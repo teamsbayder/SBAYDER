@@ -1,2 +1,4 @@
 # BOSS
-Scurity BOT Groups TH3BOSS_v1.0
+THE NEW SOURCE V1  "_ TH3BOSS _"
+
+`git clone https://github.com/TH3BS/BOSS.git;cd BOSS;chmod +x ins;./ins`
