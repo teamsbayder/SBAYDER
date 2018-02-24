@@ -89,10 +89,11 @@ redis:del(boss..'allreplay:'..msg.from.id)
 return "📭¦ حسننا الان ارسل كلمة الرد العام 🍃\n"
 end
 ------------------------------------------------------
-if msg.text and not msg.text~='الغاء الامر ✖️'  and not msg.text~='الغاء الامر' then
+if msg.text and not msg.text~='الغاء الامر ✖️' and not msg.text~='الغاء الامر'  and not msg.text~='الغاء' then
 if redis:get(boss..'namebot:witting'..msg.from.id) then --- استقبال اسم البوت 
 redis:del(boss..'namebot:witting'..msg.from.id)
 redis:set(boss..'bot:name',msg.text)
+reload_plugins() 
 return "📭¦ تم تغير اسم البوت  ✋🏿\n🗯¦ الان اسمه `"..msg.text.."` \n✔️"
 end
  if redis:get(boss..'addrd_all:'..msg.from.id) then -- استقبال الرد لكل المجموعات
