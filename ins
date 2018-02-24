@@ -4,7 +4,7 @@ cd $(cd $(dirname $0); pwd)
 memory_free=`awk '/^Mem/ {print $4}' <(free -m)`
 
 if [ "$memory_free" -le 60 ]; then
-	echo -e "\x1B[31m¦\n¦ CAUTION:\x1B[01;91m Your RAM size is less than 100 MB.\n¦ NOW you can not install the SOURCE TH3BOSS. \n¦"
+	echo -e "\x1B[31m¦\n¦ CAUTION:\x1B[01;91m Your RAM size is less than 60MB.\n¦ NOW you can not install the SOURCE TH3BOSS. \n¦"
 	echo -e "\x1B[01;90m¦ YOUR RAM FREE SIZE IS : \x1B[01;94m "$memory_free"MB\x1B[0m"
 	exit 1
 fi
