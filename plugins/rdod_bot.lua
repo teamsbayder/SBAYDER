@@ -71,7 +71,7 @@ if (r== "ايدي" or r=="ايدي 🆔") and msg.to.type == "pv" then
 return  "\n"..msg.from.id.."\n" 
 end
 if r== "قناة السورس 📡" and msg.to.type == "pv" then
-local inline = {{{text="قنآهہ‏‏ آلسـورس : الـزعـيـم 🍃",url="t.me/"..SUDO_USER:gsub('@',''):gsub([[\_]],'_')}}}
+local inline = {{{text="قنآهہ‏‏ آلسـورس : الـزعـيـم 🍃",url="t.me/lldev1ll"}}}
 return send_inline_key(msg.from.id,'  [قناة السورس : الـزعـيـم](t.me/lldev1ll)',nil,inline)
 end
 if (r== "الاحصائيات 📈" or r=="الاحصائيات") and is_sudo(msg) and msg.to.type == "pv" then
