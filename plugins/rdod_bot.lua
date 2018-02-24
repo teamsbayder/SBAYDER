@@ -76,7 +76,7 @@ if r== "قناة السورس 📡" and msg.to.type == "pv" then
 local inline = {{{text="قنآهہ‏‏ آلسـورس : الـزعـيـم 🍃",url="t.me/lldev1ll"}}}
 return send_inline_key(msg.from.id,'  [قناة السورس : الـزعـيـم](t.me/lldev1ll)',nil,inline)
 end
-if (r== "الاحصائيات 📈" or r=="الاحصائيات") and is_sudo(msg) and msg.to.type == "pv" then
+if (r== "الاحصائيات 📈" or r=="الاحصائيات") and is_sudo(msg) then
 local group = redis:smembers(boss..'group:ids')
 local pv = redis:smembers(boss..'users')
 return 'الاحصائيات : 📈 \n\n👥*¦* عدد المجموعات المفعله : '..#group..'\n👤*¦* عدد المشتركين في البوت : '..#pv..'\n📡'
