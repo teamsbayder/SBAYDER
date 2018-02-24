@@ -40,7 +40,9 @@ local text = [[💯¦ مـرحبآ آنآ بوت آسـمـي ]]..BOT_NAME..[[ �
 ⚖️¦ مـعرف آلمـطـور  : ]]..SUDO_USER..[[
 
 👨🏽‍🔧]]
-local inline = {{{text="آلمـطـور ™",url="t.me/"..SUDO_USER:gsub('@','')}}}
+xsudouser = SUDO_USER:gsub('@','')
+xsudouser = xsudouser:gsub([\_],'_')
+local inline = {{{text="آلمـطـور ™",url="t.me/"..xsudouser}}}
 return send_inline_key(msg.from.id,text,nil,inline)
 end end
 if (msg.to.type == "pv") and is_sudo(msg) and msg.from.id ~= bot.id then -- ارسال الرساله بالخاص عبر رد على التوجيه
