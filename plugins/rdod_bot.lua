@@ -41,7 +41,7 @@ local text = [[💯¦ مـرحبآ آنآ بوت آسـمـي ]]..BOT_NAME..[[ �
 
 👨🏽‍🔧]]
 xsudouser = SUDO_USER:gsub('@','')
-xsudouser = xsudouser:gsub([\_],'_')
+xsudouser = xsudouser:gsub([[\_]],'_')
 local inline = {{{text="آلمـطـور ™",url="t.me/"..xsudouser}}}
 return send_inline_key(msg.from.id,text,nil,inline)
 end end
