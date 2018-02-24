@@ -518,16 +518,16 @@ if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_
 if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id,{chat_id=msg.to.id,user_id=matches[2],msg_id=msg.id,cmd="unbandall"}) end
 if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {chat_id=msg.to.id,username=matches[2],cmd="unbanall"}) end end 
 if matches[1] == "رتبتي" then return '🎫*¦* رتبتك » '..get_rank(msg)..'\n🌿' end
-if (matches[1] == "الغاء الامر ✖️" or matches[1] == "الغاء") and is_mod(msg) then
+if (matches[1] == "الغاء الامر ✖️" or matches[1] == "الغاء" or matches[1] == "الغاء الامر") and is_mod(msg) then
 redis:del(boss..'waiting_link'..msg.from.id) redis:del(boss..'welcom:witting'..msg.from.id) redis:del(boss..'rulse:witting'..msg.from.id)redis:del(boss..'rulse:witting'..msg.from.id) redis:del(boss..'name:witting'..msg.from.id) redis:del(boss..'about:witting'..msg.from.id) redis:del(boss..'fwd:all'..msg.from.id) redis:del(boss..'fwd:pv'..msg.from.id) redis:del(boss..'fwd:groups'..msg.from.id) redis:del(boss..'namebot:witting'..msg.from.id) redis:del(boss..'addrd_all:'..msg.from.id) redis:del(boss..'delrd:'..msg.from.id) redis:del(boss..'addrd:'..msg.from.id) redis:del(boss..'delrdall:'..msg.from.id) redis:del(boss..'text_sudo:witting'..msg.from.id)  return '📬*¦* تم آلغآء آلآمـر بنجآح \n🌿'  end
 ----------------- استقبال الرسائل ---------------
-if msg.text and msg.text ~= "الغاء الامر" and msg.text ~= "الغاء الامر" then
+if msg.text and msg.text ~= "الغاء الامر ✖️" and msg.text ~= "الغاء الامر"  and msg.text ~= "الغاء" then
 if (msg.text:match("^([https?://w]*.?telegram.me/joinchat/%S+)$") or msg.text:match("^([https?://w]*.?t.me/joinchat/%S+)$")) and redis:get(boss..'waiting_link'..msg.from.id) and is_owner(msg) then  -- استقبال الرابط
 redis:set(boss..'linkgp'..msg.to.id,msg.text)
 return "💌*¦* شكرأ لك 😻\n📦*¦* تم حفظ الرابط بنجاح \n✔️" end
 if redis:get(boss..'text_sudo:witting'..msg.from.id) then -- استقبال كليشه المطور
-redis:del(boss..'text_sudo:witting'..msg.from.id) redis:set(boss..':TEXT_SUDO',check_markdown(msg.text))
-return "📜*¦* تم وضع الكليشه بنجاح كلاتي 👋🏻\n\n*{*  "..check_markdown(msg.text).."  *}*\n✓"  end
+redis:del(boss..'text_sudo:witting'..msg.from.id) redis:set(boss..':TEXT_SUDO',msg.text)
+return "📜*¦* تم وضع الكليشه بنجاح كلاتي 👋🏻\n\n*{*  ["..msg.text.."]  *}*\n✓"  end
 if redis:get(boss..'welcom:witting'..msg.from.id) then -- استقبال كليشه الترحيب
 redis:del(boss..'welcom:witting'..msg.from.id) redis:set(boss..'welcome:msg'..msg.to.id,msg.text)
 return "📜*¦* تم وضع الترحيب بنجاح كلاتي 👋🏻\n*["..msg.text.."]*\n\n🔖¦ ملاحظه تستطيع\n🗒¦ اضهار القوانين بواسطه  ➣ *{rules}*  \n📰¦  اضهار الاسم بواسطه ➣ *{name}*\n🏷¦ اضهار المعرف بواسطه ➣ *{username}*" end
