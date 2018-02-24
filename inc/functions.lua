@@ -203,7 +203,7 @@ if (msg.from.id == SUDO_ID) then var = true end return var
 end
 function is_mod(msg)
 local var = false
-if redis:sismember(boss..':MONSHA_BOT:'..msg.to.id,msg.from.id) then var = true end return var
+if redis:sismember(boss..':MONSHA_BOT:'..msg.to.id,msg.from.id) then var = true end
 if redis:sismember(boss..':SUDO_BOT:',msg.from.id) then var = true end
 if redis:sismember(boss..'admins:'..msg.to.id,msg.from.id)then var = true end
 if redis:sismember(boss..'owners:'..msg.to.id,msg.from.id)then var = true end
