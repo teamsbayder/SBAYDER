@@ -1,4 +1,5 @@
-local BOT_NAME = redis:get(boss..'bot:name')
+function BOT_NAME() return redis:get(boss..'bot:name') end
+ local BOT_NAME = BOT_NAME()
 do 
 local function run(msg, matches) 
 local r =  matches[1]
@@ -53,25 +54,17 @@ if data.forward_info_ then
 function infousers(arg,data)
 if data.username_ then user_name = '@'..data.username_ else user_name = data.first_name_ end
 sendMessage(arg.user_id, 0,1,'['..r..']', 1, 'md')
-sendMessage(msg.from.id, msg.id_,1,"📬¦ تم آرسـآل آلرسـآل‏‏هہ 🌿\n🎟¦ آلى : "..user_name.." 🏌🏻", 1, 'html')
-end
-tdcli_function ({ID = "GetUser",user_id_ = data.forward_info_.sender_user_id_}, infousers, {user_id=data.forward_info_.sender_user_id_}) 
-end end
-tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = data.id_ }, replay_fwd, nil)
-end
+sendMessage(msg.from.id, msg.id_,1,"📬¦ تم آرسـآل آلرسـآل‏‏هہ 🌿\n🎟¦ آلى : "..user_name.." 🏌🏻", 1, 'html') end
+tdcli_function ({ID = "GetUser",user_id_ = data.forward_info_.sender_user_id_}, infousers, {user_id=data.forward_info_.sender_user_id_})  end end
+tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = data.id_ }, replay_fwd, nil) end
 tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = msg.reply_to_message_id_ }, get_msg_id, nil)
-end
-end
+end end
 if (msg.to.type == "pv") and not is_sudo(msg) and msg.from.id ~= bot.id and not redis:get(boss..'lock_twasel') then -- ارسال رساله للاعضاء الي يدخلون خاص
 sendMessage(msg.to.id, 0, 1, "🗯¦ تم آرسـآل رسـآلتگ آلى آلمـطـور\n📬¦ سـآرد عليگ في آقرب وقت\n🏌 ["..SUDO_USER.."]", 1, 'md')
 forwardMessages(SUDO_ID,msg.to.id,{[0] = msg.id}, 0)
 end
-if (r=="تيست" or r=="test") and is_sudo(msg) then
-return "💯 البوت شـغــال 🚀"
-end
-if (r== "ايدي" or r=="ايدي 🆔") and msg.to.type == "pv" then
-return  "\n"..msg.from.id.."\n" 
-end
+if (r=="تيست" or r=="test") and is_sudo(msg) then return "💯 البوت شـغــال 🚀" end
+if (r== "ايدي" or r=="ايدي 🆔") and msg.to.type == "pv" then return  "\n"..msg.from.id.."\n"  end
 if r== "قناة السورس 📡" and msg.to.type == "pv" then
 local inline = {{{text="قنآهہ‏‏ آلسـورس : الـزعـيـم 🍃",url="t.me/lldev1ll"}}}
 return send_inline_key(msg.from.id,'  [قناة السورس : الـزعـيـم](t.me/lldev1ll)',nil,inline)
@@ -93,7 +86,6 @@ if msg.text and not msg.text~='الغاء الامر ✖️' and not msg.text~='
 if redis:get(boss..'namebot:witting'..msg.from.id) then --- استقبال اسم البوت 
 redis:del(boss..'namebot:witting'..msg.from.id)
 redis:set(boss..'bot:name',msg.text)
-reload_plugins() 
 return "📭¦ تم تغير اسم البوت  ✋🏿\n🗯¦ الان اسمه `"..msg.text.."` \n✔️"
 end
  if redis:get(boss..'addrd_all:'..msg.from.id) then -- استقبال الرد لكل المجموعات
