@@ -176,7 +176,7 @@ return "🙋🏼‍♂️*¦* أهلا عزيزي \n🔖¦ رجائا ارسل �
 end
 if matches[1] == "الرابط" then
 if not redis:get(boss..'linkgp'..msg.to.id) then return "📡*¦* اوه 🙀 لا يوجد هنا رابط\n🔖¦ *رجائا اكتب [ضع رابط]* \n🔃" end
-return sendMessage(msg.to.id, msg.id, 1, "<b>رابط المجموعة  :</b>\n"..redis:get(boss..'linkgp'..msg.to.id), 1, 'html')
+return sendMessage(msg.to.id, msg.id, 1, "<code>🔖¦رابـط الـمـجـمـوعه 💯\n🌿¦"..msg.to.title.." :\n\n</code>"..redis:get(boss..'linkgp'..msg.to.id).."\n", 1, 'html')
 end
 if matches[1] == "الرابط خاص" and is_mod(msg) then
 if not redis:get(boss..'linkgp'..msg.to.id) then return "📡*¦* اوه 🙀 لا يوجد هنا رابط\n🔖¦ *رجائا اكتب [ضع رابط]*🔃" end
