@@ -491,18 +491,18 @@ if matches[1] == 'المطور' then
 sendMessage(msg.to.id,msg.id,1,(redis:get(boss..":TEXT_SUDO") or '🗃¦ لا توجد كليشه المطور .\n📰¦ يمكنك اضافه كليشه من خلال الامر\n       " `ضع كليشه المطور` " \n📡'),1,'md')
 end
 if (matches[1] == "اذاعه عام بالتوجيه" or matches[1] == "اذاعه عام بالتوجيه 📣") and is_sudo(msg) then		
-if not we_sudo(msg) and redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط "  end
+if not we_sudo(msg) and not redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط "  end
 redis:setex(boss..'fwd:'..msg.from.id,300, true) return "📭¦ حسننا الان ارسل التوجيه للاذاعه \n🔛" end
 if (matches[1] == "اذاعه عام" or matches[1] == "اذاعه عام 📢") and is_sudo(msg) then		
-if not we_sudo(msg) and redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط " end
+if not we_sudo(msg) and not redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط " end
 redis:setex(boss..'fwd:all'..msg.from.id,300, true)
 return "📭¦ حسننا الان ارسل الكليشه للاذاعه عام \n🔛" end
 if (matches[1] == "اذاعه خاص" or matches[1] == "اذاعه خاص 👤") and is_sudo(msg) then		
-if not we_sudo(msg) and redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط "  end
+if not we_sudo(msg) and not redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط "  end
 redis:setex(boss..'fwd:pv'..msg.from.id,300, true)
 return "📭¦ حسننا الان ارسل الكليشه للاذاعه خاص \n🔛"	 end
 if (matches[1] == "اذاعه" or matches[1] == "اذاعه 🗣") and is_sudo(msg) then		
-if not we_sudo(msg) and redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط "  end
+if not we_sudo(msg) and not redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط "  end
 redis:setex(boss..'fwd:groups'..msg.from.id,300, true)
 return "📭¦ حسننا الان ارسل الكليشه للاذاعه للمجموعات \n🔛" end
 if (matches[1] == "المطورين" or matches[1] == "المطورين 🕹") and is_sudo(msg) then return sudolist(msg) end
@@ -521,7 +521,7 @@ if matches[1] == "رتبتي" then return '🎫*¦* رتبتك » '..get_rank(ms
 if (matches[1] == "الغاء الامر ✖️" or matches[1] == "الغاء") and is_mod(msg) then
 redis:del(boss..'waiting_link'..msg.from.id) redis:del(boss..'welcom:witting'..msg.from.id) redis:del(boss..'rulse:witting'..msg.from.id)redis:del(boss..'rulse:witting'..msg.from.id) redis:del(boss..'name:witting'..msg.from.id) redis:del(boss..'about:witting'..msg.from.id) redis:del(boss..'fwd:all'..msg.from.id) redis:del(boss..'fwd:pv'..msg.from.id) redis:del(boss..'fwd:groups'..msg.from.id) redis:del(boss..'namebot:witting'..msg.from.id) redis:del(boss..'addrd_all:'..msg.from.id) redis:del(boss..'delrd:'..msg.from.id) redis:del(boss..'addrd:'..msg.from.id) redis:del(boss..'delrdall:'..msg.from.id) redis:del(boss..'text_sudo:witting'..msg.from.id)  return '📬*¦* تم آلغآء آلآمـر بنجآح \n🌿'  end
 ----------------- استقبال الرسائل ---------------
-if msg.text then
+if msg.text and msg.text ~= "الغاء الامر" and msg.text ~= "الغاء الامر" then
 if (msg.text:match("^([https?://w]*.?telegram.me/joinchat/%S+)$") or msg.text:match("^([https?://w]*.?t.me/joinchat/%S+)$")) and redis:get(boss..'waiting_link'..msg.from.id) and is_owner(msg) then  -- استقبال الرابط
 redis:set(boss..'linkgp'..msg.to.id,msg.text)
 return "💌*¦* شكرأ لك 😻\n📦*¦* تم حفظ الرابط بنجاح \n✔️" end
