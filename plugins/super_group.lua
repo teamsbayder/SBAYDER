@@ -510,9 +510,9 @@ if (matches[1] == "قائمه العام" or matches[1]=="قائمه العام 
 if matches[1] == "تعطيل" and (matches[2] == "التواصل" or matches[2]=="التواصل ✖️") and we_sudo(msg) then return lock_twasel(msg) end
 if matches[1] == "تفعيل" and (matches[2] == "التواصل" or matches[2]=="التواصل 🔛") and we_sudo(msg) then return unlock_twasel(msg) end
 if matches[1] == "حظر عام"  and we_sudo(msg)  then
-if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {chat_id=msg.to.id,cmd="banall"}) end
+if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {chat_id=msg.to.id,msg_id=msg.id,cmd="banall"}) end
 if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id,{chat_id=msg.to.id,user_id=matches[2],msg_id=msg.id,cmd="bandall"}) end
-if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {chat_id=msg.to.id,username=matches[2],cmd="banall"}) end end
+if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {chat_id=msg.to.id,msg_id=msg.id,username=matches[2],cmd="banall"}) end end
 if matches[1] == "الغاء العام" and we_sudo(msg)  then
 if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {chat_id=msg.to.id,cmd="unbanall"}) end
 if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id,{chat_id=msg.to.id,user_id=matches[2],msg_id=msg.id,cmd="unbandall"}) end
