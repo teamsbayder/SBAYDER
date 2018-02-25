@@ -522,7 +522,7 @@ if (msg.text:match("^([https?://w]*.?telegram.me/joinchat/%S+)$") or msg.text:ma
 redis:set(boss..'linkgp'..msg.to.id,msg.text)
 return "💌*¦* شكرأ لك 😻\n📦*¦* تم حفظ الرابط بنجاح \n✓" end
 if redis:get(boss..'text_sudo:witting'..msg.from.id) then -- استقبال كليشه المطور
-redis:del(boss..'text_sudo:witting'..msg.from.id) redis:set(boss..':TEXT_SUDO',msg.text)
+redis:del(boss..'text_sudo:witting'..msg.from.id) redis:set(boss..':TEXT_SUDO','['..msg.text..']')
 return "📜*¦* تم وضع الكليشه بنجاح كلاتي 👋🏻\n\n*{*  ["..msg.text.."]  *}*\n✓"  end
 if redis:get(boss..'welcom:witting'..msg.from.id) then -- استقبال كليشه الترحيب
 redis:del(boss..'welcom:witting'..msg.from.id) redis:set(boss..'welcome:msg'..msg.to.id,msg.text)
