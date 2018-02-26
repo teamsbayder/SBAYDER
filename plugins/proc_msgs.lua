@@ -47,8 +47,18 @@ end
 ------------------------------------------------------
 if msg.from.username then usernamex = "@"..msg.from.username else usernamex = msg.to.id end
 if redis:get(boss..'group:add'..arg.chat_id) then
+
+if data.type_.ID == "UserTypeBot" then -- حصانه التحقق من البوتات المضافه
+if not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots_by_kick'..chat) then --- طرد البوت مع الي ضافه
+kick_user(data.id_, arg.chat_id)
+kick_user(arg.user_id, arg.chat_id)
+sendMessage(arg.chat_id, 0, 1, '👤*¦* العضو : ['..arg.name..']\n❖￤ يوزر : ['..usernamex..']\n❖￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت مع الي ضاف البوت \n✘', 0, "md")    
+elseif not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots'..chat) then
+kick_user(data.id_, arg.chat_id)
+if redis:get(boss..'lock_woring'..chat) then
+return sendMessage(arg.chat_id, 0, 1, '❖￤ الاسم : ['..arg.name..']\n❖￤ الايدي : '..arg.user_id..'\n❖￤ العضو : ['..usernamex..']\n❖￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت \n✘', 0, "md")    
+end end else
 if redis:get(boss..'welcome:get'..arg.chat_id) then
-if data.type_.ID ~= "UserTypeBot" then
 welcome = (redis:get(boss..'welcome:msg'..arg.chat_id) or "❖￤ مرحباً عزيزي\n❖￤ نورت المجموعة \n💂🏼‍♀️")
 rules = (redis:get(boss..'rulse:msg'..arg.chat_id) or "❖￤ مرحبأ عزيري 👋🏻 القوانين كلاتي 👇🏻\n❖￤ ممنوع نشر الروابط \n❖￤ ممنوع التكلم او نشر صور اباحيه \n❖￤ ممنوع  اعاده توجيه \n❖￤ ممنوع التكلم بلطائفه \n❖￤ الرجاء احترام المدراء والادمنيه 😅\n")
 if data.username_ then user_name = "@"..data.username_ else user_name = "---" end
@@ -57,17 +67,7 @@ local welcome = welcome:gsub("{name}", '['..data.first_name_..' '..(data.last_na
 local welcome = welcome:gsub("{username}", "["..user_name.."]")
 local welcome = welcome:gsub("{gpname}", arg.gp_name)
 sendMessage(arg.chat_id, arg.msg_id, 0, welcome, 0, "md")
-end  end 
-if data.type_.ID == "UserTypeBot" then -- حصانه التحقق من البوتات المضافه
-if not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots_by_kick'..chat) then --- طرد البوت مع الي ضافه
-kick_user(data.id_, arg.chat_id)
-kick_user(arg.user_id, arg.chat_id)
-sendMessage(arg.chat_id, 0, 1, '👤*¦* العضو : ['..arg.name..']\n❖￤ يوزر : ['..usernamex..']\n❖￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت مع الي ضاف البوت', 0, "md")    
-elseif not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots'..chat) then
-kick_user(data.id_, arg.chat_id)
-if redis:get(boss..'lock_woring'..chat) then
-return sendMessage(arg.chat_id, 0, 1, '❖￤ الاسم : ['..arg.name..']\n❖￤ الايدي : '..arg.user_id..'\n❖￤ العضو : ['..usernamex..']\n❖￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت ', 0, "md")    
-end end end
+end  end
 -------------------------
 if is_banned(data.id_, arg.chat_id) then
 sendMessage(arg.chat_id,arg.msg_id, 0, '❖￤ العضو ⇐ ['..user_name..'] \n❖￤ الايدي* ('..data.id_..')*\n❖￤ محضور سابقا وتم طرده ✔️', 0, "md")
