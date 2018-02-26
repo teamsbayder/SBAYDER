@@ -28,11 +28,11 @@ tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_user
 end end
 if matches[1] == "تثبيت" and is_mod(msg) and msg.reply_id then
 tdcli_function ({ID = "PinChannelMessage",channel_id_ = getChatId(msg.to.id).ID,message_id_ = msg.reply_id,disable_notification_ = 1}, dl_cb, cmd)
-return "🙋🏼‍♂️*¦* أهلا عزيزي \n📌*¦* تم تثبيت الرساله ✓"
+return "🙋🏼‍♂️*¦* أهلا عزيزي \n📌*¦* تم تثبيت الرساله \n✓"
 end
 if matches[1] == "الغاء التثبيت" and is_mod(msg) then
 tdcli_function ({ID = "UnpinChannelMessage",channel_id_ = getChatId(msg.to.id).ID}, dl_cb, cmd)
-return "🙋🏼‍♂️*¦* أهلا عزيزي \n📃*¦* تم الغاء تثبيت الرساله ✓"
+return "🙋🏼‍♂️*¦* أهلا عزيزي \n📃*¦* تم الغاء تثبيت الرساله \n✓"
 end
 if matches[1] == "رفع عضو مميز" and is_mod(msg) then
 if not matches[2] and msg.reply_id then
