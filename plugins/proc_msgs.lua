@@ -63,7 +63,7 @@ if not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots_by_kick
 kick_user(data.id_, arg.chat_id)
 kick_user(arg.user_id, arg.chat_id)
 sendMessage(arg.chat_id, 0, 1, '👤*¦* العضو : ['..arg.name..']\n❖￤ يوزر : ['..usernamex..']\n❖￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت مع الي ضاف البوت', 0, "md")    
-elseif not is_owner(arg.msg) and redis:get(boss..'lock_bots'..chat) then
+elseif not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots'..chat) then
 kick_user(data.id_, arg.chat_id)
 if redis:get(boss..'lock_woring'..chat) then
 return sendMessage(arg.chat_id, 0, 1, '❖￤ الاسم : ['..arg.name..']\n❖￤ الايدي : '..arg.user_id..'\n❖￤ العضو : ['..usernamex..']\n❖￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت ', 0, "md")    
