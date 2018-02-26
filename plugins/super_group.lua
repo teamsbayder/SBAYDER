@@ -249,7 +249,7 @@ end
 if matches[2] == 'المميزين' and is_owner(msg)  then
 if #redis:smembers(boss..'whitelist:'..msg.to.id) ==0 then return "*⚙️*¦* لا يوجد مستخدمين مكتومين في المجموعه *" end
 redis:del(boss..'whitelist:'..msg.to.id)
-return "*⚙️*¦* تم مسح قائمه الكتم*"
+return "⚙️*¦* تم مسح قائمه المميزين"
 end
 if matches[2] == 'المطورين' and we_sudo(msg)  then
 if #redis:smembers(boss..':SUDO_BOT:')==0 then  return "⚙️*¦* عذرا لا يوجد مطورين في البوت  ✖️" end
@@ -295,7 +295,7 @@ tdcli_function({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,f
 local deleted = 0 
 for k, v in pairs(data.members_) do
 if v.user_id_ ~= our_id then kick_user(v.user_id_, msg.to.id) deleted = deleted + 1  end end
-if deleted == 0 then sendMessage(msg.to.id, msg.id, 1, '📡*¦* لا يوجد بوتات في المجموعة\n🛠', 1, 'md') else sendMessage(msg.to.id, msg.id, 1, '📡¦ تم طرد [<code>'..deleted..'</code>] بوت من المجموعة \n✓', 1, 'html') end end, nil)
+if deleted == 0 then sendMessage(msg.to.id, msg.id, 1, '📡*¦* لا يوجد بوتات في المجموعة\n✘', 1, 'md') else sendMessage(msg.to.id, msg.id, 1, '📡¦ تم طرد [<code>'..deleted..'</code>] بوت من المجموعة \n✓', 1, 'html') end end, nil)
 end
 if matches[1] == "كشف البوتات" and is_owner(msg) then
 tdcli_function ({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,filter_ = {ID = "ChannelMembersBots"},offset_ = 0,limit_ = 100},function(arg, data)
@@ -397,7 +397,6 @@ return sendPhoto(msg.to.id, msg.id, 0, 1, nil, './inc/git_pro.jpg','🎟¦ ال�
 end
 if matches[1] == "تفعيل" and is_mod(msg) then
 if matches[2] == "الردود" then return unlock_replay(msg) end
-if matches[2] == "البوت خدمي" then return unlock_service(msg) end
 if matches[2] == "الاذاعه" and is_sudo(msg) then return unlock_brod(msg) end
 if matches[2] == "الايدي" then
 if redis:get(boss..'lock_id'..msg.to.id) then return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* امر الايدي شغال بالفعل\n✓" else redis:set(boss..'lock_id'..msg.to.id,true)  return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تفعيل امر الايدي \n✓" end end
@@ -407,7 +406,6 @@ if matches[2] == "التحذير" then
 if redis:get(boss..'lock_woring'..msg.to.id) then return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تفعيل التحذير مفعل مسبقاً \n✓" else redis:set(boss..'lock_woring'..msg.to.id,true) return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تفعيل التحذير \n✓" end end end
 if matches[1] == "تعطيل" and is_mod(msg) then
 if matches[2] == "الردود" then return lock_replay(msg) end
-if matches[2] == "البوت خدمي" then return lock_service(msg) end
 if matches[2] == "الاذاعه" and is_sudo(msg) then return lock_brod(msg) end
 if matches[2] == "الايدي" then
 if not redis:get(boss..'lock_id'..msg.to.id) then return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* الايدي بالتأكيد معطل\n✓" else redis:del(boss..'lock_id'..msg.to.id) return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تعطيل امر الايدي\n✓" end end
@@ -467,6 +465,8 @@ if matches[2] and not string.match(matches[2], '^%d+$') then tdcli_function ({ID
 if matches[1] == "ضع صوره للترحيب" or matches[1]=="ضع صوره للترحيب 🌄" then
 redis:setex(boss..'welcom_ph:witting'..msg.from.id,300,true) return'📭¦ حسننا عزيزي 🍁\n🌄 ¦ الان قم بارسال الصوره للترحيب \n🛠'
 end
+if matches[1] == "تفعيل البوت خدمي" then return lock_service(msg) end
+if matches[1] == "تعطيل البوت خدمي" then return unlock_service(msg) end
 if matches[1] == "صوره الترحيب" then
 return sendPhoto(msg.to.id,msg.id,0,1,nil,redis:get(boss..':WELCOME_BOT'),[[💯¦ مـرحبآ آنآ بوت آسـمـي ]]..redis:get(boss..'bot:name')..[[ 🎖
 💰¦ آختصـآصـي حمـآيهہ‏‏ آلمـجمـوعآت
