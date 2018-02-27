@@ -115,7 +115,7 @@ if matches[2] and not string.match(matches[2], '^%d+$') then
 tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="demote"})
 end end
 if matches[1] == "قفل" then
-if matches[2] == "الكل" then lock_username(msg) mute_gif(msg) mute_photo(msg) mute_audio(msg) mute_voice(msg) mute_sticker(msg) mute_forward(msg) mute_contact(msg) mute_location(msg) mute_document(msg)mute_inline(msg) lock_link(msg) lock_tag(msg) lock_edit(msg) lock_spam(msg) lock_bots(msg) lock_webpage(msg) mute_video(msg) return '🙋🏼‍♂️*¦* أهلا عزيزي  \n📡*¦* تم قفل الكل  \n✓' end
+if matches[2] == "الكل" and is_mod(msg) then lock_username(msg) mute_gif(msg) mute_photo(msg) mute_audio(msg) mute_voice(msg) mute_sticker(msg) mute_forward(msg) mute_contact(msg) mute_location(msg) mute_document(msg)mute_inline(msg) lock_link(msg) lock_tag(msg) lock_edit(msg) lock_spam(msg) lock_bots(msg) lock_webpage(msg) mute_video(msg) return '🙋🏼‍♂️*¦* أهلا عزيزي  \n📡*¦* تم قفل الكل  \n✓' end
 if matches[2] == "الوسائط" then  mute_gif(msg) mute_photo(msg) mute_audio(msg) mute_voice(msg) mute_sticker(msg) mute_video(msg)  return '🙋🏼‍♂️*¦* أهلا عزيزي  \n🔛¦ تم قفل الوسائط  \n✓' end
 if matches[2] == "المتحركه" then return mute_gif(msg) end
 if matches[2] == "الدردشه" then return mute_text(msg) end
@@ -144,7 +144,7 @@ if matches[2] == "الماركدوان" then return lock_markdown(msg) end
 if matches[2] == "الويب" then return lock_webpage(msg) end
 if matches[2] == "الثبيت" and is_owner(msg) then return lock_pin(msg) end end
 if matches[1] == "فتح" then 
-if matches[2] == "الكل" then unlock_username(msg) unmute_gif(msg) unmute_photo(msg) unmute_audio(msg) unmute_voice(msg) unmute_sticker(msg) unmute_forward(msg) unmute_contact(msg) unmute_location(msg) unmute_document(msg) unlock_link(msg) unlock_tag(msg) unlock_edit(msg) unlock_spam(msg) unlock_bots(msg) unlock_webpage(msg) unmute_video(msg) unmute_inline(msg) return '🙋🏼‍♂️*¦* أهلا عزيزي  \n📡*¦* تم فتح الكل  \n✓' end
+if matches[2] == "الكل" and is_mod(msg) then unlock_username(msg) unmute_gif(msg) unmute_photo(msg) unmute_audio(msg) unmute_voice(msg) unmute_sticker(msg) unmute_forward(msg) unmute_contact(msg) unmute_location(msg) unmute_document(msg) unlock_link(msg) unlock_tag(msg) unlock_edit(msg) unlock_spam(msg) unlock_bots(msg) unlock_webpage(msg) unmute_video(msg) unmute_inline(msg) return '🙋🏼‍♂️*¦* أهلا عزيزي  \n📡*¦* تم فتح الكل  \n✓' end
 if matches[2] == "الوسائط" then unmute_gif(msg) unmute_photo(msg) unmute_audio(msg) unmute_voice(msg) unmute_sticker(msg) unmute_video(msg) return '🙋🏼‍♂️*¦* أهلا عزيزي  \n🔛¦ تم فتح الوسائط  \n✓'  end
 if matches[2] == "المتحركه" then return unmute_gif(msg) end
 if matches[2] == "الدردشه" then return unmute_text(msg) end
