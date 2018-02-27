@@ -38,7 +38,7 @@
 
 #  💬¦ للمشاكل والاسفسار والاقتراحات :
   
-  [♔↝ الـےز؏ّـ«ْஞ»ـِيم || مٰـحٰـمـٰد هٰـشٰامٰ ³¹³](https://telegram.me/TH3BS) <br>
+  [ الـےز؏ّـ«ْஞ»ـِيم || مٰـحٰـمـٰد هٰـشٰامٰ ³¹³](https://telegram.me/TH3BS) <br>
   
   [Mohammed Hisham](https://telegram.me/TH3BOSS) <br>
   
