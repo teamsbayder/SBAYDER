@@ -865,6 +865,16 @@ redis:hset(boss..'username:'..data.id_, 'username', user_name)
 redis:sadd(boss..'whitelist:'..arg.chat_id,data.id_)
 return sendMessage(arg.chat_id,arg.msg_id, 0, '👤*¦* العضو » '..user_name..' \n🎫*¦* الايدي » (`'..data.id_..'`)\n🛠*¦* تمت ترقيته ليصبح ضمن عضو مميز \n✓', 0, "md")
 end
+if cmd == "setmnsha" then
+if redis:sismember(boss..':MONSHA_BOT:'..arg.chat_id,data.id_) then return sendMessage(arg.chat_id,arg.msg_id, 0, '👤*¦* العضو » '..user_name..'\n🎫*¦* الايدي » (`'..data.id_..'`)\n🛠*¦* انه بالتأكيد منشىء \n✓️', 0, "md") end
+redis:hset(boss..'username:'..data.id_, 'username', user_name)
+redis:sadd(boss..':MONSHA_BOT:'..arg.chat_id,data.id_)
+return sendMessage(arg.chat_id,arg.msg_id,0, '👤*¦* العضو » '..user_name..' \n🎫*¦* الايدي » (`'..data.id_..'`)\n🛠*¦* تمت ترقيته ليصبح منشىء في البوت \n✓️',0, "md") end
+if cmd == "remmnsha" then
+if not redis:sismember(boss..':MONSHA_BOT:'..arg.chat_id,data.id_) then return sendMessage(arg.chat_id,arg.msg_id,0, '👤*¦* العضو » '..user_name..'\n🎫*¦* الايدي » (`'..data.id_..'`)\n🛠*¦* انه بالتأكيد ليس منشىء \n✓️', 0, "md") end
+redis:srem(boss..':MONSHA_BOT:'..arg.chat_id,data.id_)
+return sendMessage(arg.chat_id,arg.msg_id,0, '👤*¦* العضو » '..user_name..' \n🎫*¦* الايدي » (`'..data.id_..'`)\n🛠*¦* تم تنزيله من المنشىء \n✓️',0, "md")
+end
 if cmd == "remwhitelist" then
 if not redis:sismember(boss..'whitelist:'..arg.chat_id,data.id_) then return sendMessage(arg.chat_id,arg.msg_id, 0, '👤*¦* العضو » '..user_name..'\n🎫*¦* الايدي » (`'..data.id_..'`)\n🛠*¦* انه بالتأكيد ليس من عضو مميز \n✓', 0, "md") end
 redis:srem(boss..'whitelist:'..arg.chat_id,data.id_)
