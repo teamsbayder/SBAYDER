@@ -302,7 +302,7 @@ tdcli_function ({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,
 local i = 0
 for k, v in pairs(data.members_) do
 if v.user_id_ ~= our_id then i = i + 1 end end
-if i == 0 then sendMessage(msg.to.id, msg.id, 1, '📡*¦* لا يوجد بوتات في المجموعة 💯', 1, 'md') else sendMessage(msg.to.id, msg.id, 1, '📡*¦* عدد البوتات الموجودة [`'..i..'`] بوت \n💯',1, 'md') end end, nil)
+if i == 0 then sendMessage(msg.to.id, msg.id, 1, '📡*¦* لا يوجد بوتات في المجموعة 💯', 1, 'md') else sendMessage(msg.to.id, msg.id, 1, '📡*¦* عدد البوتات الموجودة *['..i..']* بوت \n💯',1, 'md') end end, nil)
 end
 if matches[1] == 'طرد المحذوف' then 
 if not we_sudo(msg) then return "☔️هذا الاوامر للمطور الاساسي فقط 🌿" end
