@@ -251,17 +251,6 @@ if #redis:smembers(boss..'whitelist:'..msg.to.id) ==0 then return "*⚙️*¦* �
 redis:del(boss..'whitelist:'..msg.to.id)
 return "⚙️*¦* تم مسح قائمه المميزين"
 end
-if matches[2] == 'المطورين' and we_sudo(msg)  then
-if #redis:smembers(boss..':SUDO_BOT:')==0 then  return "⚙️*¦* عذرا لا يوجد مطورين في البوت  ✖️" end
-sendMessage(msg.to.id, msg.id, 0, "📌¦ تم مسح `"..#list.."` من المطورين ☔️", 0, "md")
-redis:del(boss..':SUDO_BOT:')
-return false
-end			
-if matches[2] == 'قائمه العام' and we_sudo(msg)  then
-if #redis:smembers(boss..'gban_users')==0 then return "*⚙️¦ لا يوجد مستخدمين محظورين عام في المجموعه *" end
-redis:del(boss..'gban_users')
-return "*⚙️¦ تم مسح قائمه العام*"
-end 
 end --end del 
 if matches[1] == "ضع اسم" and is_mod(msg) then
 redis:setex(boss..'name:witting'..msg.from.id,300,true)
@@ -431,7 +420,7 @@ if matches[2] and string.match(matches[2], '^%d+$') then
 if matches[2] == our_id then sendMessage(msg.chat_id_,msg.id, 0, "📛¦ لا تستطيع طرد البوت\n🛠", 0, "md")
 elseif is_mod1(msg.to.id,matches[2]) then sendMessage(msg.chat_id_,msg.id, 0, "📛¦ لا تستطيع طرد المدراء اوالادمنيه\n🛠", 0, "md")
 else kick_user(matches[2], msg.to.id) sleep(1) channel_unblock(msg.to.id, matches[2])
-sendMessage(msg.chat_id_, msg.id, 0, "🙋🏼‍♂️*¦* أهلا عزيزي  \n📡*¦* تم طرد العضو ["..matches[2].."]","md")
+sendMessage(msg.chat_id_, msg.id, 0, "🙋🏼‍♂️*¦* أهلا عزيزي  \n📡*¦* تم طرد العضو ["..matches[2].."]\n✓","md")
 end end
 if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {msg_id=msg.id,chat_id=msg.to.id,msg_id=msg.id,username=matches[2],cmd="kick"}) end end
 if matches[1] == "حظر" and is_mod(msg)  then
@@ -453,6 +442,17 @@ if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID 
 if matches[1] == "المكتومين" and is_mod(msg)  then return silent_users_list(msg.to.id) end
 if matches[1] == "المحظورين" and is_mod(msg)  then return banned_list(msg.to.id) end
  end -- end of insert group 
+ if matches[1] == 'مسح المطورين' and we_sudo(msg)  then
+if #redis:smembers(boss..':SUDO_BOT:')==0 then  return "⚙️*¦* عذرا لا يوجد مطورين في البوت  ✖️" end
+sendMessage(msg.to.id, msg.id, 0, "📌¦ تم مسح `"..#list.."` من المطورين ☔️\n✓", 0, "md")
+redis:del(boss..':SUDO_BOT:')
+return false
+end			
+if matches[1] == 'مسح قائمه العام' and we_sudo(msg)  then
+if #redis:smembers(boss..'gban_users')==0 then return "*⚙️¦ لا يوجد مستخدمين محظورين عام في المجموعه *" end
+redis:del(boss..'gban_users')
+return "⚙️*¦* تم مسح قائمه العام\n✓"
+end 
 if we_sudo(msg) then
 if matches[1] == "رفع مطور" then
 if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="up_sudo"}) end
