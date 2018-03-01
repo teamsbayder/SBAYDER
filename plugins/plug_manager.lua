@@ -42,7 +42,7 @@ return 'تم حذف الملف \n↝ ['..matches[2]..']\n'
 end end 
 if matches[1]:lower() == "ssp" and matches[2] and matches[3] then
 if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
-sendDocument(msg.to.id, msg.id_,0, 1, nil, "./"..matches[2].."/"..matches[3], '💢┇ الملف مقدم من قناه  ﭬــﮧـيـﮧـر ¦ֆ \n💢┇ تابع قناة السورس @verxbot\n👨🏽‍🔧', dl_cb, nil) end
+sendDocument(msg.to.id, msg.id_,0, 1, nil, "./"..matches[2].."/"..matches[3], '🗂¦ آلمـلف مـقدم مـن قنآ‏‏هہ آلزعـًيـٌِم ¦ֆ \n📡¦ تابع قناة السورس @llDEV1ll\n👨🏽‍🔧', dl_cb, nil) end
 if (matches[1] == 'حفظ الملف' or matches[1] == 'save') and matches[2] and is_sudo(msg) then
 if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
 if msg.reply_id then
