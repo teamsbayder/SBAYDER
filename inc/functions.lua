@@ -482,6 +482,23 @@ local d = math.floor(redis:ttl(boss..'ExpireDate:'..msg.to.id) / 86400) + 1
 if tonumber(d) == 1 and not is_sudo(msg) and is_mod(msg) then
 sendMessage(msg.to.id, 0, 1, '🕵🏼️‍♀️¦ باقي يوم واحد وينتهي الاشتراك ✋🏿\n👨🏾‍🔧¦ راسل المطور للتجديد '..SUDO_USER..'\n📛', 1, 'md')
 end end end
+
+
+function set_admins(msg) 
+tdcli_function({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 50},function(arg, data)
+for k,v in pairs(data.members_) do
+local function config_mods(arg, data)
+if data.username_ then user_name = '@'..check_markdown(data.username_) else user_name = check_markdown(data.first_name_) end
+redis:hset(boss..'username:'..data.id_,'username',user_name)
+redis:sadd(boss..'admins:'..msg.to.id,data.id_) end
+tdcli_function ({ID = "GetUser",user_id_ = v.user_id_}, config_mods, {user_id=v.user_id_})
+if data.members_[k].status_.ID == "ChatMemberStatusCreator" then
+local function config_owner(arg, data)
+if data.username_ then user_name = '@'..check_markdown(data.username_) else user_name = check_markdown(data.first_name_) end
+redis:hset(boss..'username:'..arg.user_id, 'username', user_name)
+redis:sadd(boss..':MONSHA_BOT:'..msg.to.id,arg.user_id)
+end tdcli_function ({ID = "GetUser",user_id_ = v.user_id_}, config_owner, {user_id=v.user_id_}) end end 
+return sendMessage(msg.to.id, 0, 1,'👨🏽‍🔧*¦* تم رفع جمـيع آلآدمـنيهہ‏‏ آلگروب بآلبوت \n✓', 1, 'md') end,nil) end
 function group_set(msg)
 redis:set(boss..'group:add'..msg.to.id,true) redis:sadd(boss..'group:ids',msg.to.id) redis:set(boss..'group:name'..msg.to.id,msg.to.title) redis:set(boss..'lock_link'..msg.to.id,true)  redis:set(boss..'lock_id'..msg.to.id,true) redis:set(boss..'lock_spam'..msg.to.id,true) redis:set(boss..'lock_webpage'..msg.to.id,true) redis:set(boss..'lock_markdown'..msg.to.id,true) redis:set(boss..'lock_flood'..msg.to.id,true) redis:set(boss..'lock_bots'..msg.to.id,true) redis:set(boss..'mute_forward'..msg.to.id,true) redis:set(boss..'mute_contact'..msg.to.id,true) redis:set(boss..'mute_location'..msg.to.id,true) redis:set(boss..'mute_document'..msg.to.id,true) redis:set(boss..'mute_keyboard'..msg.to.id,true) redis:set(boss..'mute_game'..msg.to.id,true) redis:set(boss..'mute_inline'..msg.to.id,true) redis:set(boss..'lock_username'..msg.to.id,true) redis:set(boss..'num_msg_max'..msg.to.id,5) redis:sadd(boss..'mtwr_count'..msg.from.id,msg.to.id)
 if not we_sudo(msg) then
@@ -502,7 +519,7 @@ end,nil)
 if not res_users then
 return sendMessage(msg.to.id,0,1,'🚸*¦* لآ يمـگنني تفعيل آلبوت في آلمـجمـوعهہ‏ يجب آن يگون آگثر مـن *【'..redis:get(boss..':addnumberusers')..'】* عضـو 👤',1,'md')
 end
-tdcli_function({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 100},function(arg, data)
+tdcli_function({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 50},function(arg, data)
 local bot_anin = false
 for k,v in pairs(data.members_) do
 if tonumber(v.user_id_) == tonumber(our_id) then bot_anin = true end 
