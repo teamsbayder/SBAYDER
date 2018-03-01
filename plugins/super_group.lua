@@ -358,8 +358,7 @@ elseif tonumber(check_time) > 2592000 and tonumber(check_time) < 31536000 then
 remained_expire = '💳¦ `باقي من الاشتراك `:: * \n 📆¦  '..month..'* شهر و *'..day..'* يوم و *'..hours..'* ساعه و *'..min..'* دقيقه و *'..sec..'* ثانيه'
 elseif tonumber(check_time) > 31536000 then
 remained_expire = '💳¦ `باقي من الاشتراك `:: * \n 📆¦  '..year..'* سنه و *'..month..'* شهر و *'..day..'* يوم و *'..hours..'* ساعه و *'..min..'* دقيقه و *'..sec..'* ثانيه' end
-sendMessage(msg.to.id, msg.id, 1, remained_expire, 1, 'md')
-end
+sendMessage(msg.to.id, msg.id, 1, remained_expire, 1, 'md') end
 if matches[1] == "الرتبه" and not matches[2] and msg.reply_id then return tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="rtba"}) end
 if matches[1] == "كشف الادمن" and not matches[2] and is_owner(msg) then
 local checkmod = false
@@ -367,11 +366,9 @@ tdcli_function ({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,
 local secchk = true
 for k,v in pairs(b.members_) do
 if v.user_id_ == tonumber(our_id) then secchk = false end end
-if secchk then return sendMessage(msg.to.id, msg.id, 1, '📡*¦* كلا البوت ليس ادمن في المجموعة ♨️', 1, "md") else return sendMessage(msg.to.id, msg.id, 1, '📡*¦* نعم انه ادمن في المجموعة 👍🏿', 1, "md") end end, nil)
-end
+if secchk then return sendMessage(msg.to.id, msg.id, 1, '📡*¦* كلا البوت ليس ادمن في المجموعة ♨️', 1, "md") else return sendMessage(msg.to.id, msg.id, 1, '📡*¦* نعم انه ادمن في المجموعة 👍🏿', 1, "md") end end, nil) end
 if matches[1]== 'رسائلي' or matches[1]=='رسايلي' then
-return '🗯*¦*عدد رسائلك  » (*'..tonumber(redis:get(boss..'msgs:'..msg.from.id..':'..msg.to.id) or 0)..'*) رساله \n-\n'
-end
+return '🗯*¦*عدد رسائلك  » (*'..tonumber(redis:get(boss..'msgs:'..msg.from.id..':'..msg.to.id) or 0)..'*) رساله \n➖\n' end
 if matches[1] == 'معلوماتي' or matches[1] == 'موقعي'  then
 if msg.from.username then username = '@'..msg.from.username else username = 'لا يوجد ❕' end
 local msgs = tonumber(redis:get(boss..'msgs:'..msg.from.id..':'..msg.to.id) or 0)
@@ -382,7 +379,7 @@ url = "https://api.github.com/users/"..URL.escape(matches[2])
 jstr, res = https.request(url) jdat = JSON.decode(jstr)
 if jdat.message then return '🚸 ¦ اليوزر غير موجود في الـGithub'  end
 download_to_file(jdat.avatar_url, './inc/git_pro.jpg')
-return sendPhoto(msg.to.id, msg.id, 0, 1, nil, './inc/git_pro.jpg','🎟¦ الاسم » '..(jdat.name or 'لا يوجد اسم')..'\n🔅¦ البايو » '..(jdat.bio or 'لا يوجد بايو')..'\n🔅¦ المتابعون » '..jdat.followers..'\n🔅¦ المتابعين » '..jdat.following..'\n🔅¦ المشاريع » '..jdat.public_repos..'\n🔅¦ الرابط » '..jdat.html_url,dl_cb,nil)
+return sendPhoto(msg.to.id, msg.id, 0, 1, nil, './inc/git_pro.jpg','🎟¦ الاسم » '..(jdat.name or 'لا يوجد اسم')..'\n🔅¦ البايو » '..(jdat.bio or 'لا يوجد بايو')..'\n🔅¦ المتابعون » '..jdat.followers..'\n🔅¦ المتابعين » '..jdat.following..'\n🔅¦ المشاريع » '..jdat.public_repos..'\n🔅¦ الرابط » '..jdat.html_url,dl_cb,nil) 
 end
 if matches[1] == "تفعيل" and is_mod(msg) then
 if matches[2] == "الردود" then return unlock_replay(msg) end
@@ -406,9 +403,8 @@ if matches[1] == "ضع الترحيب" and is_mod(msg) then redis:set(boss..'wel
 if matches[1] == "الترحيب"  and is_mod(msg) then
 if redis:get(boss..'welcome:msg'..msg.to.id)  then
 return redis:get(boss..'welcome:msg'..msg.to.id)
-else return "🙋🏼‍♂️*¦* أهلا عزيزي \n🌿¦ نورت المجموعه \n💂🏼‍♀️"
-end end
-if matches[1] == "رفع الادمنيه" and is_owner(msg) then --[[set_config(msg)]] end
+else return "🙋🏼‍♂️*¦* أهلا عزيزي \n🌿¦ نورت المجموعه \n💂🏼‍♀️" end end
+if matches[1] == "رفع الادمنيه" and is_owner(msg) then --[[set_admins(msg)]] end
 if matches[1] == "كشف"  then
 if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="whois"})end 
 if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id, {chat_id=msg.to.id,msg_id=msg.id,user_id=matches[2],cmd="whois"}) end
@@ -420,8 +416,7 @@ if matches[2] and string.match(matches[2], '^%d+$') then
 if matches[2] == our_id then sendMessage(msg.chat_id_,msg.id, 0, "📛¦ لا تستطيع طرد البوت\n🛠", 0, "md")
 elseif is_mod1(msg.to.id,matches[2]) then sendMessage(msg.chat_id_,msg.id, 0, "📛¦ لا تستطيع طرد المدراء اوالادمنيه\n🛠", 0, "md")
 else kick_user(matches[2], msg.to.id) sleep(1) channel_unblock(msg.to.id, matches[2])
-sendMessage(msg.chat_id_, msg.id, 0, "🙋🏼‍♂️*¦* أهلا عزيزي  \n📡*¦* تم طرد العضو ["..matches[2].."]\n✓","md")
-end end
+sendMessage(msg.chat_id_, msg.id, 0, "🙋🏼‍♂️*¦* أهلا عزيزي  \n📡*¦* تم طرد العضو ["..matches[2].."]\n✓","md") end end
 if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {msg_id=msg.id,chat_id=msg.to.id,msg_id=msg.id,username=matches[2],cmd="kick"}) end end
 if matches[1] == "حظر" and is_mod(msg)  then
 if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="ban"}) end
@@ -442,20 +437,16 @@ if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID 
 if matches[1] == "المكتومين" and is_mod(msg)  then return silent_users_list(msg.to.id) end
 if matches[1] == "المحظورين" and is_mod(msg)  then return banned_list(msg.to.id) end
  end -- end of insert group 
- if matches[1] == 'مسح المطورين' and we_sudo(msg)  then
-if #redis:smembers(boss..':SUDO_BOT:')==0 then  return "⚙️*¦* عذرا لا يوجد مطورين في البوت  ✖️" end
-sendMessage(msg.to.id, msg.id, 0, "📌¦ تم مسح `"..#list.."` من المطورين ☔️\n✓", 0, "md")
-redis:del(boss..':SUDO_BOT:')
-return false
-end			
+ if matches[1] == 'مسح' and matches[2] == 'المطورين' and we_sudo(msg)  then
+if #redis:smembers(boss..':SUDO_BOT:') == 0 then  return "⚙️*¦* عذرا لا يوجد مطورين في البوت  ✖️" end
+sendMessage(msg.to.id,msg.id,0,"📛*¦* تم مسح `"..redis:scard(boss..':SUDO_BOT:').."` من المطورين ☔️\n✓", 0, "md")
+redis:del(boss..':SUDO_BOT:') return false end			
 if matches[1] == 'مسح قائمه العام' and we_sudo(msg)  then
 if #redis:smembers(boss..'gban_users')==0 then return "*⚙️¦ لا يوجد مستخدمين محظورين عام في المجموعه *" end
-redis:del(boss..'gban_users')
-return "⚙️*¦* تم مسح قائمه العام\n✓"
-end 
+redis:del(boss..'gban_users') return "⚙️*¦* تم مسح قائمه العام\n✓" end 
 if we_sudo(msg) then
 if matches[1] == "رفع مطور" then
-if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="up_sudo"}) end
+if not matches[2] and msg.reply_id then tdcli_function({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="up_sudo"}) end
 if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id, {chat_id=msg.to.id,msg_id=msg.id,user_id=matches[2],cmd="up_sudo"}) end
 if matches[2] and not string.match(matches[2], '^%d+$') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="up_sudo"}) end end
 if matches[1] == "تنزيل مطور" then
@@ -463,8 +454,7 @@ if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_
 if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id, {chat_id=msg.to.id,msg_id=msg.id,user_id=matches[2],cmd="dn_sudo"}) end
 if matches[2] and not string.match(matches[2], '^%d+$') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="dn_sudo"}) end end
 if matches[1] == "ضع صوره للترحيب" or matches[1]=="ضع صوره للترحيب 🌄" then
-redis:setex(boss..'welcom_ph:witting'..msg.from.id,300,true) return'📭¦ حسننا عزيزي 🍁\n🌄 ¦ الان قم بارسال الصوره للترحيب \n🛠'
-end
+redis:setex(boss..'welcom_ph:witting'..msg.from.id,300,true) return'📭¦ حسننا عزيزي 🍁\n🌄 ¦ الان قم بارسال الصوره للترحيب \n🛠' end
 if matches[1] == "تفعيل البوت خدمي" then return lock_service(msg) end
 if matches[1] == "تعطيل البوت خدمي" then return unlock_service(msg) end
 if matches[1] == "صوره الترحيب" then
@@ -472,11 +462,12 @@ return sendPhoto(msg.to.id,msg.id,0,1,nil,redis:get(boss..':WELCOME_BOT'),[[💯
 💰¦ آختصـآصـي حمـآيهہ‏‏ آلمـجمـوعآت
 📛¦ مـن آلسـبآم وآلتوجيهہ‏‏ وآلتگرآر وآلخ...
 ⚖️¦ مـعرف آلمـطـور  » ]]..SUDO_USER:gsub([[\_]],'_')..[[ 🌿
-👨🏽‍🔧]],dl_cb,nil)
-end
-if matches[1] == "ضع كليشه المطور" then
-redis:setex(boss..'text_sudo:witting'..msg.from.id,1200,true) return'📭¦ حسننا عزيزي 🍁\n💬¦ الان قم بارسال الكليشه \n🛠'
-end end
+👨🏽‍🔧]],dl_cb,nil) end
+if matches[1] == "ضع كليشه المطور" then 
+redis:setex(boss..'text_sudo:witting'..msg.from.id,1200,true) return'📭¦ حسننا عزيزي 🍁\n💬¦ الان قم بارسال الكليشه \n🛠' end
+if matches[1] == "ضع شرط التفعيل" and matches[2] and string.match(matches[2], '^%d+$') then 
+redis:set(boss..':addnumberusers',matches[2]) return'💱*¦* تم وضـع شـرط آلتفعيل آلبوت آذآ گآنت آلمـجمـوعهہ‏‏ آگثر مـن*【'..matches[2]..'】* عضـو  🍁\n' end
+if matches[1] == "شرط التفعيل" then return'🚸*¦* شـرط آلتفعيل آلبوت آذآ گآنت آلمـجمـوعهہ‏‏ آگثر مـن*【'..redis:get(boss..':addnumberusers')..'】* عضـو  🍁\n' end end
 if is_sudo(msg) then
 if (matches[1] == 'المجموعات' or matches[1] == "المجموعات 🔝") and is_sudo(msg) then return chat_num(msg) end
 if matches[1] == 'قائمه المجموعات' and is_sudo(msg) then return chat_list(msg) end
@@ -487,26 +478,21 @@ sendMessage(matches[2],0,1,'📛*¦* تم تعطيل المجموعه بأمر �
 rem_data_group(matches[2]) 
 tdcli_function ({ID = "ChangeChatMemberStatus",chat_id_ = matches[2],user_id_ = our_id,status_ = {ID = "ChatMemberStatusLeft"},},dl_cb,nil)
 return '📛*¦* تم تعطيل المجموعه ومغادرتها \n🏷*¦* المجموعةة » ['..name_gp..']\n🎫*¦* الايدي » ( *'..matches[2]..'* )\n✓'
-else return '📛*¦* لا توجد مجموعه مفعله بهذا الايدي !\n 🌿'
-end end end
+else return '📛*¦* لا توجد مجموعه مفعله بهذا الايدي !\n 🌿' end end end
 if matches[1] == 'المطور' then
-sendMessage(msg.to.id,msg.id,1,(redis:get(boss..":TEXT_SUDO") or '🗃¦ لا توجد كليشه المطور .\n📰¦ يمكنك اضافه كليشه من خلال الامر\n       " `ضع كليشه المطور` " \n📡'),1,'md')
-end
+sendMessage(msg.to.id,msg.id,1,(redis:get(boss..":TEXT_SUDO") or '🗃¦ لا توجد كليشه المطور .\n📰¦ يمكنك اضافه كليشه من خلال الامر\n       " `ضع كليشه المطور` " \n📡'),1,'md') end
 if (matches[1] == "اذاعه عام بالتوجيه" or matches[1] == "اذاعه عام بالتوجيه 📣") and is_sudo(msg) then		
 if not we_sudo(msg) and not redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط "  end
 redis:setex(boss..'fwd:'..msg.from.id,300, true) return "📭¦ حسننا الان ارسل التوجيه للاذاعه \n🔛" end
 if (matches[1] == "اذاعه عام" or matches[1] == "اذاعه عام 📢") and is_sudo(msg) then		
 if not we_sudo(msg) and not redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط " end
-redis:setex(boss..'fwd:all'..msg.from.id,300, true)
-return "📭¦ حسننا الان ارسل الكليشه للاذاعه عام \n🔛" end
+redis:setex(boss..'fwd:all'..msg.from.id,300, true) return "📭¦ حسننا الان ارسل الكليشه للاذاعه عام \n🔛" end
 if (matches[1] == "اذاعه خاص" or matches[1] == "اذاعه خاص 👤") and is_sudo(msg) then		
 if not we_sudo(msg) and not redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط "  end
-redis:setex(boss..'fwd:pv'..msg.from.id,300, true)
-return "📭¦ حسننا الان ارسل الكليشه للاذاعه خاص \n🔛"	 end
+redis:setex(boss..'fwd:pv'..msg.from.id,300, true) return "📭¦ حسننا الان ارسل الكليشه للاذاعه خاص \n🔛"	 end
 if (matches[1] == "اذاعه" or matches[1] == "اذاعه 🗣") and is_sudo(msg) then		
 if not we_sudo(msg) and not redis:get(boss..'lock_brod') then  return "هذا الاوامر للمطور الاساسي فقط "  end
-redis:setex(boss..'fwd:groups'..msg.from.id,300, true)
-return "📭¦ حسننا الان ارسل الكليشه للاذاعه للمجموعات \n🔛" end
+redis:setex(boss..'fwd:groups'..msg.from.id,300, true) return "📭¦ حسننا الان ارسل الكليشه للاذاعه للمجموعات \n🔛" end
 if (matches[1] == "المطورين" or matches[1] == "المطورين 🕹") and is_sudo(msg) then return sudolist(msg) end
 if (matches[1] == "قائمه العام" or matches[1]=="قائمه العام 📜") and is_sudo(msg)  then return gbanned_list(msg) end
 if matches[1] == "تعطيل" and (matches[2] == "التواصل" or matches[2]=="التواصل ✖️") and we_sudo(msg) then return lock_twasel(msg) end
@@ -534,14 +520,11 @@ if redis:get(boss..'welcom:witting'..msg.from.id) then -- استقبال كلي�
 redis:del(boss..'welcom:witting'..msg.from.id) redis:set(boss..'welcome:msg'..msg.to.id,msg.text)
 return "📜*¦* تم وضع الترحيب بنجاح كلاتي 👋🏻\n*["..msg.text.."]*\n\n🔖¦ ملاحظه تستطيع\n🗒¦ اضهار القوانين بواسطه  ➣ *{rules}*  \n📰¦  اضهار الاسم بواسطه ➣ *{name}*\n🏷¦ اضهار المعرف بواسطه ➣ *{username}*" end
 if redis:get(boss..'rulse:witting'..msg.from.id) then --- استقبال القوانين
-redis:del(boss..'rulse:witting'..msg.from.id) redis:set(boss..'rulse:msg'..msg.to.id,check_markdown(msg.text))
-return '📜*¦* مرحبآ عزيزي\n📦¦ تم حفظ القوانين بنجاح ✓\n🔖¦ اكتب [[ القوانين ]] لعرضها \n💬✓' end
+redis:del(boss..'rulse:witting'..msg.from.id) redis:set(boss..'rulse:msg'..msg.to.id,check_markdown(msg.text)) return '📜*¦* مرحبآ عزيزي\n📦¦ تم حفظ القوانين بنجاح ✓\n🔖¦ اكتب [[ القوانين ]] لعرضها \n💬✓' end
 if redis:get(boss..'name:witting'..msg.from.id) then --- استقبال الوصف
-redis:del(boss..'name:witting'..msg.from.id) tdcli_function ({ID = "ChangeChatTitle",chat_id_ = msg.to.id,title_ = msg.text}, dl_cb, nil)
-return "📭¦ تم تغير اسم المجموعه  ✋🏿\n🗯¦ الان اسمه `"..msg.text.."` \n✓" end
+redis:del(boss..'name:witting'..msg.from.id) tdcli_function ({ID = "ChangeChatTitle",chat_id_ = msg.to.id,title_ = msg.text}, dl_cb, nil) return "📭¦ تم تغير اسم المجموعه  ✋🏿\n🗯¦ الان اسمه `"..msg.text.."` \n✓" end
 if redis:get(boss..'about:witting'..msg.from.id) then --- استقبال الوصف
-redis:del(boss..'about:witting'..msg.from.id) tdcli_function ({ID = "ChangeChannelAbout",channel_id_ = getChatId(msg.to.id).ID,about_ = msg.text}, dl_cb, nil)
-return "📜*¦* تم وضع الوصف بنجاح\n✓" end
+redis:del(boss..'about:witting'..msg.from.id) tdcli_function ({ID = "ChangeChannelAbout",channel_id_ = getChatId(msg.to.id).ID,about_ = msg.text}, dl_cb, nil) return "📜*¦* تم وضع الوصف بنجاح\n✓" end
 if redis:get(boss..'fwd:all'..msg.from.id) then ---- استقبال رساله الاذاعه عام
 redis:del(boss..'fwd:all'..msg.from.id)
 local pv = redis:smembers(boss..'users')  
@@ -561,4 +544,4 @@ for i = 1, #groups do sendMessage(groups[i],0,0,'['..msg.text..']', 0)			 end
 sendMessage(msg.to.id,0,0, '🗣*¦*  تم اذاعه الكليشه الى *'..#groups..'* مجموعات \n✓', 0)			
 end end end
 
-return {patterns ={"^(ايدي) (@[%a%d%_]+)$","^(كشف) (%d+)$","^(كشف) (@[%a%d%_]+)$",'^(رفع عضو مميز) (@[%a%d%_]+)$','^(رفع عضو مميز) (%d+)$','^(تنزيل عضو مميز) (@[%a%d%_]+)$','^(تنزيل عضو مميز) (%d+)$','^(رفع ادمن) (@[%a%d%_]+)$','^(رفع ادمن) (%d+)$','^(تنزيل ادمن) (@[%a%d%_]+)$','^(تنزيل ادمن) (%d+)$','^(رفع المدير) (@[%a%d%_]+)$','^(رفع المدير) (%d+)$','^(رفع منشى) (%d+)$','^(تنزيل منشى) (%d+)$','^(رفع منشى) (@[%a%d%_]+)$','^(تنزيل منشى) (@[%a%d%_]+)$','^(تنزيل المدير) (@[%a%d%_]+)$','^(تنزيل المدير) (%d+)$','^(قفل) (.*)$','^(فتح) (.*)$','^(تفعيل) (.*)$','^(تعطيل) (.*)$','^(ضع تكرار) (%d+)$',"^(مسح) (.*)$",'^(منع) (.*)$','^(الغاء منع) (.*)$',"^(حظر عام) (@[%a%d%_]+)$","^(حظر عام) (%d+)$","^(الغاء العام) (@[%a%d%_]+)$","^(الغاء العام) (%d+)$","^(حظر) (@[%a%d%_]+)$","^(حظر) (%d+)$","^(الغاء الحظر) (@[%a%d%_]+)$","^(الغاء الحظر) (%d+)$","^(طرد) (@[%a%d%_]+)$","^(طرد) (%d+)$","^(كتم) (@[%a%d%_]+)$","^(كتم) (%d+)$","^(الغاء الكتم) (@[%a%d%_]+)$","^(الغاء الكتم) (%d+)$","^(رفع مطور) (.*)$","^(تنزيل مطور) (.*)$","^(تعطيل) (-%d+)$","^(الاشتراك) ([123])$", "^(شحن) (%d+)$", "^(git) (.*)$", "(.*)" },run=xboss}
+return {patterns ={"^(ضع شرط التفعيل) (%d+)$","^(ايدي) (@[%a%d%_]+)$","^(كشف) (%d+)$","^(كشف) (@[%a%d%_]+)$",'^(رفع عضو مميز) (@[%a%d%_]+)$','^(رفع عضو مميز) (%d+)$','^(تنزيل عضو مميز) (@[%a%d%_]+)$','^(تنزيل عضو مميز) (%d+)$','^(رفع ادمن) (@[%a%d%_]+)$','^(رفع ادمن) (%d+)$','^(تنزيل ادمن) (@[%a%d%_]+)$','^(تنزيل ادمن) (%d+)$','^(رفع المدير) (@[%a%d%_]+)$','^(رفع المدير) (%d+)$','^(رفع منشى) (%d+)$','^(تنزيل منشى) (%d+)$','^(رفع منشى) (@[%a%d%_]+)$','^(تنزيل منشى) (@[%a%d%_]+)$','^(تنزيل المدير) (@[%a%d%_]+)$','^(تنزيل المدير) (%d+)$','^(قفل) (.*)$','^(فتح) (.*)$','^(تفعيل) (.*)$','^(تعطيل) (.*)$','^(ضع تكرار) (%d+)$',"^(مسح) (.*)$",'^(منع) (.*)$','^(الغاء منع) (.*)$',"^(حظر عام) (@[%a%d%_]+)$","^(حظر عام) (%d+)$","^(الغاء العام) (@[%a%d%_]+)$","^(الغاء العام) (%d+)$","^(حظر) (@[%a%d%_]+)$","^(حظر) (%d+)$","^(الغاء الحظر) (@[%a%d%_]+)$","^(الغاء الحظر) (%d+)$","^(طرد) (@[%a%d%_]+)$","^(طرد) (%d+)$","^(كتم) (@[%a%d%_]+)$","^(كتم) (%d+)$","^(الغاء الكتم) (@[%a%d%_]+)$","^(الغاء الكتم) (%d+)$","^(رفع مطور) (.*)$","^(تنزيل مطور) (.*)$","^(تعطيل) (-%d+)$","^(الاشتراك) ([123])$", "^(شحن) (%d+)$", "^(git) (.*)$", "(.*)" },run=xboss}
