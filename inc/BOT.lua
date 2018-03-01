@@ -111,7 +111,7 @@ cd $(cd $(dirname $0); pwd)
  rm ./ins  
  rm ./README.md
  rm -rf ./.git
-chmod +x ../run
+chmod +x ./run
 ./run
 ]])
 end
