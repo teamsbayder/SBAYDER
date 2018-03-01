@@ -482,8 +482,6 @@ local d = math.floor(redis:ttl(boss..'ExpireDate:'..msg.to.id) / 86400) + 1
 if tonumber(d) == 1 and not is_sudo(msg) and is_mod(msg) then
 sendMessage(msg.to.id, 0, 1, '🕵🏼️‍♀️¦ باقي يوم واحد وينتهي الاشتراك ✋🏿\n👨🏾‍🔧¦ راسل المطور للتجديد '..SUDO_USER..'\n📛', 1, 'md')
 end end end
-
-
 function set_admins(msg) 
 tdcli_function({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 50},function(arg, data)
 for k,v in pairs(data.members_) do
@@ -506,16 +504,15 @@ local get_time = https.request('https://api.th3boss.com/date.php')
 local dat = JSON.decode(get_time)
 send_msg(SUDO_ID,'👮🏽*¦* قام احد المطورين بتفعيل البوت\n👥*¦* ['..msg.to.title..'️]\n🎫*¦* ايدي المجموعه » `'..msg.to.id..'`\n👨🏽‍💻*¦* بواسطة » ['..msg.from.first_name..']\n🎟*¦* معرفه » @['..(msg.from.username or ' --- ')..']\n📆*¦* التاريخ » ['..dat.en.fulldate5..']\n📮',nil,'md')
 end end
-function modadd(msg)
+function modadd(msg,num)
 if not is_sudo(msg) and not redis:get(boss..'lock_service') then return '🚸¦ أنـت لـسـت الـمـطـور ⚙️' end
 if not is_super(msg) then return '🚸¦ لا يمكنك تفعيل البوت في المجوعات العاديه / البوت يدعم فقط المجموعات الخارقه ⚙️' end
 if redis:get(boss..'group:add'..msg.to.id) then  return '🎗*¦* المجموعه بالتأكيد ✓️ تم تفعيلها' end
 tdcli_function({ID="GetChannelFull",channel_id_=getChatId(msg.to.id).ID},function(arg, data) 
 res_users = true
-if  data.member_count_ >= tonumber(redis:get(boss..':addnumberusers')) then
+if  data.member_count_ >= num then
 res_users = false
-end 
-end,nil)
+end end,nil)
 if not res_users then
 return sendMessage(msg.to.id,0,1,'🚸*¦* لآ يمـگنني تفعيل آلبوت في آلمـجمـوعهہ‏ يجب آن يگون آگثر مـن *【'..redis:get(boss..':addnumberusers')..'】* عضـو 👤',1,'md')
 end
@@ -653,8 +650,13 @@ end
 if cmd == "whois" then
 local function id_cb(arg, data)
 if data.username_ then user_name = '@'..check_markdown(data.username_) else user_name = check_markdown(data.first_name_) end
-return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* الاسم » '..data.first_name_..'\n🎫*¦* الايدي » (`'..data.id_..'`) \n🛠*¦* المعرف » '..user_name..'\n📃', 1,'md')
-end
+return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* الاسم » '..data.first_name_..'\n🎫*¦* الايدي » (`'..data.id_..'`) \n🛠*¦* المعرف » '..user_name..'\n📃', 1,'md') end
+tdcli_function ({ID = "GetUser",user_id_ = data.sender_user_id_}, id_cb, {msg_id=arg.msg_id,chat_id=data.chat_id_,user_id=data.sender_user_id_}) end
+if cmd == "active" then
+local function id_cb(arg, data)
+if data.username_ then user_name = '@'..check_markdown(data.username_) else user_name = check_markdown(data.first_name_) end
+msgs = tonumber(redis:get(boss..'msgs:'..data.id_..':'..arg.chat_id) or 1)
+return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..user_name..'\n📮*¦* رسائلك : '..msgs..' رسالةة \n🔖*¦* التفاعل : '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
 tdcli_function ({ID = "GetUser",user_id_ = data.sender_user_id_}, id_cb, {msg_id=arg.msg_id,chat_id=data.chat_id_,user_id=data.sender_user_id_})
 end
 if cmd == "ban" then
@@ -817,6 +819,9 @@ end
 if cmd == "whois" then
 return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* الاسم » '..data.title_..'\n🎫*¦* الايدي » (`'..data.id_..'`) \n🛠*¦* المعرف » '..check_markdown(arg.username)..'\n📃', 1,'md')
 end
+if cmd == "active" then
+msgs = tonumber(redis:get(boss..'msgs:'..data.id_..':'..arg.chat_id) or 1)
+return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..check_markdown(arg.username)..'\n📮*¦* رسائلك : '..msgs..' رسالةة \n🔖*¦* التفاعل : '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
 if cmd == "ban" then
 if (is_mod1(arg.chat_id, data.id_) or data.id_ == our_id ) then return sendMessage(arg.chat_id,arg.msg_id, 0, "👤*¦* لا تستطيع حظر المدراء او الادمنيه", 0, "md") end
 if redis:sismember(boss..'banned:'..arg.chat_id,data.id_) then return sendMessage(arg.chat_id,arg.msg_id, 0, '👤*¦* العضو » '..user_name..' \n🎫*¦* الايدي » (`'..data.id_..'`)\n🛠*¦* تم بالتأكيد حظره \n✓️', 0, "md") end
