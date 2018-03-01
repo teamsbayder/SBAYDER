@@ -114,7 +114,7 @@ end
 if matches[2] and not string.match(matches[2], '^%d+$') then
 tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="demote"})
 end end
-if matches[1] == "التفاعل" and is_owner(msg) then
+if matches[1] == "التفاعل" then
 if not matches[2] and msg.reply_id then
 tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="active"})
 end
