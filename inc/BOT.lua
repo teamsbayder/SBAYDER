@@ -1,7 +1,7 @@
 --[[
 << تم برمجه وكتابه السورس من قبل مطورين >>
 <<         @BLCON  \  @TH3BOSS          >>
-]]
+]] 
 function load_proc()
 loadfile('./inc/functions.lua')()
 loadfile('./inc/locks.lua')()
