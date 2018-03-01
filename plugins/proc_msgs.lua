@@ -52,15 +52,15 @@ if data.type_.ID == "UserTypeBot" then -- حصانه التحقق من البو�
 if not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots_by_kick'..chat) then --- طرد البوت مع الي ضافه
 kick_user(data.id_, arg.chat_id)
 kick_user(arg.user_id, arg.chat_id)
-sendMessage(arg.chat_id, 0, 1, '👤*¦* العضو : ['..arg.name..']\n❖￤ يوزر : ['..usernamex..']\n❖￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت مع الي ضاف البوت \n✘', 0, "md")    
+sendMessage(arg.chat_id, 0, 1, '👤*¦* العضو : ['..arg.name..']\n🔸￤ يوزر : ['..usernamex..']\n🔸￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت مع الي ضاف البوت \n✘', 0, "md")    
 elseif not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots'..chat) then
 kick_user(data.id_, arg.chat_id)
 if redis:get(boss..'lock_woring'..chat) then
-return sendMessage(arg.chat_id, 0, 1, '❖￤ الاسم : ['..arg.name..']\n❖￤ الايدي : '..arg.user_id..'\n❖￤ العضو : ['..usernamex..']\n❖￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت \n✘', 0, "md")    
+return sendMessage(arg.chat_id, 0, 1, '🔸￤ الاسم : ['..arg.name..']\n🔸￤ الايدي : '..arg.user_id..'\n🔸￤ العضو : ['..usernamex..']\n🔸￤ البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت \n✘', 0, "md")    
 end end else
 if redis:get(boss..'welcome:get'..arg.chat_id) then
-welcome = (redis:get(boss..'welcome:msg'..arg.chat_id) or "❖￤ مرحباً عزيزي\n❖￤ نورت المجموعة \n💂🏼‍♀️")
-rules = (redis:get(boss..'rulse:msg'..arg.chat_id) or "❖￤ مرحبأ عزيري 👋🏻 القوانين كلاتي 👇🏻\n❖￤ ممنوع نشر الروابط \n❖￤ ممنوع التكلم او نشر صور اباحيه \n❖￤ ممنوع  اعاده توجيه \n❖￤ ممنوع التكلم بلطائفه \n❖￤ الرجاء احترام المدراء والادمنيه 😅\n")
+welcome = (redis:get(boss..'welcome:msg'..arg.chat_id) or "🔸￤ مرحباً عزيزي\n🔸￤ نورت المجموعة \n💂🏼‍♀️")
+rules = (redis:get(boss..'rulse:msg'..arg.chat_id) or "🔸￤ مرحبأ عزيري 👋🏻 القوانين كلاتي 👇🏻\n🔸￤ ممنوع نشر الروابط \n🔸￤ ممنوع التكلم او نشر صور اباحيه \n🔸￤ ممنوع  اعاده توجيه \n🔸￤ ممنوع التكلم بلطائفه \n🔸￤ الرجاء احترام المدراء والادمنيه 😅\n")
 if data.username_ then user_name = "@"..data.username_ else user_name = "---" end
 local welcome = welcome:gsub("{rules}", rules)
 local welcome = welcome:gsub("{name}", '['..data.first_name_..' '..(data.last_name_ or '')..']')
@@ -70,11 +70,11 @@ sendMessage(arg.chat_id, arg.msg_id, 0, welcome, 0, "md")
 end  end
 -------------------------
 if is_banned(data.id_, arg.chat_id) then
-sendMessage(arg.chat_id,arg.msg_id, 0, '❖￤ العضو ⇐ ['..user_name..'] \n❖￤ الايدي* ('..data.id_..')*\n❖￤ محضور سابقا وتم طرده ✔️', 0, "md")
+sendMessage(arg.chat_id,arg.msg_id, 0, '🔸￤ العضو ⇐ ['..user_name..'] \n🔸￤ الايدي* ('..data.id_..')*\n🔸￤ محضور سابقا وتم طرده ✔️', 0, "md")
 kick_user(data.id_, arg.chat_id)
 end
 if is_gbanned(data.id_) then
-sendMessage(arg.chat_id,arg.msg_id, 0, '❖￤ العضو ⇐ ['..user_name..'] \n❖￤ الايدي* ('..data.id_..')*\n❖￤ محظور عام تم طرده ✔️', 0, "md")
+sendMessage(arg.chat_id,arg.msg_id, 0, '🔸￤ العضو ⇐ ['..user_name..'] \n🔸￤ الايدي* ('..data.id_..')*\n🔸￤ محظور عام تم طرده ✔️', 0, "md")
 kick_user(data.id_, arg.chat_id)
 end end end
 if msg.to.type == "channel" then
@@ -152,7 +152,7 @@ else
 del_msg(chat, msg.id)
 kick_user(user, chat)
 redis:setex(boss..'sender:'..user..':flood', 30, true)
-return sendMessage(chat, msg.id, 0, "👤¦ العضو : ["..user_name.."]\n🚸¦ عذرا ممنوع التكرار في هذه المجموعه لقد تم طردك ✔️\n-", 0, "md")
+return sendMessage(chat, msg.id, 0, "👤¦ العضو : ["..user_name.."]\n🚸¦ عذرا ممنوع التكرار في هذه المجموعه لقد تم طردك ✔️\n➖", 0, "md")
 end end
 redis:setex(boss..'user:'..user..':msgs', TIME_CHECK, msgs+1)
 end
