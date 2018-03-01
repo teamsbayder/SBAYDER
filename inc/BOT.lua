@@ -7,14 +7,14 @@ loadfile('./inc/functions.lua')()
 loadfile('./inc/locks.lua')()
 end
 load_proc()
-URL = require('socket.url')
-http = require('socket.http')
+URL   = require('socket.url')
+http  = require('socket.http')
 https = require('ssl.https')
-JSON = require('cjson')
+JSON  = require('cjson')
 ltn12 = require ('ltn12')
 Tolgi = require ('lgi')
 Redis = require('redis')
-redis = Redis.connect('127.0.0.1', 6379)
+redis = Redis.connect('127.0.0.1',6379)
 doify = Tolgi.require('Notify')
 doify.init ('Telegram updates')
 local chats = {}
@@ -107,15 +107,12 @@ screen -S boss lua ./inc/BOT.lua
 file:close()
 print ('\27[1;36minfo.lua is created.\27[m')
 os.execute([[
+cd $(cd $(dirname $0); pwd)
  rm ./ins  
  rm ./README.md
  rm -rf ./.git
-chmod +x run
-if ! screen -list | grep -q "boss"; then
-screen -S boss lua ./inc/BOT.lua
-fi
-screen -X -S boss kill
-screen -S boss lua ./inc/BOT.lua
+chmod +x ../run
+../run
 ]])
 end
 
@@ -255,23 +252,23 @@ end
 function msg_pattern(pattern,text)
 if text then
 local matches = {}
-matches = {string.match(text, pattern)} 
+matches = {string.match(text,pattern)} 
 if next(matches) then
 return matches
 end end end
-function match_plugin(plug, plug_name, msg)
+function match_plugin(plug,plug_name,msg)
 if plug.pre_process then
 if plug.pre_process(msg) then
-print("¦This_process: ", plug_name)
+print("¦This_process: ",plug_name)
 end end
 for k, pattern in pairs(plug.patterns) do
-matches = msg_pattern(pattern, msg.content_.text_ or msg.content_.caption_)
+matches = msg_pattern(pattern,msg.content_.text_ or msg.content_.caption_)
 if matches then
-print("¦This_Message: ", pattern..' | Plugin is: '..plug_name)
+print("¦This_Message: ",pattern..' | Plugin is: '..plug_name)
 if plug.run then
-local TEXT = plug.run(msg, matches)
+local TEXT = plug.run(msg,matches)
 if TEXT then
-sendMessage(msg.chat_id_, msg.id_, 0, TEXT, 0, "md")
+sendMessage(msg.chat_id_,msg.id_,0,TEXT,0,"md")
 end end return end end end
 function msg_info(msg, data)
 bot = {}
@@ -362,8 +359,7 @@ msg_info(msg, msg)
 	elseif msg.content_.ID == "MessageChatJoinByLink" then
 	msg.joinuser = msg.sender_user_id_
 	elseif msg.content_.ID == "MessageChatDeleteMember" then
-	msg.deluser = true
-    end end
+	msg.deluser = true  end end
 	elseif data.ID == "UpdateMessageContent" then  
 	edit = data
 	local function msg_edit(arg, data)
@@ -383,4 +379,3 @@ msg_info(msg, msg)
 	tdcli_function ({ID="GetChats", offset_order_="9223372036854775807", offset_chat_id_=0, limit_=20}, dl_cb, nil)    
 	end
 end
- 
