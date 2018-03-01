@@ -455,8 +455,8 @@ if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "
 if matches[2] and not string.match(matches[2], '^%d+$') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="dn_sudo"}) end end
 if matches[1] == "ضع صوره للترحيب" or matches[1]=="ضع صوره للترحيب 🌄" then
 redis:setex(boss..'welcom_ph:witting'..msg.from.id,300,true) return'📭¦ حسننا عزيزي 🍁\n🌄 ¦ الان قم بارسال الصوره للترحيب \n🛠' end
-if matches[1] == "تفعيل البوت خدمي" then return lock_service(msg) end
-if matches[1] == "تعطيل البوت خدمي" then return unlock_service(msg) end
+if matches[1] == "تعطيل" and matches[2] == "البوت خدمي" then return lock_service(msg) end
+if matches[1] == "تفعيل" and matches[2] == "البوت خدمي" then return unlock_service(msg) end
 if matches[1] == "صوره الترحيب" then
 return sendPhoto(msg.to.id,msg.id,0,1,nil,redis:get(boss..':WELCOME_BOT'),[[💯¦ مـرحبآ آنآ بوت آسـمـي ]]..redis:get(boss..'bot:name')..[[ 🎖
 💰¦ آختصـآصـي حمـآيهہ‏‏ آلمـجمـوعآت
