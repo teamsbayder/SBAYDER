@@ -404,7 +404,7 @@ if matches[1] == "الترحيب"  and is_mod(msg) then
 if redis:get(boss..'welcome:msg'..msg.to.id)  then
 return redis:get(boss..'welcome:msg'..msg.to.id)
 else return "🙋🏼‍♂️*¦* أهلا عزيزي \n🌿¦ نورت المجموعه \n💂🏼‍♀️" end end
-if matches[1] == "رفع الادمنيه" and is_owner(msg) then --[[set_admins(msg)]] end
+if matches[1] == "رفع الادمنيه" and is_owner(msg) then set_admins(msg) end
 if matches[1] == "كشف"  then
 if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="whois"})end 
 if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id, {chat_id=msg.to.id,msg_id=msg.id,user_id=matches[2],cmd="whois"}) end
