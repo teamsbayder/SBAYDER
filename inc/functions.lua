@@ -654,7 +654,7 @@ if cmd == "active" then
 local function id_cb(arg, data)
 if data.username_ then user_name = '@'..check_markdown(data.username_) else user_name = check_markdown(data.first_name_) end
 msgs = tonumber(redis:get(boss..'msgs:'..data.id_..':'..arg.chat_id) or 1)
-return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..user_name..'\n📮*¦* رسائلك : '..msgs..' رسالةة \n🔖*¦* التفاعل : '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
+return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..user_name..'\n📮*¦* رسائلك » '..msgs..' رسالةة \n🔖*¦* التفاعل » '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
 tdcli_function ({ID = "GetUser",user_id_ = data.sender_user_id_}, id_cb, {msg_id=arg.msg_id,chat_id=data.chat_id_,user_id=data.sender_user_id_})
 end
 if cmd == "ban" then
@@ -819,7 +819,7 @@ return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* الاسم » '..data.ti
 end
 if cmd == "active" then
 msgs = tonumber(redis:get(boss..'msgs:'..data.id_..':'..arg.chat_id) or 1)
-return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..check_markdown(arg.username)..'\n📮*¦* رسائلك : '..msgs..' رسالةة \n🔖*¦* التفاعل : '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
+return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..check_markdown(arg.username)..'\n📮*¦* رسائلك » '..msgs..' رسالةة \n🔖*¦* التفاعل » '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
 if cmd == "ban" then
 if (is_mod1(arg.chat_id, data.id_) or data.id_ == our_id ) then return sendMessage(arg.chat_id,arg.msg_id, 0, "👤*¦* لا تستطيع حظر المدراء او الادمنيه", 0, "md") end
 if redis:sismember(boss..'banned:'..arg.chat_id,data.id_) then return sendMessage(arg.chat_id,arg.msg_id, 0, '👤*¦* العضو » '..user_name..' \n🎫*¦* الايدي » (`'..data.id_..'`)\n🛠*¦* تم بالتأكيد حظره \n✓️', 0, "md") end
