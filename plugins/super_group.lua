@@ -4,7 +4,7 @@
 ]]
 local function xboss(msg, matches)
 if msg.to.type == 'channel' then
-if matches[1] == "تفعيل" and not matches[2] then local numusersax = tonumber(redis:get(boss..':addnumberusers')) return modadd(msg,numusersax)  end
+if matches[1] == "تفعيل" and not matches[2] then local numusersax = (tonumber(redis:get(boss..':addnumberusers')) or 0) return modadd(msg,numusersax)  end
 if matches[1] == "تعطيل" and not matches[2] then return modrem(msg) end end
 if msg.to.type ~= 'pv' and redis:get(boss..'group:add'..msg.to.id) then 
 if matches[1] == "ايدي" then
