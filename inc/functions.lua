@@ -497,14 +497,14 @@ redis:hset(boss..'username:'..arg.user_id, 'username', user_name)
 redis:sadd(boss..':MONSHA_BOT:'..msg.to.id,arg.user_id)
 end tdcli_function ({ID = "GetUser",user_id_ = v.user_id_}, config_owner, {user_id=v.user_id_}) end end 
 return sendMessage(msg.to.id, 0, 1,'👨🏽‍🔧*¦* تم رفع جمـيع آلآدمـنيهہ‏‏ آلگروب بآلبوت \n✓', 1, 'md') end,nil) end
-function group_set(msg)
+function group_set(msg,numus)
 redis:set(boss..'group:add'..msg.to.id,true) redis:sadd(boss..'group:ids',msg.to.id) redis:set(boss..'group:name'..msg.to.id,msg.to.title) redis:set(boss..'lock_link'..msg.to.id,true)  redis:set(boss..'lock_id'..msg.to.id,true) redis:set(boss..'lock_spam'..msg.to.id,true) redis:set(boss..'lock_webpage'..msg.to.id,true) redis:set(boss..'lock_markdown'..msg.to.id,true) redis:set(boss..'lock_flood'..msg.to.id,true) redis:set(boss..'lock_bots'..msg.to.id,true) redis:set(boss..'mute_forward'..msg.to.id,true) redis:set(boss..'mute_contact'..msg.to.id,true) redis:set(boss..'mute_location'..msg.to.id,true) redis:set(boss..'mute_document'..msg.to.id,true) redis:set(boss..'mute_keyboard'..msg.to.id,true) redis:set(boss..'mute_game'..msg.to.id,true) redis:set(boss..'mute_inline'..msg.to.id,true) redis:set(boss..'lock_username'..msg.to.id,true) redis:set(boss..'num_msg_max'..msg.to.id,5) redis:sadd(boss..'mtwr_count'..msg.from.id,msg.to.id)
 if not we_sudo(msg) then
 local get_time = https.request('https://api.th3boss.com/date.php') 
 local dat = JSON.decode(get_time)
-send_msg(SUDO_ID,'👮🏽*¦* قام احد المطورين بتفعيل البوت\n👥*¦* ['..msg.to.title..'️]\n🎫*¦* ايدي المجموعه » `'..msg.to.id..'`\n👨🏽‍💻*¦* بواسطة » ['..msg.from.first_name..']\n🎟*¦* معرفه » @['..(msg.from.username or ' --- ')..']\n📆*¦* التاريخ » ['..dat.en.fulldate5..']\n📮',nil,'md')
+send_msg(SUDO_ID,'👮🏽*¦* قام احد المطورين بتفعيل البوت\n👥*¦* ['..msg.to.title..'️]\n🎫*¦* ايدي المجموعه » `'..msg.to.id..'`\n⚖️*¦* عدد الاعضاء » *【'..numus..'】* عضو 🗣\n👨🏽‍💻*¦* بواسطة » ['..msg.from.first_name..']\n🎟*¦* معرفه » @['..(msg.from.username or ' لا يوجد ')..']\n📆*¦* التاريخ » ['..dat.en.fulldate5..']\n📮',nil,'md')
 end end
-function set_groupadmins(msg)
+function set_groupadmins(msg,numus)
 tdcli_function({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 50},function(arg, data)
 local bot_anin = false
 for k,v in pairs(data.members_) do
@@ -535,10 +535,10 @@ redis:hset(boss..'username:'..arg.user_id, 'username', user_name)
 redis:sadd(boss..':MONSHA_BOT:'..msg.to.id,arg.user_id) end
 tdcli_function ({ID = "GetUser",user_id_ = v.user_id_}, config_owner, {user_id=v.user_id_})
 end end  end 
-if redis:get(boss..'lock_service') then group_set(msg)
+if redis:get(boss..'lock_service') then group_set(msg,numus)
 sendMessage(msg.to.id, 0, 1,'👨🏽‍🔧*¦* تم رفع جمـيع آلآدمـنيهہ‏‏ آلگروب بآلبوت \n✓', 1, 'md')
 return sendMessage(msg.to.id, 0, 1,'📮*¦* تـم تـفـعـيـل الـمـجـمـوعـه \n✓️' , 1, 'md')
-else group_set(msg)
+else group_set(msg,numus)
 return sendMessage(msg.to.id, 0, 1,'📮*¦* تـم تـفـعـيـل الـمـجـمـوعـه \n✓️' , 1, 'md')
 end end end ,nil) end
 function modadd(msg,num)
@@ -548,7 +548,7 @@ if redis:get(boss..'group:add'..msg.to.id) then  return '🎗*¦* المجموع
 tdcli_function({ID="GetChannelFull",channel_id_=getChatId(msg.to.id).ID},function(arg, data) 
 if arg.num  >= data.member_count_ then
 return sendMessage(msg.to.id,0,1,'🚸*¦* لآ يمـگنني تفعيل آلبوت في آلمـجمـوعهہ‏ يجب آن يگون آگثر مـن *【'..redis:get(boss..':addnumberusers')..'】* عضـو 👤',1,'md')
- else return set_groupadmins(msg) end 
+ else return set_groupadmins(msg,data.member_count_) end 
 end,{num=num}) end 
 function botrem(msg)
 redis:del(boss..'group:add'..msg.to.id) redis:srem(boss..'group:ids',msg.to.id) redis:del(boss..'group:name'..msg.to.id) redis:del(boss..'lock_link'..msg.to.id) redis:del(boss..'lock_id'..msg.to.id) redis:del(boss..'lock_spam'..msg.to.id) redis:del(boss..'lock_webpage'..msg.to.id) redis:del(boss..'lock_markdown'..msg.to.id) redis:del(boss..'lock_flood'..msg.to.id) redis:del(boss..'lock_bots'..msg.to.id) redis:del(boss..'mute_forward'..msg.to.id) redis:del(boss..'mute_contact'..msg.to.id) redis:del(boss..'mute_location'..msg.to.id) redis:del(boss..'mute_document'..msg.to.id) redis:del(boss..'mute_keyboard'..msg.to.id) redis:del(boss..'mute_game'..msg.to.id) redis:del(boss..'mute_inline'..msg.to.id) redis:del(boss..'num_msg_max'..msg.to.id) redis:del(boss..'extimeadd'..msg.to.id) redis:del(boss..'CheckExpire::'..msg.to.id) redis:del(boss..'admins:'..msg.to.id) redis:del(boss..'whitelist:'..msg.to.id) redis:del(boss..'owners:'..msg.to.id)redis:del(boss..'klmamn3'..msg.to.id) redis:del(boss..'lock_edit'..msg.to.id) redis:del(boss..'lock_link'..msg.to.id) redis:del(boss..'lock_tag'..msg.to.id) redis:del(boss..'lock_username'..msg.to.id) redis:del(boss..'lock_pin'..msg.to.id) redis:del(boss..'lock_bots_by_kick'..msg.to.id) redis:del(boss..'mute_gif'..msg.to.id) redis:del(boss..'mute_text'..msg.to.id) redis:del(boss..'mute_photo'..msg.to.id) redis:del(boss..'mute_video'..msg.to.id) redis:del(boss..'mute_audio'..msg.to.id) redis:del(boss..'mute_voice'..msg.to.id) redis:del(boss..'mute_sticker'..msg.to.id) redis:del(boss..'mute_tgservice'..msg.to.id) redis:del(boss..'welcome'..msg.to.id) redis:del(boss..'replay'..msg.to.id) redis:del(boss..'lock_woring'..msg.to.id)
@@ -654,7 +654,7 @@ if cmd == "active" then
 local function id_cb(arg, data)
 if data.username_ then user_name = '@'..check_markdown(data.username_) else user_name = check_markdown(data.first_name_) end
 msgs = tonumber(redis:get(boss..'msgs:'..data.id_..':'..arg.chat_id) or 1)
-return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..user_name..'\n📮*¦* رسائلك » '..msgs..' رسالةة \n🔖*¦* التفاعل » '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
+return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..user_name..'\n📮*¦* رسائلك : '..msgs..' رسالةة \n🔖*¦* التفاعل : '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
 tdcli_function ({ID = "GetUser",user_id_ = data.sender_user_id_}, id_cb, {msg_id=arg.msg_id,chat_id=data.chat_id_,user_id=data.sender_user_id_})
 end
 if cmd == "ban" then
@@ -819,7 +819,7 @@ return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* الاسم » '..data.ti
 end
 if cmd == "active" then
 msgs = tonumber(redis:get(boss..'msgs:'..data.id_..':'..arg.chat_id) or 1)
-return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..check_markdown(arg.username)..'\n📮*¦* رسائلك » '..msgs..' رسالةة \n🔖*¦* التفاعل » '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
+return sendMessage(arg.chat_id,arg.msg_id, 1, '👤*¦* العضو » '..check_markdown(arg.username)..'\n📮*¦* رسائلك : '..msgs..' رسالةة \n🔖*¦* التفاعل : '..get_ttl(msgs)..' \n🙇🏽', 1,'md') end
 if cmd == "ban" then
 if (is_mod1(arg.chat_id, data.id_) or data.id_ == our_id ) then return sendMessage(arg.chat_id,arg.msg_id, 0, "👤*¦* لا تستطيع حظر المدراء او الادمنيه", 0, "md") end
 if redis:sismember(boss..'banned:'..arg.chat_id,data.id_) then return sendMessage(arg.chat_id,arg.msg_id, 0, '👤*¦* العضو » '..user_name..' \n🎫*¦* الايدي » (`'..data.id_..'`)\n🛠*¦* تم بالتأكيد حظره \n✓️', 0, "md") end
