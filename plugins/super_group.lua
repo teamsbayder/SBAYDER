@@ -18,7 +18,7 @@ sendPhoto(msg.to.id, msg.id, 0, 1, nil, data.photos_[0].sizes_[1].photo_.persist
 else
 sendMessage(msg.to.id, msg.id_, 1, '🚸¦ لا يوجد صوره في بروفايلك ...!\n\n👤*¦* اسمك » ['..check_name(namecut(msg.from.first_name))..']\n🎫*¦* معرفك » '..userxn..'\n🏷*¦* ايديك » (*'..msg.from.id..'*)\n📮*¦* رتبتك » '..get_rank(msg)..'\n⭐️*¦* تفاعلك » '..get_ttl(msgs)..'\n📨*¦* رسائلك » (*'..msgs..'*) رساله\n➖', 1, 'md')
 end end, nil) else
-return '👤*¦* اسمك » ['..check_name(namecut(msg.from.first_name))..']\n🎫*¦* معرفك » '..userxn..'\n🏷*¦* ايديك » (*'..msg.from.id..'*)\n🎖¦ رتبتـك » '..get_rank(msg)..'\n📨¦ رسائلك » '..msgs..' رسالةة\n⭐️¦ تفاعلك » '..get_ttl(msgs)..'\n➖'
+return '👤*¦* اسمك » ['..check_name(namecut(msg.from.first_name))..']\n🎫*¦* معرفك » ['..userxn..']\n🏷*¦* ايديك » (*'..msg.from.id..'*)\n🎖¦ رتبتـك » '..get_rank(msg)..'\n📨¦ رسائلك » '..msgs..' رسالةة\n⭐️¦ تفاعلك » '..get_ttl(msgs)..'\n➖'
 end end
 if msg.reply_id and not matches[2] then
 tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {chat_id=msg.to.id,cmd="iduser"})
