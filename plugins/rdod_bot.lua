@@ -140,7 +140,7 @@ end end
 if redis:get(boss..'delrdall:'..msg.from.id) then
 redis:del(boss..'delrdall:'..msg.from.id)
 if not redis:hget(boss..'replay:all',msg.text) then
-return '💬*¦* هذا الرد ليش مضاف في قائمه الردود 📛'
+return '💬*¦* هذا الرد ليس مضاف في قائمه الردود 📛'
 else
 redis:hdel(boss..'replay:all',msg.text)
 return '(['..msg.text..'])\n  ✓ تم مسح الرد 🚀 '
