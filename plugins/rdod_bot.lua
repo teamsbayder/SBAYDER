@@ -86,7 +86,7 @@ if redis:get(boss..'namebot:witting'..msg.from.id) then --- استقبال اس�
 redis:del(boss..'namebot:witting'..msg.from.id)
 redis:set(boss..'bot:name',msg.text)
 reload_plugins() 
-return "📭¦ تم تغير اسم البوت  ✋🏿\n🗯¦ الان اسمه `"..msg.text.."` \n✔️"
+return "📭¦ تم تغير اسم البوت  ✋🏿\n🗯¦ الان اسمه `"..msg.text.."` \n✓"
 end
 if redis:get(boss..'addrd_all:'..msg.from.id) then -- استقبال الرد لكل المجموعات
 if not redis:get(boss..'allreplay:'..msg.from.id) then-- استقبال كلمه الرد لكل المجموعات
@@ -126,7 +126,7 @@ local audio = redis:hget(boss..'replay_audio:group:'..msg.to.id,msg.text)
 local sticker = redis:hget(boss..'replay_sticker:group:'..msg.to.id,msg.text)
 local video = redis:hget(boss..'replay_video:group:'..msg.to.id,msg.text)
 if not (names or photo or voice or animation or audio or sticker or video) then
-return '💬*¦* هذا الرد ليش مضاف في قائمه الردود 📛'
+return '💬*¦* هذا الرد ليس مضاف في قائمه الردود 📛'
 else
 redis:hdel(boss..'replay:'..msg.to.id,msg.text)
 redis:hdel(boss..'replay_photo:group:'..msg.to.id,msg.text)
@@ -214,8 +214,8 @@ redis:setex(boss..'addrd:'..msg.from.id,300,true) redis:del(boss..'replay1'..msg
 return "📭¦ حسننا , الان ارسل كلمه الرد \n-"
 end
 if r== "اسمي"  then return  "\n" ..check_name(msg.from.first_name).."\n" 
-elseif r== "معرفي" then return  "@"..(msg.from.username or " ---").."\n" 
-elseif r== "ايديي" or r=="ايدي 🆔" then return  "\n"..msg.from.id.."\n" 
+elseif r== "معرفي" then return  "@["..(msg.from.username or " ---").."]\n" 
+elseif r== "ايديي" or r=="ايدي 🆔" then return "🧟‍♂*¦* آضـغط على آلآيدي ليتم آلنسـخ\n\n @["..msg.from.username.."] ~⪼ ( `"..msg.from.id.."` )"
 elseif r=="صورتي" then
 tdcli_function ({ID = "GetUserProfilePhotos",user_id_ = msg.from.id,offset_ = 0,limit_ = 1}, function(arg, data)
 if data.photos_[0] then sendPhoto(msg.to.id,msg.id,0,1,nil,data.photos_[0].sizes_[1].photo_.persistent_id_,"",dl_cb,nil)
@@ -274,7 +274,6 @@ elseif is_sudo(msg) and r== "احبك" then return  "اموت عليك حيات�
 elseif is_sudo(msg) and r== "تحبني" or r=="حبك"  then return  "اموت عليك حياتي  😍❤️"
 elseif not is_sudo(msg) and r== "احبك" or r=="حبك" then return  lovm[math.random(#lovm)]  
 elseif not is_sudo(msg) and r== "تحبني" then return  lovm[math.random(#lovm)]  
-elseif r== "ڤير"  then return  ss97[math.random(#ss97)]    
 elseif r== "غني" or r=="غنيلي" then return  song[math.random(#song)] 
 elseif r=="اتفل" or r=="تفل" then
 if is_mod(msg) then return 'ختفوووووووووو💦💦️️' else return "📌 انجب ما اتفل عيب 😼🙌🏿" end
@@ -295,7 +294,6 @@ elseif r== "انته وين"  then return  "بالــبــ🏠ــيــت"
 elseif r== "😍"  then return  " يَمـه̷̐ إآلُحــ❤ــب يَمـه̷̐ ❤️😍"
 elseif r== "اكرهك"  then return  "ديله شلون اطيق خلقتك اني😾🖖🏿🕷"
 elseif r== "اريد اكبل"  then return  "خخ اني هم اريد اكبل قابل ربي وحد😹🙌️"
-elseif r== "باي" or r=="بااي" or r=="باااي" or r=="بااااي" and check_name(msg.from.first_name)~='الاسم سبام 📛' then  return  "بايات حياتي ❤️ [" ..msg.from.first_name.."]\n"
 elseif r== "ضوجه"  then return  "شي اكيد الكبل ماكو 😂 لو بعدك/ج مازاحف/ة 🙊😋"
 elseif r== "اروح اصلي"  then return  "انته حافظ سوره الفاتحة😍❤️️"
 elseif r== "صاك"  then return  "زاحفه 😂 منو هذا دزيلي صورهه"
@@ -363,7 +361,6 @@ elseif r== "دي"  then return  "خليني احہۣۗبہۜۧ😻ہہۖۗڱֆ �
 elseif r== "اشكرك" then return  "بخدمتك/ج حبي ❤"
 elseif r== "😉"  then return  "😻🙈"
 elseif r== "اقرالي دعاء"  then return "اللهم عذب المدرسين 😢 منهم الاحياء والاموات 😭🔥 اللهم عذب ام الانكليزي 😭💔 وكهربها بلتيار الرئيسي 😇 اللهم عذب ام الرياضيات وحولها الى غساله بطانيات 🙊 اللهم عذب ام الاسلاميه واجعلها بائعة الشاميه 😭🍃 اللهم عذب ام العربي وحولها الى بائعه البلبي اللهم عذب ام الجغرافيه واجعلها كلدجاجه الحافية اللهم عذب ام التاريخ وزحلقها بقشره من البطيخ وارسلها الى المريخ اللهم عذب ام الاحياء واجعلها كل مومياء اللهم عذب المعاون اقتله بلمدرسه بهاون 😂😂😂"
-elseif msg.edited and not is_mod(msg) then return "سحك وعدل 😹☝🏿"
 elseif r== "انجب" or r== "نجب" or r=="جب" then
 if is_sudo(msg) then  return   "حاضر تاج راسي انجبيت 😇 "
 elseif is_owner(msg) then return   "لخاطرك راح اسكت لان مدير وع راسي  😌"

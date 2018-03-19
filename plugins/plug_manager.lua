@@ -5,46 +5,48 @@
 local function run(msg, matches) 
 local update = redis:get(boss..":VERSION")
 if (matches[1] == '/p' or matches[1]=="الملفات 🗂") and is_sudo(msg) then -- اضهار لسته الملفات الموجوده بالسيرفر
-if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
+if not we_sudo(msg) then return "🍥￤هذا الاوامر للمطور الاساسي فقط 🛠" end
 return list_all_plugins() 
 end 
 if matches[1] == '+' and is_sudo(msg) then 
-if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
+if not we_sudo(msg) then return "🍥￤هذا الاوامر للمطور الاساسي فقط 🛠" end
 return enable_plugin(matches[2]) 
 end 
 if matches[1] == '-' and is_sudo(msg) then 
-if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
+if not we_sudo(msg) then return "🍥￤هذا الاوامر للمطور الاساسي فقط 🛠" end
 if matches[2] == 'plug_manager'  then return '🛠 لا يمكن تعطيل هذا الملف خاص بالتحكم بالملفات 🌚' end 
 if plugin_exists(matches[2]) then
 return disable_plugin(matches[2]) 
 else return '🗂*¦* لا يوجد ملف بهذا الاسم ❕ \n\n'
 end end 
 if (matches[1]=="تحديث" or matches[1]=="we" or matches[1]=="تحديث ♻️") and is_sudo(msg) then -- تحديث الملفات
-if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
+if not we_sudo(msg) then return "🍥￤هذا الاوامر للمطور الاساسي فقط 🛠" end
 reload_plugins() 
 return " 🗂¦ تہ‏‏م تحديث آلمـلفآت \n✓"
 end 
 if (matches[1] == "sp" or matches[1] == "جلب ملف") and is_sudo(msg) then 
-if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
+if not we_sudo(msg) then return "🍥￤هذا الاوامر للمطور الاساسي فقط 🛠" end
 if (matches[2]=="الكل" or matches[2]=="all") then
 sendMessage(msg.to.id, msg.id, 1, '🗂*¦* انتضر قليلا سوف يتم ارسالك كل الملفات📢', 1, 'md')
 for k, v in pairs(plugins_names()) do  
 sendDocument(msg.to.id, msg.id,0, 1, nil, "./plugins/"..string.match (v, "(.*)%.lua") ..".lua", '🗂¦ آلمـلف مـقدم مـن قنآ‏‏هہ آلزعـًيـٌِم ¦ֆ \n📡¦ تابع قناة السورس @llDEV1ll\n👨🏽‍🔧', dl_cb, nil) end  else
 if not plugin_exists(matches[2]) then 
 return '🗂*¦* لا يوجد ملف بهذا الاسم .\n\n'
-else  sendDocument(msg.to.id, msg.id,0,1,nil,"./plugins/"..matches[2]..".lua",'🗂¦ آلمـلف مـقدم مـن قنآ‏‏هہ آلزعـًيـٌِم ¦ֆ \n📡¦ تابع قناة السورس @llDEV1ll\n👨🏽‍🔧', dl_cb, nil)
+else sendDocument(msg.to.id, msg.id,0,1,nil,"./plugins/"..matches[2]..".lua",'🗂¦ آلمـلف مـقدم مـن قنآ‏‏هہ آلزعـًيـٌِم ¦ֆ \n📡¦ تابع قناة السورس @llDEV1ll\n👨🏽‍🔧', dl_cb, nil)
 end end end
 if (matches[1] == "dp" or matches[1] == "حذف ملف")  and matches[2] and is_sudo(msg) then 
-if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
+if not we_sudo(msg) then return "🍥￤هذا الاوامر للمطور الاساسي فقط 🛠" end
 if not plugin_exists(matches[2]) then return '🗂*¦* لا يوجد ملف بهذا الاسم ❕ \n\n'
 else io.popen("rm -rf  plugins/"..matches[2]..".lua")
-return 'تم حذف الملف \n↝ ['..matches[2]..']\n'
+redis:srem(boss..':PLUGINS_FILE:',matches[2])
+sendMessage(msg.to.id,msg.id,1,'تم حذف الملف \n↝ ['..matches[2]..']\n',1,'md')
+reload_plugins()
 end end 
 if matches[1]:lower() == "ssp" and matches[2] and matches[3] then
-if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
-sendDocument(msg.to.id, msg.id_,0, 1, nil, "./"..matches[2].."/"..matches[3], '🗂¦ آلمـلف مـقدم مـن قنآ‏‏هہ آلزعـًيـٌِم ¦ֆ \n📡¦ تابع قناة السورس @llDEV1ll\n👨🏽‍🔧', dl_cb, nil) end
+if not we_sudo(msg) then return "🍥￤هذا الاوامر للمطور الاساسي فقط 🛠" end
+sendDocument(msg.to.id, msg.id,0, 1, nil, "./"..matches[2].."/"..matches[3], '🗂¦ آلمـلف مـقدم مـن قنآ‏‏هہ آلزعـًيـٌِم ¦ֆ \n📡¦ تابع قناة السورس @llDEV1ll\n👨🏽‍🔧', dl_cb, nil) end
 if (matches[1] == 'حفظ الملف' or matches[1] == 'save') and matches[2] and is_sudo(msg) then
-if not we_sudo(msg) then return "❖￤هذا الاوامر للمطور الاساسي فقط 🛠" end
+if not we_sudo(msg) then return "🍥￤هذا الاوامر للمطور الاساسي فقط 🛠" end
 if msg.reply_id then
 function get_filemsg(arg, data)
 function get_fileinfo(arg,data)
@@ -54,8 +56,9 @@ file_name = data.content_.document_.file_name_
 if (file_name:lower():match('.lua$')) then
 tdcli_function ({ID = "DownloadFile",file_id_ = file_id}, dl_cb, nil) sleep(1) 
 if file_exi(file_name, TG_folder..'/data/document') then
-sendMessage(msg.to.id,msg.id,1,'🗂*¦* الملف `'..matches[2]..'.lua` تم رفعه في السورس \n✓', 1, 'md')
-os.rename(TG_folder..'/data/document/'..file_name, './plugins/'..matches[2]..'.lua') reload_plugins()
+sendMessage(msg.to.id,msg.id,1,'🗂*¦* تم آضـآفهہ‏‏ وتفعيل مـلف `'..matches[2]..'.lua` في آلسـورس بنجآح \n✓', 1, 'md')
+os.rename(TG_folder..'/data/document/'..file_name, './plugins/'..matches[2]..'.lua') 
+redis:sadd(boss..':PLUGINS_FILE:',matches[1]) reload_plugins()
 else sendMessage(msg.to.id,msg.id,1,'📛*¦* فشل رفع الملف او يبدو ان عدد اسطر الملف اكثر من 500 سطر يمكنك المحاوله مره ثانيه وسوف يتم رفع الملف.\n❕', 1, 'md')
 end else
 sendMessage(msg.to.id,msg.id,1,'📛*¦* الملف ليس بصيغه [[lua.]]\n❕',1, 'md') end  else sendMessage(msg.to.id,msg.id,1,'📛*¦* عذرا , هذا ليس ملف \n❕',1, 'md') end end
@@ -63,7 +66,7 @@ tdcli_function({ID ='GetMessage',chat_id_=msg.chat_id_,message_id_=data.id_}, ge
 tdcli_function({ID ='GetMessage',chat_id_=msg.chat_id_,message_id_=msg.reply_id}, get_filemsg, nil)
 end end
 if matches[1] == 'reload' and we_sudo(msg) then
-sendMessage(msg.to.id,msg.id_,1,'⏳*┇* جاري اعاده تشغيل البوت ... \n⌛️',1,'md')
+sendMessage(msg.to.id,msg.id,1,'⏳*┇* جاري اعاده تشغيل البوت ... \n⌛️',1,'md')
 RELOAD_BOT(msg)
 end
 if matches[1] == 'اصدار السورس' then

@@ -4,7 +4,7 @@
 ]]
 local function pre_process(msg)
 local chat = msg.to.id
-local user = msg.from.id
+local user = msg.from.id or 0
 local TIME_CHECK = 2
  
 if redis:get(boss..'addrd:'..user) and redis:get(boss..'replay1'..msg.from.id) then
@@ -45,18 +45,18 @@ local msg_welcom = [[💯¦ مـرحبآ آنآ بوت آسـمـي ]]..redis:ge
 return sendPhoto(arg.chat_id, arg.msg_id, 0, 1, nil, redis:get(boss..':WELCOME_BOT') ,msg_welcom,dl_cb,nil)
 end
 ------------------------------------------------------
-if msg.from.username then usernamex = "@"..msg.from.username else usernamex = msg.to.id end
+if msg.from.username then usernamex = "@"..msg.from.username else usernamex = check_name(namecut(msg.from.first_name)) end
 if redis:get(boss..'group:add'..arg.chat_id) then
 
 if data.type_.ID == "UserTypeBot" then -- حصانه التحقق من البوتات المضافه
 if not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots_by_kick'..chat) then --- طرد البوت مع الي ضافه
 kick_user(data.id_, arg.chat_id)
 kick_user(arg.user_id, arg.chat_id)
-sendMessage(arg.chat_id, 0, 1, '👤*¦* العضو : ['..arg.name..']\n🔖*¦* يوزر : ['..usernamex..']\n🔖*¦* البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت مع الي ضاف البوت \n✘', 0, "md")    
+sendMessage(arg.chat_id, 0, 1, '👤*¦* آلعضـو : ['..usernamex..']\n🔖*¦* آلبوت : ['..user_name..']\n‼️¦ مـمـنوع آضـآفهہ آلبوتآت ✋🏿\n🚯¦ تم طـرد آلبوت مـع آلعضـو \n✘', 0, "md")    
 elseif not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots'..chat) then
 kick_user(data.id_, arg.chat_id)
 if redis:get(boss..'lock_woring'..chat) then
-return sendMessage(arg.chat_id, 0, 1, '🔖*¦* الاسم : ['..arg.name..']\n🔖*¦* الايدي : '..arg.user_id..'\n🔖*¦* العضو : ['..usernamex..']\n🔖*¦* البوت : ['..user_name..']\n‼️¦ ممنوع اضافه البوتات ✋🏿\n🚯¦ تم طرد البوت \n✘', 0, "md")    
+return sendMessage(arg.chat_id, 0, 1, '🔖*¦* آلعضـو » ['..usernamex..']\n🔖*¦* الايدي »` '..arg.user_id..'`\n🔖*¦* البوت » ['..user_name..']\n‼️¦ مـمـنوع آضـآفه آلبوتآت ✋🏿\n🚯¦ تم طـرد آلبوت\n✘', 0, "md")    
 end end else
 if redis:get(boss..'welcome:get'..arg.chat_id) then
 welcome = (redis:get(boss..'welcome:msg'..arg.chat_id) or "🔖*¦* مرحباً عزيزي\n🔖*¦* نورت المجموعة \n💂🏼‍♀️")
@@ -70,16 +70,16 @@ sendMessage(arg.chat_id, arg.msg_id, 0, welcome, 0, "md")
 end  end
 -------------------------
 if is_banned(data.id_, arg.chat_id) then
-sendMessage(arg.chat_id,arg.msg_id, 0, '🔖*¦* العضو ⇐ ['..user_name..'] \n🔖*¦* الايدي* ('..data.id_..')*\n🔖*¦* محضور سابقا وتم طرده ✔️', 0, "md")
+sendMessage(arg.chat_id,arg.msg_id, 0, '🔖*¦* العضو ⇐ ['..user_name..'] \n🔖*¦* الايدي* ('..data.id_..')*\n🔖*¦* محضور سابقا وتم طرده ✓', 0, "md")
 kick_user(data.id_, arg.chat_id)
 end
 if is_gbanned(data.id_) then
-sendMessage(arg.chat_id,arg.msg_id, 0, '🔖*¦* العضو ⇐ ['..user_name..'] \n🔖*¦* الايدي* ('..data.id_..')*\n🔖*¦* محظور عام تم طرده ✔️', 0, "md")
+sendMessage(arg.chat_id,arg.msg_id, 0, '🔖*¦* العضو ⇐ ['..user_name..'] \n🔖*¦* الايدي* ('..data.id_..')*\n🔖*¦* محظور عام تم طرده ✓', 0, "md")
 kick_user(data.id_, arg.chat_id)
 end end end
 if msg.to.type == "channel" then
 if msg.adduser then
-tdcli_function ({ID = "GetUser",user_id_ = msg.adduser},check_newmember,{chat_id=chat,msg_id=msg.id,user_id=user,name=check_name(namecut(msg.from.first_name)),gp_name=msg.to.title})
+tdcli_function ({ID = "GetUser",user_id_ = msg.adduser},check_newmember,{chat_id=chat,msg_id=msg.id,user_id=user,gp_name=msg.to.title})
 end
 if msg.joinuser then
 tdcli_function ({ID = "GetUser",user_id_ = msg.joinuser},check_newmember,{chat_id=chat,msg_id=msg.id,user_id=user,gp_name=msg.to.title})
@@ -89,12 +89,12 @@ if redis:get(boss..'photo:group'..user) then
 redis:del(boss..'photo:group'..user)
 tdcli_function ({ID = "ChangeChatPhoto",chat_id_ = chat,photo_ = getInputFile(photo_id)}, dl_cb, nil)
 sleep(0.3)
-return sendMessage(chat, msg.id_,1, '🚸 ¦ تم تغيير صـورهہ‏‏ آلمـجمـوعهہ 🌿\n✔️', 1, 'md')
+return sendMessage(chat, msg.id_,1, '🚸 ¦ تم تغيير صـورهہ‏‏ آلمـجمـوعهہ 🌿\n✓', 1, 'md')
 end
 if redis:get(boss..'welcom_ph:witting'..user) then
 redis:del(boss..'welcom_ph:witting'..user)
 redis:set(boss..':WELCOME_BOT',photo_id)
-return sendMessage(chat, msg.id_,1, '🚸 ¦ تم تغيير صـورهہ‏‏ آلترحيب للبوت 🌿\n✔️', 1, 'md')
+return sendMessage(chat, msg.id_,1, '🚸 ¦ تم تغيير صـورهہ‏‏ آلترحيب للبوت 🌿\n✓', 1, 'md')
 end end
 if msg.forward_info_ and redis:get(boss..'fwd:'..user) then
 redis:del(boss..'fwd:'..user)
@@ -106,7 +106,7 @@ end
 for i = 1, #groups do
 forwardMessages(groups[i],chat, {[0] = msg.id}, 0)		
 end
-return sendMessage(chat,msg.id, 0,'📜*¦* تم اذاعه التوجيه بنجاح 🏌🏻\n🗣*¦*الى المجموعات : *'..#groups..'* \n👥*¦* الى الخاص : '..#pv..'\n✓', 0)			
+return sendMessage(chat,msg.id, 0,'📜*¦* تم اذاعه التوجيه بنجاح 🏌🏻\n🗣*¦* للمـجمـوعآت » *'..#groups..'* \n👥*¦* للخآص » '..#pv..'\n✓', 0)			
 end
 if msg.to.type == "pv" and not is_sudo(msg) then
 local msg_pv = tonumber(redis:get(boss..'user:'..user..':msgs') or 0)
@@ -116,7 +116,10 @@ return sendMessage(chat,0,1,'*📛¦* تم حظرك من البوت بسبب ا�
 end
 redis:setex(boss..'user:'..user..':msgs',2,msg_pv+1)
 end
-if msg.to.type == "channel" and redis:get(boss..'group:add'..chat) then
+  if msg and msg.adduser and msg.to.type == "channel" and redis:get(boss..'group:add'..chat) then
+    redis:incr(boss..':addusers_group:'..chat..':'..user)  -- تسـجيل آلجهآت آلمـضـآفهہ للمـجمـوعهہ‏‏
+    end
+if msg and not (msg.adduser or msgjoinuser or msgdeluser ) and msg.to.type == "channel" and redis:get(boss..'group:add'..chat) then
 redis:incr(boss..'msgs:'..user..':'..chat)  -- ريدز تسجيل عدد رسائل الاعضاء
 ------------------------------------------------------------------------------------    
 if msg.adduser or msg.joinuser or msg.deluser then -- قفل الاشعارات
@@ -145,14 +148,14 @@ if redis:get(boss..'lock_flood'..chat) and not is_mod(msg) and not is_whitelist(
 local msgs = (redis:get(boss..'user:'..user..':msgs') or 0)
 local NUM_MSG_MAX = (redis:get(boss..'num_msg_max'..chat) or 5)
 if tonumber(msgs) > tonumber(NUM_MSG_MAX) then
-if msg.from.username then  user_name = "@"..msg.from.username else user_name = msg.from.first_name end
 if redis:get(boss..'sender:'..user..':flood') then
 return
 else
+if msg.from.username then  user_name = "@"..msg.from.username else user_name = check_name(namecut(msg.from.first_name)) end
 del_msg(chat, msg.id)
 kick_user(user, chat)
 redis:setex(boss..'sender:'..user..':flood', 30, true)
-return sendMessage(chat, msg.id, 0, "👤¦ العضو : ["..user_name.."]\n🚸¦ عذرا ممنوع التكرار في هذه المجموعه لقد تم طردك ✔️\n➖", 0, "md")
+return sendMessage(chat, msg.id, 0, "👤¦ العضو : ["..user_name.."]\n🚸¦ عذرا ممنوع التكرار في هذه المجموعه لقد تم طردك ✓\n", 0, "md")
 end end
 redis:setex(boss..'user:'..user..':msgs', TIME_CHECK, msgs+1)
 end

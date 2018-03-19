@@ -14,17 +14,17 @@ msgs = tonumber(redis:get(boss..'msgs:'..msg.from.id..':'..msg.to.id) or 1)
 if redis:get(boss..'lock_id'..msg.to.id) then
 tdcli_function ({ID = "GetUserProfilePhotos",user_id_ = msg.from.id,offset_ = 0,limit_ = 1}, function (arg, data)
 if data.photos_[0] then
-sendPhoto(msg.to.id, msg.id, 0, 1, nil, data.photos_[0].sizes_[1].photo_.persistent_id_,'👤¦ اسمـك » '..check_name(namecut(msg.from.first_name))..'\n🎫¦ معرفك » '..userxn..'\n🏷¦ ايديك  » '..msg.from.id..'\n🎖¦ رتبتـك » '..get_rank(msg)..'\n📨¦ رسائلك » '..msgs..' رسالةة\n⭐️¦ تفاعلك » '..get_ttl(msgs)..'\n➖',dl_cb,nil)
+sendPhoto(msg.to.id,msg.id, 0, 1, nil, data.photos_[0].sizes_[1].photo_.persistent_id_,'👤¦ معرفك » '..userxn..'\n🎫¦ ايديك  » '..msg.from.id..'\n🎖¦ رتبتـك » '..get_rank(msg)..'\n📨¦ رسائلك » '..msgs..' رسالةة\n⭐️¦ تفاعلك » '..get_ttl(msgs)..'\n➖',dl_cb,nil)
 else
-sendMessage(msg.to.id, msg.id_, 1, '🚸¦ لا يوجد صوره في بروفايلك ...!\n\n👤*¦* اسمك » ['..check_name(namecut(msg.from.first_name))..']\n🎫*¦* معرفك » '..userxn..'\n🏷*¦* ايديك » (*'..msg.from.id..'*)\n📮*¦* رتبتك » '..get_rank(msg)..'\n⭐️*¦* تفاعلك » '..get_ttl(msgs)..'\n📨*¦* رسائلك » (*'..msgs..'*) رساله\n➖', 1, 'md')
+sendMessage(msg.to.id,msg.id, 1, '🚸*¦* لا يوجد صوره في بروفايلك ...!\n\n👤*¦* اسمك » ['..check_name(namecut(msg.from.first_name))..']\n🎫*¦* معرفك » ['..userxn..']\n🏷*¦* ايديك » (*'..msg.from.id..'*)\n📮*¦* رتبتك » '..get_rank(msg)..'\n⭐️*¦* تفاعلك » '..get_ttl(msgs)..'\n📨*¦* رسائلك » (*'..msgs..'*) رساله\n➖', 1, 'md')
 end end, nil) else
 return '👤*¦* اسمك » ['..check_name(namecut(msg.from.first_name))..']\n🎫*¦* معرفك » ['..userxn..']\n🏷*¦* ايديك » (*'..msg.from.id..'*)\n🎖¦ رتبتـك » '..get_rank(msg)..'\n📨¦ رسائلك » '..msgs..' رسالةة\n⭐️¦ تفاعلك » '..get_ttl(msgs)..'\n➖'
 end end
 if msg.reply_id and not matches[2] then
-tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {chat_id=msg.to.id,cmd="iduser"})
+tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="iduser"})
 end
 if matches[2] then
-tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {chat_id=msg.to.id,username=matches[2],cmd="iduser"})
+tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {username=matches[1],msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="iduser"})
 end end
 if matches[1] == "تثبيت" and is_mod(msg) and msg.reply_id then
 tdcli_function ({ID = "PinChannelMessage",channel_id_ = getChatId(msg.to.id).ID,message_id_ = msg.reply_id,disable_notification_ = 1}, dl_cb, cmd)
@@ -33,6 +33,17 @@ end
 if matches[1] == "الغاء التثبيت" and is_mod(msg) then
 tdcli_function ({ID = "UnpinChannelMessage",channel_id_ = getChatId(msg.to.id).ID}, dl_cb, cmd)
 return "🙋🏼‍♂️*¦* أهلا عزيزي \n📃*¦* تم الغاء تثبيت الرساله \n✓"
+end
+if matches[1] == "تقييد" and is_mod(msg) then
+if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="tqeed"}) end
+if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id, {chat_id=msg.to.id,user_id=matches[2],msg_id=msg.id,cmd="tqeed"}) end
+if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username,{msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="tqeed"}) end 
+end
+  
+if matches[1] == "فك التقييد" and is_mod(msg) then
+if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="fktqeed"}) end
+if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id, {chat_id=msg.to.id,user_id=matches[2],msg_id=msg.id,cmd="fktqeed"}) end
+if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username,{msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="fktqeed"}) end 
 end
 if matches[1] == "رفع عضو مميز" and is_mod(msg) then
 if not matches[2] and msg.reply_id then
@@ -216,7 +227,7 @@ if matches[2] and string.match(matches[2], '^%d+$') and is_owner(msg) then
 if 100 < tonumber(matches[2]) then return "📛*¦* حدود المسح ,  يجب ان تكون ما بين  *[2-100]*" end
 tdcli_function({ID = "GetChatHistory",chat_id_ = msg.to.id,from_message_id_ = 0,offset_ = 0,limit_ = matches[2]}, del_msgs, {chat_id=msg.to.id})
 sleep(0.2)
-return sendMessage(msg.to.id,0,1,"*¦*اهلا ["..msg.from.first_name.."]\n*¦*~⪼ تم مسح ("..matches[2]..") من الرسائل  \n🗑", 1, 'md')
+return sendMessage(msg.to.id,0,1,"*¦ـ\n¦*~⪼ تم مسح ("..matches[2]..") من الرسائل  \n🗑", 1, 'md')
 end
 if matches[2] == "الادمنيه" and is_owner(msg) then 
 local list = redis:smembers(boss..'admins:'..msg.to.id)
@@ -282,6 +293,7 @@ if matches[1] == "الغاء منع" and is_mod(msg) then return unfilter_word(m
 if matches[1] == "قائمه المنع" and is_mod(msg) then return filter_list(msg) end
 if matches[1] == "الحمايه" then settingsall(msg) end
 if matches[1] == "الاعدادات" then settings(msg) end
+if matches[1] == "المقيدين" then print("goos") tqeedlist(msg) end
 if matches[1] == "الوسائط" then media(msg) end
 if matches[1] == "الادمنيه" and is_mod(msg) then return modlist(msg) end
 if matches[1] == "المدراء" and is_owner(msg) then return ownerlist(msg) end
@@ -375,17 +387,20 @@ for k,v in pairs(b.members_) do
 if v.user_id_ == tonumber(our_id) then secchk = false end end
 if secchk then return sendMessage(msg.to.id, msg.id, 1, '📡*¦* كلا البوت ليس ادمن في المجموعة ♨️', 1, "md") else return sendMessage(msg.to.id, msg.id, 1, '📡*¦* نعم انه ادمن في المجموعة 👍🏿', 1, "md") end end, nil) end
 if matches[1]== 'رسائلي' or matches[1]=='رسايلي' then
-return '🗯*¦*عدد رسائلك  » (*'..tonumber(redis:get(boss..'msgs:'..msg.from.id..':'..msg.to.id) or 0)..'*) رساله \n➖\n' end
-if matches[1] == 'معلوماتي' or matches[1] == 'موقعي'  then
+return '🗯*¦* عدد رسـآئلگ هہيهہ‏‏» (*'..tonumber(redis:get(boss..'msgs:'..msg.from.id..':'..msg.to.id) or 0)..'*) رساله \n' end
+ if matches[1]== 'جهاتي' then
+ return '🧟‍♂*¦*  عدد جهہآتگ آلمـضـآفهہ‏‏ » 【'..(tonumber(redis:get(boss..':addusers_group:'..msg.to.id..':'..msg.from.id)) or 0)..'】 . \n🐾'
+end
+if matches[1] == 'معلوماتي' or matches[1] == 'موقعي' then
 if msg.from.username then username = '@'..msg.from.username else username = 'لا يوجد ❕' end
 local msgs = tonumber(redis:get(boss..'msgs:'..msg.from.id..':'..msg.to.id) or 0)
-sendMessage(msg.to.id, msg.id_, 1, '*👨🏽‍🔧¦ اهـلا بـك عزيزي :\n\n📜¦ الاسم :* ['..check_name(namecut(msg.from.first_name))..']\n*🎟¦ المعرف:* ['..username..']\n*🏷¦ الايدي :* ( `'..msg.from.id..'` )\n📨*¦* رسائلك » (*'..msgs..'*) رساله\n⭐️*¦* تفاعلك » '..get_ttl(msgs)..'\n*🎗¦ رتبتك :* '..get_rank(msg)..'\n*🎫¦ ايدي المجموعه :* ( `'..msg.to.id..'` )\n\n*🏌🏻¦ مـطـور البوت *: '..SUDO_USER..'\n👨🏽‍🔧',1,'md') end
+sendMessage(msg.to.id, msg.id_, 1, '*👨🏽‍🔧¦ اهـلا بـك عزيزي :\n\n📜¦ الاسم :* ['..check_name(namecut(msg.from.first_name))..']\n*🎟¦ المعرف:* ['..username..']\n*🏷¦ الايدي :* 【 `'..msg.from.id..'` 】\n📨*¦* رسائلك » 【*'..msgs..'*】رسـآلهہ‏‏ \n🧟‍♂*¦*  عدد جهہآتگ » 【'..(tonumber(redis:get(boss..':addusers_group:'..msg.to.id..':'..msg.from.id)) or 0)..'】جهہ‏‏\n⭐️*¦* تفاعلك » '..get_ttl(msgs)..'\n*🎗¦ رتبتك :* '..get_rank(msg)..'\n*🎫¦ ايدي المجموعه :* ( `'..msg.to.id..'` ) \n\n*🏌🏻¦ مـطـور البوت *: '..SUDO_USER..'\n👨🏽‍🔧',1,'md') end
 if matches[1] == "git" and not matches[2]:match("clone") then
 if not is_mod(msg) then return 'للاداريين فقط' end
 url = "https://api.github.com/users/"..URL.escape(matches[2])
 jstr, res = https.request(url) jdat = JSON.decode(jstr)
 if jdat.message then return '🚸 ¦ اليوزر غير موجود في الـGithub'  end
-download_to_file(jdat.avatar_url, './inc/git_pro.jpg')
+download_file(jdat.avatar_url, './inc/git_pro.jpg')
 return sendPhoto(msg.to.id, msg.id, 0, 1, nil, './inc/git_pro.jpg','🎟¦ الاسم » '..(jdat.name or 'لا يوجد اسم')..'\n🔅¦ البايو » '..(jdat.bio or 'لا يوجد بايو')..'\n🔅¦ المتابعون » '..jdat.followers..'\n🔅¦ المتابعين » '..jdat.following..'\n🔅¦ المشاريع » '..jdat.public_repos..'\n🔅¦ الرابط » '..jdat.html_url,dl_cb,nil) 
 end
 if matches[1] == "تفعيل" and is_mod(msg) then
@@ -538,17 +553,17 @@ local pv = redis:smembers(boss..'users')
 local groups = redis:smembers(boss..'group:ids')
 for i = 1, #pv do sendMessage(pv[i], 0, 0, check_markdown(msg.text), 0)			 end
 for i = 1, #groups do sendMessage(groups[i], 0, 0, check_markdown(msg.text), 0)			 end
-return sendMessage(msg.from.id,msg.id,0,'📜*¦* تم اذاعه الكليشه بنجاح 🏌🏻\n🗣*¦*الى المجموعات » *'..#groups..'* \n👥*¦* الى المشتركين » '..#pv..'\n✓', 0)		 end
+return sendMessage(msg.from.id,msg.id,0,'📜*¦* تم اذاعه الكليشه بنجاح 🏌🏻\n🗣*¦* للمـجمـوعآت » *'..#groups..'* گروب \n👥*¦* للمـشـترگين » '..#pv..' مـشـترگ \n✓', 0)		 end
 if redis:get(boss..'fwd:pv'..msg.from.id) then ---- استقبال رساله الاذاعه خاص
 redis:del(boss..'fwd:pv'..msg.from.id)
 local pv = redis:smembers(boss..'users')
 for i = 1, #pv do sendMessage(pv[i],0,0,'['..msg.text..']', 0)			 end
-sendMessage(msg.to.id, 0, 0,'🗣*¦* تم اذاعه الى `'..#pv..'` من المشتركين 👍🏿\n✓', 0) end
+sendMessage(msg.to.id, 0, 0,'🗣*¦* تم اذاعه الى `'..#pv..'` مـشـترگ 👍🏿\n✓', 0) end
 if redis:get(boss..'fwd:groups'..msg.from.id) then ---- استقبال رساله الاذاعه خاص
 redis:del(boss..'fwd:groups'..msg.from.id)
 local groups = redis:smembers(boss..'group:ids')
 for i = 1, #groups do sendMessage(groups[i],0,0,'['..msg.text..']', 0)			 end
-sendMessage(msg.to.id,0,0, '🗣*¦*  تم اذاعه الكليشه الى *'..#groups..'* مجموعات \n✓', 0)			
+sendMessage(msg.to.id,0,0, '🗣*¦*  تم اذاعه الكليشه الى *'..#groups..'* مـجمـوعهہ‏‏\n✓', 0)			
 end end end
 
-return {patterns ={"^(ضع شرط التفعيل) (%d+)$","^(التفاعل) (@[%a%d%_]+)$","^(ايدي) (@[%a%d%_]+)$","^(كشف) (%d+)$","^(كشف) (@[%a%d%_]+)$",'^(رفع عضو مميز) (@[%a%d%_]+)$','^(رفع عضو مميز) (%d+)$','^(تنزيل عضو مميز) (@[%a%d%_]+)$','^(تنزيل عضو مميز) (%d+)$','^(رفع ادمن) (@[%a%d%_]+)$','^(رفع ادمن) (%d+)$','^(تنزيل ادمن) (@[%a%d%_]+)$','^(تنزيل ادمن) (%d+)$','^(رفع المدير) (@[%a%d%_]+)$','^(رفع المدير) (%d+)$','^(رفع منشى) (%d+)$','^(تنزيل منشى) (%d+)$','^(رفع منشى) (@[%a%d%_]+)$','^(تنزيل منشى) (@[%a%d%_]+)$','^(تنزيل المدير) (@[%a%d%_]+)$','^(تنزيل المدير) (%d+)$','^(قفل) (.*)$','^(فتح) (.*)$','^(تفعيل) (.*)$','^(تعطيل) (.*)$','^(ضع تكرار) (%d+)$',"^(مسح) (.*)$",'^(منع) (.*)$','^(الغاء منع) (.*)$',"^(حظر عام) (@[%a%d%_]+)$","^(حظر عام) (%d+)$","^(الغاء العام) (@[%a%d%_]+)$","^(الغاء العام) (%d+)$","^(حظر) (@[%a%d%_]+)$","^(حظر) (%d+)$","^(الغاء الحظر) (@[%a%d%_]+)$","^(الغاء الحظر) (%d+)$","^(طرد) (@[%a%d%_]+)$","^(طرد) (%d+)$","^(كتم) (@[%a%d%_]+)$","^(كتم) (%d+)$","^(الغاء الكتم) (@[%a%d%_]+)$","^(الغاء الكتم) (%d+)$","^(رفع مطور) (.*)$","^(تنزيل مطور) (.*)$","^(تعطيل) (-%d+)$","^(الاشتراك) ([123])$", "^(شحن) (%d+)$", "^(git) (.*)$", "(.*)" },run=xboss}
+return {patterns ={"^(تقييد) (%d+)$","^(تقييد) (@[%a%d%_]+)$","^(فك التقييد) (%d+)$","^(فك التقييد) (@[%a%d%_]+)$","^(ضع شرط التفعيل) (%d+)$","^(التفاعل) (@[%a%d%_]+)$","^(ايدي) (@[%a%d%_]+)$","^(كشف) (%d+)$","^(كشف) (@[%a%d%_]+)$",'^(رفع عضو مميز) (@[%a%d%_]+)$','^(رفع عضو مميز) (%d+)$','^(تنزيل عضو مميز) (@[%a%d%_]+)$','^(تنزيل عضو مميز) (%d+)$','^(رفع ادمن) (@[%a%d%_]+)$','^(رفع ادمن) (%d+)$','^(تنزيل ادمن) (@[%a%d%_]+)$','^(تنزيل ادمن) (%d+)$','^(رفع المدير) (@[%a%d%_]+)$','^(رفع المدير) (%d+)$','^(رفع منشى) (%d+)$','^(تنزيل منشى) (%d+)$','^(رفع منشى) (@[%a%d%_]+)$','^(تنزيل منشى) (@[%a%d%_]+)$','^(تنزيل المدير) (@[%a%d%_]+)$','^(تنزيل المدير) (%d+)$','^(قفل) (.*)$','^(فتح) (.*)$','^(تفعيل) (.*)$','^(تعطيل) (.*)$','^(ضع تكرار) (%d+)$',"^(مسح) (.*)$",'^(منع) (.*)$','^(الغاء منع) (.*)$',"^(حظر عام) (@[%a%d%_]+)$","^(حظر عام) (%d+)$","^(الغاء العام) (@[%a%d%_]+)$","^(الغاء العام) (%d+)$","^(حظر) (@[%a%d%_]+)$","^(حظر) (%d+)$","^(الغاء الحظر) (@[%a%d%_]+)$","^(الغاء الحظر) (%d+)$","^(طرد) (@[%a%d%_]+)$","^(طرد) (%d+)$","^(كتم) (@[%a%d%_]+)$","^(كتم) (%d+)$","^(الغاء الكتم) (@[%a%d%_]+)$","^(الغاء الكتم) (%d+)$","^(رفع مطور) (.*)$","^(تنزيل مطور) (.*)$","^(تعطيل) (-%d+)$","^(الاشتراك) ([123])$", "^(شحن) (%d+)$", "^(git) (.*)$", "(.*)" },run=xboss}
