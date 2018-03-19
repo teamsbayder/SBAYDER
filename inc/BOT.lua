@@ -295,7 +295,7 @@ bot.phone = (data.phone_number_ or false)
 end
 tdcli_function({ ID = 'GetMe'}, info_bot, {chat_id=msg.chat_id_})
 function get_user(arg, data)
-msg.from.id = data.id_
+msg.from.id = data.id_ or 0
 msg.from.username = (data.username_ or false)
 msg.from.first_name = (data.first_name_ or '')
 msg.from.last_name = (data.last_name_ or '')
