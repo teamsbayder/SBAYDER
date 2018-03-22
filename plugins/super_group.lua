@@ -3,7 +3,7 @@
 <<         @BLCON  \  @TH3BOSS          >>
 ]]
 local function xboss(msg, matches)
-if msg.to.type == 'channel' then
+if msg.to.type ~= 'pv' then
 if matches[1] == "تفعيل" and not matches[2] then local numusersax = (tonumber(redis:get(boss..':addnumberusers')) or 0) return modadd(msg,numusersax)  end
 if matches[1] == "تعطيل" and not matches[2] then return modrem(msg) end end
 if msg.to.type ~= 'pv' and redis:get(boss..'group:add'..msg.to.id) then 
@@ -39,7 +39,6 @@ if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_
 if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id, {chat_id=msg.to.id,user_id=matches[2],msg_id=msg.id,cmd="tqeed"}) end
 if matches[2] and string.match(matches[2], '@[%a%d_]') then tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username,{msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="tqeed"}) end 
 end
-  
 if matches[1] == "فك التقييد" and is_mod(msg) then
 if not matches[2] and msg.reply_id then tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id,chat_id=msg.to.id,cmd="fktqeed"}) end
 if matches[2] and string.match(matches[2], '^%d+$') then tdcli_function ({ID = "GetUser",user_id_ = matches[2],}, action_by_id, {chat_id=msg.to.id,user_id=matches[2],msg_id=msg.id,cmd="fktqeed"}) end
@@ -131,8 +130,7 @@ tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_
 end
 if matches[2] and not string.match(matches[2], '^%d+$') then
 tdcli_function ({ID = "SearchPublicChat",username_ = matches[2]}, action_by_username, {msg_id=msg.id,chat_id=msg.to.id,username=matches[2],cmd="active"})
-end 
-end
+end  end
 if matches[1] == "قفل" then
 if matches[2] == "الكل" and is_mod(msg) then lock_username(msg) mute_gif(msg) mute_photo(msg) mute_audio(msg) mute_voice(msg) mute_sticker(msg) mute_forward(msg) mute_contact(msg) mute_location(msg) mute_document(msg)mute_inline(msg) lock_link(msg) lock_tag(msg) lock_edit(msg) lock_spam(msg) lock_bots(msg) lock_webpage(msg) mute_video(msg) return '🙋🏼‍♂️*¦* أهلا عزيزي  \n📡*¦* تم قفل الكل  \n✓' end
 if matches[2] == "الوسائط" then  mute_gif(msg) mute_photo(msg) mute_audio(msg) mute_voice(msg) mute_sticker(msg) mute_video(msg)  return '🙋🏼‍♂️*¦* أهلا عزيزي  \n🔛¦ تم قفل الوسائط  \n✓' end
@@ -275,6 +273,10 @@ if matches[1] == "ضع اسم" and is_mod(msg) then
 redis:setex(boss..'name:witting'..msg.from.id,300,true)
 return "📭¦ حسننا عزيزي  ✋🏿\n🗯¦ الان ارسل الاسم  للمجموعه \n🛠"
 end
+if matches[1] == "حذف صوره" and is_mod(msg) then
+https.request("https://api.telegram.org/bot".._info.TOKEN.."/deleteChatPhoto?chat_id="..msg.to.id)
+return sendMessage(msg.to.id,msg.id,1,'🚸 ¦ تم مسح حذف آلمـجمـوعهہ 🌿\n✓',1,'html')
+end
 if matches[1] == "ضع صوره" and is_mod(msg) then
 if msg.reply_id  then
 function photomsg(arg, data)
@@ -404,6 +406,7 @@ download_file(jdat.avatar_url, './inc/git_pro.jpg')
 return sendPhoto(msg.to.id, msg.id, 0, 1, nil, './inc/git_pro.jpg','🎟¦ الاسم » '..(jdat.name or 'لا يوجد اسم')..'\n🔅¦ البايو » '..(jdat.bio or 'لا يوجد بايو')..'\n🔅¦ المتابعون » '..jdat.followers..'\n🔅¦ المتابعين » '..jdat.following..'\n🔅¦ المشاريع » '..jdat.public_repos..'\n🔅¦ الرابط » '..jdat.html_url,dl_cb,nil) 
 end
 if matches[1] == "تفعيل" and is_mod(msg) then
+if matches[2] == "الرد بالرد" then redis:set(boss..":msg_id"..msg.to.id,true) return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تفعيل الرد بالرد \n✓" end
 if matches[2] == "الردود" then return unlock_replay(msg) end
 if matches[2] == "الاذاعه" and is_sudo(msg) then return unlock_brod(msg) end
 if matches[2] == "الايدي" then
@@ -413,6 +416,7 @@ if redis:get(boss..'welcome:get'..msg.to.id) then return "🙋🏼‍♂️*¦* 
 if matches[2] == "التحذير" then 
 if redis:get(boss..'lock_woring'..msg.to.id) then return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تفعيل التحذير مفعل مسبقاً \n✓" else redis:set(boss..'lock_woring'..msg.to.id,true) return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تفعيل التحذير \n✓" end end end
 if matches[1] == "تعطيل" and is_mod(msg) then
+if matches[2] == "الرد بالرد" then redis:del(boss..":msg_id"..msg.to.id) return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تعطيل الرد بالرد \n✓" end
 if matches[2] == "الردود" then return lock_replay(msg) end
 if matches[2] == "الاذاعه" and is_sudo(msg) then return lock_brod(msg) end
 if matches[2] == "الايدي" then

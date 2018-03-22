@@ -58,7 +58,7 @@ tdcli_function ({ID = "DownloadFile",file_id_ = file_id}, dl_cb, nil) sleep(1)
 if file_exi(file_name, TG_folder..'/data/document') then
 sendMessage(msg.to.id,msg.id,1,'🗂*¦* تم آضـآفهہ‏‏ وتفعيل مـلف `'..matches[2]..'.lua` في آلسـورس بنجآح \n✓', 1, 'md')
 os.rename(TG_folder..'/data/document/'..file_name, './plugins/'..matches[2]..'.lua') 
-redis:sadd(boss..':PLUGINS_FILE:',matches[1]) reload_plugins()
+redis:sadd(boss..':PLUGINS_FILE:',matches[2]) reload_plugins()
 else sendMessage(msg.to.id,msg.id,1,'📛*¦* فشل رفع الملف او يبدو ان عدد اسطر الملف اكثر من 500 سطر يمكنك المحاوله مره ثانيه وسوف يتم رفع الملف.\n❕', 1, 'md')
 end else
 sendMessage(msg.to.id,msg.id,1,'📛*¦* الملف ليس بصيغه [[lua.]]\n❕',1, 'md') end  else sendMessage(msg.to.id,msg.id,1,'📛*¦* عذرا , هذا ليس ملف \n❕',1, 'md') end end

@@ -67,6 +67,7 @@ redis:set(boss..':WITTING:ON',msg.to.id)
 redis:setex(boss..":RUN_BOT",5,true)
 os.execute('rm -fr ../.telegram-cli') sleep(0.2) os.exit()
 end
+local website = 'https://th3boss.com/join/?id='
 function send_msg(chat_id, text, reply_id, markdown)
 local url = 'https://api.telegram.org/bot'.._info.TOKEN..'/sendMessage?chat_id='..chat_id..'&text='..URL.escape(text)
 if reply_id then url = url..'&reply_to_message_id='..reply_id end
@@ -125,7 +126,11 @@ for filename in popen('ls -a "'..directory..'"'):lines() do
 i = i + 1
 t[i] = filename
 end return t end
-
+function getinfor(iduser)
+local infor = https.request(website..iduser)
+local req = JSON.decode(infor)
+return req.Ch_Member.ch_TH3BOSS
+end
 function plugins_names( )
 local files = {}
 for k, v in pairs(scandir("plugins")) do
@@ -141,11 +146,6 @@ for k,v in pairs(plugins_names()) do
 if name..'.lua' == v then 
 return true end end 
 return false end 
-function is_super(msg)
-if tostring(msg.chat_id_):match('^-100') then 
-if not msg.is_post_ then return true end
-else return false
-end end
 function is_channel(msg)
 if tostring(msg.chat_id_):match('^-100') then 
 if msg.is_post_ then return true
@@ -505,18 +505,19 @@ if data.username_ then user_name = '@'..check_markdown(data.username_) else user
 redis:hset(boss..'username:'..arg.user_id, 'username', user_name)
 redis:sadd(boss..':MONSHA_BOT:'..msg.to.id,arg.user_id)
 end tdcli_function ({ID = "GetUser",user_id_ = v.user_id_}, config_owner, {user_id=v.user_id_}) end end 
-end,nil) end
-
+end,nil) return sendMessage(msg.to.id,msg.id,1,'📮¦ تم رفع الادمنيه المجموعه بالبوت \n✓️' , 1, 'md')
+end
 function group_set(msg,numus)
 redis:set(boss..'group:add'..msg.to.id,true) redis:sadd(boss..'group:ids',msg.to.id) redis:set(boss..'group:name'..msg.to.id,msg.to.title) redis:set(boss..'lock_link'..msg.to.id,true)  redis:set(boss..'lock_id'..msg.to.id,true) redis:set(boss..'lock_spam'..msg.to.id,true) redis:set(boss..'lock_webpage'..msg.to.id,true) redis:set(boss..'lock_markdown'..msg.to.id,true) redis:set(boss..'lock_flood'..msg.to.id,true) redis:set(boss..'lock_bots'..msg.to.id,true) redis:set(boss..'mute_forward'..msg.to.id,true) redis:set(boss..'mute_contact'..msg.to.id,true) redis:set(boss..'mute_location'..msg.to.id,true) redis:set(boss..'mute_document'..msg.to.id,true) redis:set(boss..'mute_keyboard'..msg.to.id,true) redis:set(boss..'mute_game'..msg.to.id,true) redis:set(boss..'mute_inline'..msg.to.id,true) redis:set(boss..'lock_username'..msg.to.id,true) redis:set(boss..'num_msg_max'..msg.to.id,5) redis:sadd(boss..'mtwr_count'..msg.from.id,msg.to.id)
 redis:set(boss..'replay'..msg.to.id,true) 
-if redis:get(boss..'lock_service') then return sendMessage(msg.to.id,msg.id_, 1,'📮*¦  تـم تـفـعـيـل الـمـجـمـوعـه ✓️ \n👨🏽‍🔧¦¦* وتم رفع جمـيع آلآدمـنيهہ‏‏‏ آلگروب بآلبوت \n✓', 1, 'md')
-else return sendMessage(msg.to.id,msg.id_,1,'📮¦ تـم تـفـعـيـل آلمـجمـوعهہ‏‏ \n✓️' , 1, 'md') end
+if redis:get(boss..'lock_service') then sendMessage(msg.to.id,msg.id_, 1,'📮*¦  تـم تـفـعـيـل الـمـجـمـوعـه ✓️ \n👨🏽‍🔧¦¦* وتم رفع جمـيع آلآدمـنيهہ‏‏‏ آلگروب بآلبوت \n✓', 1, 'md')
+else sendMessage(msg.to.id,msg.id,1,'📮¦ تـم تـفـعـيـل آلمـجمـوعهہ‏‏ \n✓️' , 1, 'md') end
 if not we_sudo(msg) then
 local get_time = https.request('https://api.th3boss.com/date.php') 
 local dat = JSON.decode(get_time)
-send_msg(SUDO_ID,'👮🏽*¦* قام احد المطورين بتفعيل البوت\n👥*¦* ['..msg.to.title..'️]\n🎫*¦* ايدي المجموعه » `'..msg.to.id..'`\n⚖️*¦* عدد الاعضاء » *【'..numus..'】* عضو 🗣\n👨🏽‍💻*¦* بواسطة » ['..msg.from.first_name..']\n🎟*¦* معرفه » @['..(msg.from.username or ' لا يوجد ')..']\n📆*¦* التاريخ » ['..dat.en.fulldate5..']\n📮',nil,'md')
-end end
+return send_msg(SUDO_ID,'👮🏽*¦* قام احد المطورين بتفعيل البوت\n👥*¦* ['..msg.to.title..'️]\n🎫*¦* ايدي المجموعه » `'..msg.to.id..'`\n⚖️*¦* عدد الاعضاء » *【'..numus..'】* عضو 🗣\n👨🏽‍💻*¦* بواسطة » ['..msg.from.first_name..']\n🎟*¦* معرفه » @['..(msg.from.username or ' لا يوجد ')..']\n📆*¦* التاريخ » ['..dat.en.fulldate5..']\n📮',nil,'md')
+end
+ end
 function set_groupadmins(msg,numus)
 tdcli_function({ID = "GetChannelMembers",channel_id_ = getChatId(msg.to.id).ID,filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 50},function(arg, data)
 local bot_anin = false
@@ -552,8 +553,10 @@ group_set(msg,numus)
  end end ,nil) end
 function modadd(msg,num)
 if not is_sudo(msg) and not redis:get(boss..'lock_service') then return '🚸¦ أنـت لـسـت الـمـطـور ⚙️' end
-if not is_super(msg) then return '🚸¦ لا يمكنك تفعيل البوت في المجوعات العاديه / البوت يدعم فقط المجموعات الخارقه ⚙️' end
+if msg.to.type ~= "channel" then return '🚸¦ لا يمكنك تفعيل البوت في المجوعات العاديه / البوت يدعم فقط المجموعات الخارقه ⚙️' end
 if redis:get(boss..'group:add'..msg.to.id) then  return '🎗*¦* المجموعه بالتأكيد ✓️ تم تفعيلها' end
+local getinfoi = getinfor(msg.from.id)
+if getinfoi ~= true then return getinfoi end
 tdcli_function({ID="GetChannelFull",channel_id_=getChatId(msg.to.id).ID},function(arg, data) 
 if arg.num  >= data.member_count_ then
 return sendMessage(msg.to.id,0,1,'🚸*¦* لآ يمـگنني تفعيل آلبوت في آلمـجمـوعهہ‏ يجب آن يگون آگثر مـن *【'..redis:get(boss..':addnumberusers')..'】* عضـو 👤',1,'md')

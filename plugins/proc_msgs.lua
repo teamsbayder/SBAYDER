@@ -34,6 +34,7 @@ redis:hset(boss..'replay_sticker:group:'..chat,klma,sticker_id)
 redis:del(boss..'addrd:'..user)
 return sendMessage(chat,msg.id,1,'🗂¦ تم اضافه ملصق للرد بنجاح ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الملصق الاتي .',1,'html')
 end end
+if msg.from.username then usernamex = "@"..msg.from.username else usernamex = check_name(namecut(msg.from.first_name)) end
 local function check_newmember(arg, data)
 if data.username_ then user_name = '@'..data.username_ else user_name = data.first_name_ end
 if data.id_ == bot.id then
@@ -45,9 +46,7 @@ local msg_welcom = [[💯¦ مـرحبآ آنآ بوت آسـمـي ]]..redis:ge
 return sendPhoto(arg.chat_id, arg.msg_id, 0, 1, nil, redis:get(boss..':WELCOME_BOT') ,msg_welcom,dl_cb,nil)
 end
 ------------------------------------------------------
-if msg.from.username then usernamex = "@"..msg.from.username else usernamex = check_name(namecut(msg.from.first_name)) end
 if redis:get(boss..'group:add'..arg.chat_id) then
-
 if data.type_.ID == "UserTypeBot" then -- حصانه التحقق من البوتات المضافه
 if not is_owner1(arg.chat_id,arg.user_id) and redis:get(boss..'lock_bots_by_kick'..chat) then --- طرد البوت مع الي ضافه
 kick_user(data.id_, arg.chat_id)
@@ -116,16 +115,16 @@ return sendMessage(chat,0,1,'*📛¦* تم حظرك من البوت بسبب ا�
 end
 redis:setex(boss..'user:'..user..':msgs',2,msg_pv+1)
 end
-  if msg and msg.adduser and msg.to.type == "channel" and redis:get(boss..'group:add'..chat) then
-    redis:incr(boss..':addusers_group:'..chat..':'..user)  -- تسـجيل آلجهآت آلمـضـآفهہ للمـجمـوعهہ‏‏
-    end
-if msg and not (msg.adduser or msgjoinuser or msgdeluser ) and msg.to.type == "channel" and redis:get(boss..'group:add'..chat) then
-redis:incr(boss..'msgs:'..user..':'..chat)  -- ريدز تسجيل عدد رسائل الاعضاء
-------------------------------------------------------------------------------------    
+if msg.adduser and redis:get(boss..'group:add'..chat) then
+redis:incr(boss..':addusers_group:'..chat..':'..user)  -- تسـجيل آلجهآت آلمـضـآفهہ للمـجمـوعهہ‏‏
+end
 if msg.adduser or msg.joinuser or msg.deluser then -- قفل الاشعارات
 if redis:get(boss..'mute_tgservice'..chat) then
 del_msg(chat, tonumber(msg.id))
 end end
+if msg and not (msg.adduser or msgjoinuser or msgdeluser ) and redis:get(boss..'group:add'..chat) then
+redis:incr(boss..'msgs:'..user..':'..chat)  -- ريدز تسجيل عدد رسائل الاعضاء
+------------------------------------------------------------------------------------    
 if msg.adduser and redis:get(boss..'welcome:get'..chat) then
 local adduserx = tonumber(redis:get(boss..'user:'..user..':msgs') or 0)
 if adduserx > 3 then 
