@@ -115,7 +115,6 @@ chmod +x ./run
 ./run
 ]])
 end
-create_config()
 function load_config()
 local fopen = io.open('./inc/info.lua', "r")
 if not fopen then
