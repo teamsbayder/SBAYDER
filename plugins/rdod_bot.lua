@@ -60,8 +60,6 @@ tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = msg.
 end end
 if (msg.to.type == "pv") and not is_sudo(msg) and not redis:get(boss..'lock_twasel') then -- ارسال رساله للاعضاء الي يدخلون خاص
 sendMsg(msg.to.id,0,"🗯¦ تم آرسـآل رسـآلتگ آلى آلمـطـور\n📬¦ سـآرد عليگ في آقرب وقت\n🏌 "..SUDO_USER,'md')
-sendMsg(msg.to.id,0,our_id,'md')
-sendMsg(msg.to.id,0,boss,'md')
 forwardMessages(SUDO_ID,msg.to.id,{[0] = msg.id_}, 0)
 end
 if (r=="تيست" or r=="test") and is_sudo(msg) then return "💯 البوت شـغــال 🚀" end
