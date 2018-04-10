@@ -58,7 +58,7 @@ tdcli_function ({ID = "GetUser",user_id_ = data.forward_info_.sender_user_id_}, 
 tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = data.id_ },replay_fwd,nil) end
 tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = msg.reply_to_message_id_ }, get_msg_id,nil)
 end end
-if (msg.to.type == "pv") and not is_sudo(msg) and not redis:get(boss..'lock_twasel') then -- ارسال رساله للاعضاء الي يدخلون خاص
+if (msg.to.type == "pv") and not is_sudo(msg) and not redis:get(boss..'lock_twasel') and msg.from.id ~= our_id then -- ارسال رساله للاعضاء الي يدخلون خاص
 sendMsg(msg.to.id,0,"🗯¦ تم آرسـآل رسـآلتگ آلى آلمـطـور\n📬¦ سـآرد عليگ في آقرب وقت\n🏌 "..SUDO_USER,'md')
 forwardMessages(SUDO_ID,msg.to.id,{[0] = msg.id_}, 0)
 end
