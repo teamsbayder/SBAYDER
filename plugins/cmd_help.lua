@@ -47,7 +47,7 @@ local text =[[
 ┇ـ➖➖➖➖➖
 
 🗯*┇* راسلني للاستفسار 💡↭ ]]..SUDO_USER
-return sendMessage(msg.to.id, 1, 1, text, 1, 'md')
+return sendMsg(msg.to.id,1,text,'md')
 end
 if matches[1]== 'م2' then
 if not is_mod(msg) then return "🔅¦ للاداريين فقط 🎖" end
@@ -78,7 +78,7 @@ local text = [[
 
 ➖➖➖➖➖➖➖
 🗯¦ راسلني للاستفسار 💡↭ ]]..SUDO_USER
-return sendMessage(msg.to.id, 1, 1, text, 1, 'md')
+return sendMsg(msg.to.id,1,text,'md')
 end
 if matches[1]== 'م3' then
 if not is_mod(msg) then return "🔅¦ للاداريين فقط 🎖" end
@@ -112,7 +112,7 @@ local text = [[
 🗨| تفعيل ~ تعطيل : الايدي
 🔅|ـ➖➖➖➖➖
 🗯| راسلني للاستفسار 💡↭ ]]..SUDO_USER
-return sendMessage(msg.to.id, 1, 1, text, 1, 'md')
+return sendMsg(msg.to.id,1,text,'md')
 end
 if matches[1]== 'م4' then
 if not is_mod(msg) then return "🔅¦ للاداريين فقط 🎖" end
@@ -133,7 +133,7 @@ local text = [[
 🔅¦ـ➖➖➖➖➖
 
 🗯¦ راسلني للاستفسار 💡↭ ]]..SUDO_USER
-return sendMessage(msg.to.id, 1, 1, text, 1, 'md')
+return sendMsg(msg.to.id,1,text,'md')
 end
 if matches[1]== "م المطور" then
 if not is_sudo(msg) then return "🔅¦ للمطوين فقط 🎖" end
@@ -158,7 +158,7 @@ local text = [[
 🔅¦ـ➖➖➖➖➖
 
 🗯¦ راسلني للاستفسار 💡↭ ]]..SUDO_USER
-return sendMessage(msg.to.id, 1, 1, text, 1, 'md')
+return sendMsg(msg.to.id,1,text,'md')
 end
 if matches[1]== 'اوامر الرد' then
 if not is_owner(msg) then return "🔅¦ للمدراء فقط 🎖" end
@@ -174,7 +174,7 @@ local text = [[
 🔅¦ مسح الردود العامه : لمسح كل ردود العامه
 🔅¦ـ➖➖➖➖➖
 🗯¦ راسلني للاستفسار 💡↭ ]]..SUDO_USER
-return sendMessage(msg.to.id, 1, 1, text, 1, 'md')
+return sendMsg(msg.to.id,1,text,'md')
 end
 if matches[1]== "اوامر الملفات" then
 if not we_sudo(msg) then return "☔️هذا الاوامر للمطور الاساسي فقط 🌑" end
@@ -188,7 +188,7 @@ local text = [[☔️¦ اوامر الملفات 🌑
 🔅¦ sp all | لارسالك كل ملفات السورس 
 
 ]]
-return sendMessage(msg.to.id, 1, 1, text, 1, 'md')
+return sendMsg(msg.to.id,1,text,'md')
 end end 
 if matches[1] == "سورس" or matches[1]=="السورس" then
 return [[
@@ -208,5 +208,10 @@ return [[
 
     ]]
 end
+
+if matches[1] == "z" then
+return os.date("%Y/%m/%d ~ %I:%M %p")
 end
-return{patterns = {"^(السورس)$","^(سورس)$","^(م المطور)$", "^(اوامر الرد)$", "^(اوامر الملفات)$", "^(الاوامر)$", "^(م1)$", "^(م2)$", "^(م3)$", "^(م4)$", }, run = run,}
+
+end
+return{patterns = {"^(z)$","^(السورس)$","^(سورس)$","^(م المطور)$", "^(اوامر الرد)$", "^(اوامر الملفات)$", "^(الاوامر)$", "^(م1)$", "^(م2)$", "^(م3)$", "^(م4)$", }, run = run,}

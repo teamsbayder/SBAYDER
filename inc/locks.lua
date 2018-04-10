@@ -1,22 +1,127 @@
 
----------------Lock twasel-------------------
-function lock_twasel(msg)
-if not we_sudo(msg) then return "🚸*¦ * هذا الامر يخص المطور الاساسي فقط  \n📛" end
-if redis:get(boss..'lock_twasel') then
-return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التواصل بالتاكيد تم تعطيله \n✓'
+---------------Lock -------------------
+function tqeed_photo(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if redis:get(boss..':tqeed_photo:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد بالصور بالتأكيد تم قفله \n✓'
 else
-redis:set(boss..'lock_twasel',true)
-return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تعطيل التواصل  \n✓'
+redis:set(boss..':tqeed_photo:'..msg.to.id,true)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم قفل الصور بالتقييد  \n✓'
 end
 end
 
-function unlock_twasel(msg)
-if not we_sudo(msg) then return "🚸*¦ * هذا الامر يخص المطور الاساسي فقط  \n📛" end
-if not redis:get(boss..'lock_twasel') then
-return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التواصل بالتاكيد تم تفعيله \n✓'
+function fktqeed_photo(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if not redis:get(boss..':tqeed_photo:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد بالصور بالتأكيد تم فتحه \n✓'
 else 
-redis:del(boss..'lock_twasel')
-return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تفعيل التواصل \n✓'
+redis:del(boss..':tqeed_photo:'..msg.to.id)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم فتح الصور بالتقييد \n✓'
+end
+end
+
+---------------Lock -------------------
+function tqeed_video(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if redis:get(boss..':tqeed_video:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد بالفيديو بالتأكيد تم قفله \n✓'
+else
+redis:set(boss..':tqeed_video:'..msg.to.id,true)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم قفل الفيديو بالتقييد  \n✓'
+end
+end
+
+function fktqeed_video(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if not redis:get(boss..':tqeed_video:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد بالفيديو بالتأكيد تم فتحه \n✓'
+else 
+redis:del(boss..':tqeed_video:'..msg.to.id)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم فتح الفيديو بالتقييد \n✓'
+end
+end
+
+---------------Lock -------------------
+function tqeed_gif(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if redis:get(boss..':tqeed_gif:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد الممتحركه بالتأكيد تم قفله \n✓'
+else
+redis:set(boss..':tqeed_gif:'..msg.to.id,true)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم قفل المتحركه بالتقييد  \n✓'
+end
+end
+
+function fktqeed_gif(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if not redis:get(boss..':tqeed_gif:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد المتحركه بالتأكيد تم فتحه \n✓'
+else 
+redis:del(boss..':tqeed_gif:'..msg.to.id)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم فتح المتحركه بالتقييد \n✓'
+end
+end
+
+---------------Lock -------------------
+function tqeed_fwd(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if redis:get(boss..':tqeed_fwd:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد بالتوجيه بالتأكيد تم قفله \n✓'
+else
+redis:set(boss..':tqeed_fwd:'..msg.to.id,true)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم قفل التوجيه بالتقييد  \n✓'
+end
+end
+
+function fktqeed_fwd(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if not redis:get(boss..':tqeed_fwd:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد التوجيه بالتأكيد تم فتحه \n✓'
+else 
+redis:del(boss..':tqeed_fwd:'..msg.to.id)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم فتح التوجيه بالتقييد \n✓'
+end
+end
+
+---------------Lock -------------------
+function tqeed_link(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if redis:get(boss..':tqeed_link:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد بالروابط بالتأكيد تم قفله \n✓'
+else
+redis:set(boss..':tqeed_link:'..msg.to.id,true)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم قفل الروابط بالتقييد  \n✓'
+end
+end
+
+function fktqeed_link(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if not redis:get(boss..':tqeed_link:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد بالروابط بالتأكيد تم فتحه \n✓'
+else 
+redis:del(boss..':tqeed_link:'..msg.to.id)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم فتح الروابط بالتقييد \n✓'
+end
+end
+
+---------------Lock -------------------
+function tqeed_photo(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if redis:get(boss..':tqeed_photo:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد بالصور بالتأكيد تم قفله \n✓'
+else
+redis:set(boss..':tqeed_photo:'..msg.to.id,true)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم قفل الصور بالتقييد  \n✓'
+end
+end
+
+function fktqeed_photo(msg)
+if not is_mod(msg) then return "🚸*¦ * هذا الامر يخص الادمنيه فقط  \n📛" end
+if not redis:get(boss..':tqeed_photo:'..msg.to.id) then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التقييد بالصور بالتأكيد تم فتحه \n✓'
+else 
+redis:del(boss..':tqeed_photo:'..msg.to.id)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم فتح الصور بالتقييد \n✓'
 end
 end
 
@@ -289,32 +394,10 @@ if not is_mod(msg) then return "📡*¦* هذا الامر يخص الادمني
 if not redis:get(boss..'lock_webpage'..msg.to.id) then
 return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* الويب بالتأكيد تم فتحه \n✓'
 else 
-redis:set(boss..'lock_webpage'..msg.to.id,true)
+redis:del(boss..'lock_webpage'..msg.to.id)
 return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم فتح الويب \n✓'
 end
 end
-
----------------Lock Pin-------------------
-function lock_pin(msg) 
-if not is_mod(msg) then return "📡*¦* هذا الامر يخص الادمنيه فقط  🚶" end
-if redis:get(boss..'lock_pin'..msg.to.id) then
-return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التثبيت بالتأكيد تم قفله \n✓'
-else
-redis:set(boss..'lock_pin'..msg.to.id,true)
-return "🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم قفل التثبيت \n✓"
-end
-end
-
-function unlock_pin(msg)
-if not is_mod(msg) then return "📡*¦* هذا الامر يخص الادمنيه فقط  🚶" end
-if not redis:get(boss..'lock_pin'..msg.to.id) then
-return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التثبيت بالتأكيد تم فتحه \n✓'
-else 
-redis:del(boss..'lock_pin'..msg.to.id)
-return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم فتح التثبيت \n✓'
-end
-end
-
 ---------------Mute Gif-------------------
 function mute_gif(msg) 
 if not is_mod(msg) then return "📡*¦* هذا الامر يخص الادمنيه فقط  🚶" end
@@ -341,7 +424,7 @@ if not is_mod(msg) then return "📡*¦* هذا الامر يخص الادمني
 if redis:get(boss..'mute_game'..msg.to.id) then
 return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* الالعاب بالتأكيد تم قفلها \n✓'
 else
-redis:ser('mute_game'..msg.to.id,true)
+redis:set('mute_game'..msg.to.id,true)
 return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم قفل الالعاب \n✓'
 end
 end

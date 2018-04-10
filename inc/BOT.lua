@@ -12,14 +12,14 @@ http  = require('socket.http')
 https = require('ssl.https')
 JSON  = require('cjson')
 ltn12 = require ('ltn12')
-Tolgi = require ('lgi')
 Redis = require('redis')
 redis = Redis.connect('127.0.0.1',6379)
+Tolgi = require ('lgi')
 doify = Tolgi.require('Notify')
 doify.init ('Telegram updates')
 local chats = {}
 local plugins = {}
-function doify (alado, rsala) doify.Notification.new(alado, rsala):show() end
+function doify(alado,rsala) doify.Notification.new(alado,rsala):show() end
 function create_config()
 local ip_login = io.popen("echo $SSH_CLIENT | awk '{ print $1}'"):read('*a')
 if not redis:get(ip_login..":TOKEN") then
@@ -33,6 +33,7 @@ create_config()
 else
 local jjson = JSON.decode(url)
 redis:set(ip_login..":USERBOT:","@"..jjson.result.username)
+redis:set(jjson.result.id..'bot:name',jjson.result.first_name)
 io.write('\n\27[1;36m￤تم ادخال التوكن بنجاح   \n￤Success Enter Your Token: \27[1;34m@'..jjson.result.username..'\n\27[0;39;49m')
 redis:set(ip_login..":TOKEN",token)
 end else
@@ -66,22 +67,15 @@ print('\n\27[1;31m￤ You Did not Enter USERNAME !\n￤ لم تقوم بادخا
 create_config()
 end
 end
-if not redis:get(ip_login..":BOT_NAME") then
-io.write('\n\27[1;33m￤ادخل الان اسم البوت الذي تريده ↓  \n￤Enter Name Your BOT : \27[0;39;49m')
-botname = io.read()
-if botname =="" then
-print('\n\27[1;31m￤ You Did not Enter BOT_NAME !\n￤ لم تقوم بادخال اسم البوت !')
-create_config()
-end end
 local REBD = redis:get(ip_login..":TOKEN"):match("(%d+)")
 local getversion = https.request('https://api.th3boss.com/version/')
 redis:set(REBD..":VERSION",getversion)
-redis:set(REBD..'bot:name',botname)
 redis:sadd(REBD..':PLUGINS_FILE:','cmd_help')
 redis:sadd(REBD..':PLUGINS_FILE:','plug_manager')
 redis:sadd(REBD..':PLUGINS_FILE:','proc_msgs')
 redis:sadd(REBD..':PLUGINS_FILE:','rdod_bot')
 redis:sadd(REBD..':PLUGINS_FILE:','super_group')
+os.execute("timedatectl set-timezone Asia/Baghdad")
 insert(redis:get(ip_login..":SUDO_USER"),redis:get(ip_login..":SUDO_IDX"),redis:get(ip_login..":USERBOT:"))
 file = io.open("./inc/info.lua", "w")
 file:write([[
@@ -108,7 +102,6 @@ file:close()
 print ('\27[1;36minfo.lua is created.\27[m')
 os.execute([[
 cd $(cd $(dirname $0); pwd)
- rm ./ins  
  rm ./README.md
  rm -rf ./.git
 chmod +x ./run
@@ -158,12 +151,15 @@ done
 end
 redis:del(info.TOKEN:match("(%d+)")..":RUN_BOT")
 local TGO = JSON.decode(url)
+redis:set(info.TOKEN:match("(%d+)")..":username","@"..TGO.result.username)
+
 login = string.gsub(io.popen("whoami"):read('*a'), '[\n\r]+', '') 
 if login:match("^root$") then
 TG_folder = '/root/.telegram-cli'
 elseif not login:match("^root$") then
 TG_folder = '/home/'..login..'/.telegram-cli'
 end
+os.execute("timedatectl set-timezone Asia/Baghdad")
 print('\27[0;33m>>'..[[
 
 
@@ -198,11 +194,13 @@ return info
 end end
 _info = load_config()
 boss = _info.TOKEN:match("(%d+)")
+our_id = tonumber(boss)
+bot_username = redis:get(boss..":username")
 SUDO_USER = check_markdown(_info.SUDO_USER) 
 SUDO_ID = _info.SUDO_ID 
-if redis:get(_info.TOKEN:match("(%d+)")..":WITTING:ON") then
-send_msg(redis:get(_info.TOKEN:match("(%d+)")..":WITTING:ON"), '📟*¦* تم اعادة تشغيل البوت ✓', nil, 'md')
-redis:del(_info.TOKEN:match("(%d+)")..":WITTING:ON")
+if redis:get(our_id..":WITTING:ON") then
+send_msg(redis:get(our_id..":WITTING:ON"),'📟*¦* تم اعادة تشغيل البوت ✓',nil,'md')
+redis:del(our_id..":WITTING:ON")
 end
 function match_plugins(msg)
 for name, plugin in pairs(plugins) do
@@ -222,31 +220,33 @@ print('\n\27[0;32mPlugins is : '..#list_plug..' Are Active.\n\n\27[0;31mThe SOUR
 end
 load_plugins()
 function msg_check(msg)
-if tonumber(msg.date_) < (tonumber(os.time()) - 30) then
+if tonumber(msg.date_ or 0) < (tonumber(os.time()) - 30) then
 print('\27[36m¦¦¦¦   (THIS_IS_OLD_MSG)   ¦¦¦¦\27[39m')
-return false
-end
+return false end 
 if not (tostring(msg.chat_id_):match('^-100') or tostring(msg.chat_id_):match('-')) and redis:get(boss..':mute_pv:'..msg.sender_user_id_) then
 print('is_MUTE_BY_FLOOD')
-return false
-end
-if is_silent_user(msg.sender_user_id_, msg.chat_id_) then 
-del_msg(msg.chat_id_, msg.id_)
-return false
-end
+return false end
+if is_silent_user(msg.sender_user_id_,msg.chat_id_) then 
+del_msg(msg.chat_id_,msg.id_)
+return false end
 if is_gbanned(msg.sender_user_id_) then
 print('is_G_BAN_USER')
 del_msg(msg.chat_id_, msg.id_)
 kick_user(msg.sender_user_id_, msg.chat_id_)
-return false
-end
+return false end
 if is_banned(msg.sender_user_id_, msg.chat_id_) then
 print('is_BANED_USER')
 del_msg(msg.chat_id_, msg.id_)
 kick_user(msg.sender_user_id_, msg.chat_id_)
+return false end
+if not is_mod1(msg.chat_id_,msg.sender_user_id_) then
+if redis:get(boss..'mute_text'..msg.chat_id_) then --قفل الدردشه
+del_msg(msg.chat_id_, tonumber(msg.id_))
+return false end
+if is_filter(msg.chat_id_,msg.content_.text_ or msg.content_.caption_) then
+del_msg(msg.chat_id_, tonumber(msg.id_))
 return false
-end
-return true
+end end return true
 end
 function msg_pattern(pattern,text)
 if text then
@@ -255,65 +255,44 @@ matches = {string.match(text,pattern)}
 if next(matches) then
 return matches
 end end end
-function match_plugin(plug,plug_name,msg)
-if plug.pre_process then
-if plug.pre_process(msg) then
+function match_plugin(plugin,plug_name,msg)
+if plugin.pre_process and plugin.pre_process(msg) then
 print("¦This_process: ",plug_name)
-end end
-for k, pattern in pairs(plug.patterns) do
+end
+for k, pattern in pairs(plugin.patterns) do
 matches = msg_pattern(pattern,msg.content_.text_ or msg.content_.caption_)
 if matches then
 print("¦This_Message: ",pattern..' | Plugin is: '..plug_name)
-if plug.run then
-local TEXT = plug.run(msg,matches)
+if plugin.run then
+local TEXT = plugin.run(msg,matches)
 if TEXT then
-sendMessage(msg.chat_id_,msg.id_,0,TEXT,0,"md")
+sendMsg(msg.chat_id_,msg.id_,TEXT,"md")
 end end return end end end
-function msg_info(msg, data)
-bot = {}
+function msg_info(msg)
 msg.to = {}
 msg.from = {}
 msg.media = {}
-msg.id = msg.id_
-msg.to.type = GP_Type(data.chat_id_)
-msg.media.caption = (data.content_.caption_ or false)
-if data.reply_to_message_id_ ~= 0 then	msg.reply_id = data.reply_to_message_id_ end
-function info_group(arg, data)
-msg.to.id = msg.chat_id_
-msg.to.title = (data.title_ or false)
-end
-tdcli_function ({ ID = "GetChat", chat_id_ = data.chat_id_ }, info_group, nil)
-function info_bot(arg, data)
-bot.id = data.id_
-our_id = data.id_
-bot.username   = (data.username_ or false)
-bot.first_name = (data.first_name_ or '')
-bot.last_name  = (data.last_name_ or false)
-bot.print_name = (data.first_name_ or '')..' '..(data.last_name_ or '')
-bot.phone = (data.phone_number_ or false)
-end
-tdcli_function({ ID = 'GetMe'}, info_bot, {chat_id=msg.chat_id_})
-function get_user(arg, data)
+msg.to.id = msg.chat_id_ or 0
+msg.to.title = chats[msg.to.id].title_
+msg.to.type = GP_Type(msg.chat_id_)
+msg.media.caption = (msg.content_.caption_ or false)
+if msg.reply_to_message_id_ ~= 0 then	msg.reply_id = msg.reply_to_message_id_ end
+tdcli_function ({ID = "GetUser", user_id_ = msg.sender_user_id_},function(arg,data)
 msg.from.id = data.id_ or 0
 msg.from.username = (data.username_ or false)
 msg.from.first_name = (data.first_name_ or '')
 msg.from.last_name = (data.last_name_ or '')
-msg.from.print_name = (data.first_name_ or '')..' '..(data.last_name_ or '')
-msg.from.phone = (data.phone_number_ or false)
 match_plugins(msg)
-end
-tdcli_function ({ ID = "GetUser", user_id_ = data.sender_user_id_ }, get_user, nil)
+end,nil)
 end
 function tdcli_update_callback (data)
 if data.ID == "UpdateNewMessage" then
 local msg = data.message_
-local gruop = chats[msg.chat_id_]
-local notifi = data.disable_notification_
-if ((not notifi) and gruop) then
-if msg.content_.ID == "MessageText" then doify(gruop.title_, msg.content_.text_) else doify(gruop.title_, msg.content_.ID)
-end end
+
+if ((not data.disable_notification_) and chats[msg.chat_id_]) then if msg.content_.ID == "MessageText" then doify(chats[msg.chat_id_].title_, msg.content_.text_)  else doify(chats[msg.chat_id_].title_, msg.content_.ID) end end
+
 if msg_check(msg) then
-msg_info(msg, msg)
+msg_info(msg)
 	if msg.content_.ID == "MessageText" then
 	msg.text = msg.content_.text_
 	msg.edited = false
@@ -335,7 +314,7 @@ msg_info(msg, msg)
 	elseif msg.content_.ID == "MessageAudio" then
 	msg.audio_ = true
 	audio_id = msg.content_.audio_.audio_.persistent_id_
-	elseif msg.content_.ID == "MessageForwardedFromUser" or msg.content_.ID  == "MessageForwardedPost"  then
+	elseif msg.content_.ID == "MessageForwarded" then
     msg.forward = {}
 	msg.forward_info_ = true
 	msg.forward.from_id = msg.forward_info_.sender_user_id_
@@ -361,14 +340,14 @@ msg_info(msg, msg)
 	msg.deluser = true  end end
 	elseif data.ID == "UpdateMessageContent" then  
 	edit = data
-	local function msg_edit(arg, data)
+	tdcli_function({ID ="GetMessage",chat_id_=data.chat_id_,message_id_=data.message_id_},function(arg, data)
 	msg = data
 	data.media = {}
 	data.text = (edit.new_content_.text_ or false)
 	data.media.caption = (edit.new_content_.caption_ or false)
 	data.edited = true
-	if msg_check(data) then msg_info(msg, msg) end end
-	tdcli_function ({ ID = "GetMessage", chat_id_ = data.chat_id_, message_id_ = data.message_id_ }, msg_edit, nil)
+	if msg_check(data) then msg_info(msg) end 
+	end, nil)
 	elseif data.ID == "UpdateFile" then
 	file_id = data.file_.id_
 	elseif (data.ID == "UpdateChat") then

@@ -1,4 +1,4 @@
-BOT_NAME = redis:get(boss..'bot:name')
+ BOT_NAME = redis:get(boss..'bot:name')
 do 
 local function run(msg, matches) 
 local r =  matches[1]
@@ -7,7 +7,7 @@ local r3 = matches[3]
 local r4 = matches[4]
 ---------------[bot out]---------------------------
 if r == BOT_NAME and r2 == 'غادر' and is_sudo(msg) then
-sendMessage(msg.to.id, msg.id, 1, 'اوك باي 😢💔💯', 1, 'html')
+sendMsg(msg.to.id,msg.id_,'اوك باي 😢💔💯','html')
 botrem(msg)
 end   
 if (r == "ضع اسم للبوت" or r== 'ضع اسم للبوت ©') and is_sudo(msg) then
@@ -45,22 +45,24 @@ xsudouser = xsudouser:gsub([[\_]],'_')
 local inline = {{{text="آلمـطـور ™",url="t.me/"..xsudouser}}}
 return send_inline_key(msg.from.id,text,nil,inline)
 end end
-if (msg.to.type == "pv") and is_sudo(msg) and msg.from.id ~= bot.id then -- ارسال الرساله بالخاص عبر رد على التوجيه
+if (msg.to.type == "pv") and is_sudo(msg) then -- ارسال الرساله بالخاص عبر رد على التوجيه
 if msg.reply_id then
 function get_msg_id(arg, data)
 function replay_fwd(arg,data)
 if data.forward_info_ then
 function infousers(arg,data)
 if data.username_ then user_name = '@'..data.username_ else user_name = data.first_name_ end
-sendMessage(arg.user_id, 0,1,'['..r..']', 1, 'md')
-sendMessage(msg.from.id, msg.id_,1,"📬¦ تم آرسـآل آلرسـآل‏‏هہ 🌿\n🎟¦ آلى : "..user_name.." 🏌🏻", 1, 'html') end
+sendMsg(arg.user_id,0,'['..r..']','md')
+sendMsg(msg.from.id,msg.id_,"📬¦ تم آرسـآل آلرسـآل‏‏هہ 🌿\n🎟¦ آلى : "..user_name.." 🏌🏻",'html') end
 tdcli_function ({ID = "GetUser",user_id_ = data.forward_info_.sender_user_id_}, infousers, {user_id=data.forward_info_.sender_user_id_})  end end
 tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = data.id_ },replay_fwd,nil) end
 tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = msg.reply_to_message_id_ }, get_msg_id,nil)
 end end
-if (msg.to.type == "pv") and not is_sudo(msg) and msg.from.id ~= bot.id and not redis:get(boss..'lock_twasel') then -- ارسال رساله للاعضاء الي يدخلون خاص
-sendMessage(msg.to.id, 0, 1, "🗯¦ تم آرسـآل رسـآلتگ آلى آلمـطـور\n📬¦ سـآرد عليگ في آقرب وقت\n🏌 "..SUDO_USER, 1, 'md')
-forwardMessages(SUDO_ID,msg.to.id,{[0] = msg.id}, 0)
+if (msg.to.type == "pv") and not is_sudo(msg) and not redis:get(boss..'lock_twasel') then -- ارسال رساله للاعضاء الي يدخلون خاص
+sendMsg(msg.to.id,0,"🗯¦ تم آرسـآل رسـآلتگ آلى آلمـطـور\n📬¦ سـآرد عليگ في آقرب وقت\n🏌 "..SUDO_USER,'md')
+sendMsg(msg.to.id,0,our_id,'md')
+sendMsg(msg.to.id,0,boss,'md')
+forwardMessages(SUDO_ID,msg.to.id,{[0] = msg.id_}, 0)
 end
 if (r=="تيست" or r=="test") and is_sudo(msg) then return "💯 البوت شـغــال 🚀" end
 if (r== "ايدي" or r=="ايدي 🆔") and msg.to.type == "pv" then return  "\n"..msg.from.id.."\n"  end
@@ -90,8 +92,14 @@ return "📭¦ تم تغير اسم البوت  ✋🏿\n🗯¦ الان اسم�
 end
 if redis:get(boss..'addrd_all:'..msg.from.id) then -- استقبال الرد لكل المجموعات
 if not redis:get(boss..'allreplay:'..msg.from.id) then-- استقبال كلمه الرد لكل المجموعات
+redis:hdel(boss..'replay_photo:group:',msg.text)
+redis:hdel(boss..'replay_voice:group:',msg.text)
+redis:hdel(boss..'replay_animation:group:',msg.text)
+redis:hdel(boss..'replay_audio:group:',msg.text)
+redis:hdel(boss..'replay_sticker:group:',msg.text)
+redis:hdel(boss..'replay_video:group:',msg.text)
 redis:setex(boss..'allreplay:'..msg.from.id,300,msg.text)
-return "👨🏽‍✈️*¦* شكرأ لك 😻\n👨🏽‍💻*¦* الان ارسل جواب الرد \n-" 
+return "📜¦ جيد , يمكنك الان ارسال جوا ب الردالعام \n🔛¦ [[ نص,صوره,فيديو,متحركه,بصمه,اغنيه ]] ✓\n-" 
 end
 if redis:get(boss..'allreplay:'..msg.from.id) then -- استقبال جواب الرد لكل المجموعات
 redis:hset(boss..'replay:all', redis:get(boss.."allreplay:"..msg.from.id), msg.text)
@@ -101,13 +109,13 @@ end end
 -------------------------------------------------------------
 if redis:get(boss..'addrd:'..msg.from.id) then -- استقبال الرد للمجموعه فقط
 if not redis:get(boss..'replay1'..msg.from.id) then  -- كلمه الرد
-local names = redis:hdel(boss..'replay:'..msg.to.id,msg.text)
-local photo =redis:hdel(boss..'replay_photo:group:'..msg.to.id,msg.text)
-local voice = redis:hdel(boss..'replay_voice:group:'..msg.to.id,msg.text)
-local animation = redis:hdel(boss..'replay_animation:group:'..msg.to.id,msg.text)
-local audio = redis:hdel(boss..'replay_audio:group:'..msg.to.id,msg.text)
-local sticker = redis:hdel(boss..'replay_sticker:group:'..msg.to.id,msg.text)
-local video = redis:hdel(boss..'replay_video:group:'..msg.to.id,msg.text)
+redis:hdel(boss..'replay:'..msg.to.id,msg.text)
+redis:hdel(boss..'replay_photo:group:'..msg.to.id,msg.text)
+redis:hdel(boss..'replay_voice:group:'..msg.to.id,msg.text)
+redis:hdel(boss..'replay_animation:group:'..msg.to.id,msg.text)
+redis:hdel(boss..'replay_audio:group:'..msg.to.id,msg.text)
+redis:hdel(boss..'replay_sticker:group:'..msg.to.id,msg.text)
+redis:hdel(boss..'replay_video:group:'..msg.to.id,msg.text)
 redis:setex(boss..'replay1'..msg.from.id,300,msg.text)
 return "📜¦ جيد , يمكنك الان ارسال جواب الرد \n🔛¦ [[ نص,صوره,فيديو,متحركه,بصمه,اغنيه ]] ✓\n-" 
 end
@@ -139,10 +147,23 @@ return '(['..msg.text..'])\n  ✓ تم مسح الرد 🚀 '
 end end
 if redis:get(boss..'delrdall:'..msg.from.id) then
 redis:del(boss..'delrdall:'..msg.from.id)
-if not redis:hget(boss..'replay:all',msg.text) then
+local names = redis:hget(boss..'replay:all',msg.text)
+local photo =redis:hget(boss..'replay_photo:group:',msg.text)
+local voice = redis:hget(boss..'replay_voice:group:',msg.text)
+local animation = redis:hget(boss..'replay_animation:group:',msg.text)
+local audio = redis:hget(boss..'replay_audio:group:',msg.text)
+local sticker = redis:hget(boss..'replay_sticker:group:',msg.text)
+local video = redis:hget(boss..'replay_video:group:',msg.text)
+if not (names or photo or voice or animation or audio or sticker or video) then
 return '💬*¦* هذا الرد ليس مضاف في قائمه الردود 📛'
 else
 redis:hdel(boss..'replay:all',msg.text)
+redis:hdel(boss..'replay_photo:group:',msg.text)
+redis:hdel(boss..'replay_voice:group:',msg.text)
+redis:hdel(boss..'replay_audio:group:',msg.text)
+redis:hdel(boss..'replay_animation:group:',msg.text)
+redis:hdel(boss..'replay_sticker:group:',msg.text)
+redis:hdel(boss..'replay_video:group:',msg.text)
 return '(['..msg.text..'])\n  ✓ تم مسح الرد 🚀 '
 end end end
 if r== 'مسح الردود' then
@@ -169,7 +190,19 @@ end
 if r== 'مسح الردود العامه' then
 if not is_sudo(msg) then return"♨️ للمطورين فقط ! 💯" end
 local names = redis:hkeys(boss..'replay:all')
+local photo =redis:hkeys(boss..'replay_photo:group:')
+local voice = redis:hkeys(boss..'replay_voice:group:')
+local animation = redis:hkeys(boss..'replay_animation:group:')
+local audio = redis:hkeys(boss..'replay_audio:group:')
+local sticker = redis:hkeys(boss..'replay_sticker:group:')
+local video = redis:hkeys(boss..'replay_video:group:')
 for i=1, #names do redis:hdel(boss..'replay:all',names[i]) end
+for i=1, #photo do redis:hdel(boss..'replay_photo:group:',photo[i]) end
+for i=1, #voice do redis:hdel(boss..'replay_voice:group:',voice[i]) end
+for i=1, #animation do redis:hdel(boss..'replay_animation:group:',animation[i]) end
+for i=1, #audio do redis:hdel(boss..'replay_audio:group:',audio[i]) end
+for i=1, #sticker do redis:hdel(boss..'replay_sticker:group:',sticker[i]) end
+for i=1, #video do redis:hdel(boss..'replay_video:group:',video[i]) end
 return "✓ تم مسح كل الردود العامه🚀"
 end
 if r== 'مسح رد عام' then
@@ -202,10 +235,25 @@ return message..'\n➖➖➖'
 end
 if (r== 'الردود العامه' or r=='الردود العامه 🗨') and is_sudo(msg) then
 local names = redis:hkeys(boss..'replay:all')
-if #names == 0 then return "👨🏾‍🔧¦ لا يوجد ردود مضافه للمجموعات ✋🏿" end
-local i = 1
-local message = '💢 ردود العامه في البوت  💯\n\n'
-for i=1, #names do message = message ..i..' - ('..names[i]..') \n' i = i + 1 end return message
+local photo =redis:hkeys(boss..'replay_photo:group:')
+local voice = redis:hkeys(boss..'replay_voice:group:')
+local animation = redis:hkeys(boss..'replay_animation:group:')
+local audio = redis:hkeys(boss..'replay_audio:group:')
+local sticker = redis:hkeys(boss..'replay_sticker:group:')
+local video = redis:hkeys(boss..'replay_video:group:')
+if #names==0 and #photo==0 and #voice==0 and #animation==0 and #audio==0 and #sticker==0 and #video==0 then return '🚸*¦* لا يوجد ردود مضافه حاليا \n❕' end
+local ii = 1
+local message = '💬*¦* الردود العامه في البوت :   :\n\n'
+for i=1, #photo do message = message ..ii..' - *{* '..photo[i]..' *}_*( صوره 🏞 ) \n' ii = ii + 1 end
+for i=1, #names do message = message ..ii..' - *{* '..names[i]..' *}_*( نص 🗯 ) \n' ii = ii + 1 end
+for i=1, #voice do message = message ..ii..' - *{* '..voice[i]..' *}_*( بصمه 🎙 ) \n' ii = ii + 1 end
+for i=1, #animation do message = message ..ii..' - *{* '..animation[i]..' *}_*( متحركه 🎭 ) \n' ii = ii + 1 end
+for i=1, #audio do message = message ..ii..' - *{* '..audio[i]..' *}_*( صوتيه 🔊 ) \n' ii = ii + 1 end
+for i=1, #sticker do message = message ..ii..' - *{* '..sticker[i]..' *}_*( ملصق 🗺 ) \n' ii = ii + 1 end
+for i=1, #video do message = message ..ii..' - *{* '..video[i]..' *}_*( فيديو  🎞 ) \n' ii = ii + 1 end
+return message..'\n➖➖➖'
+
+
 end
 if not redis:get(boss..'group:add'..msg.to.id) then return end
 if r=="اضف رد" then
@@ -218,8 +266,8 @@ elseif r== "معرفي" then return  "@["..(msg.from.username or " ---").."]\n"
 elseif r== "ايديي" or r=="ايدي 🆔" then return "🧟‍♂*¦* آضـغط على آلآيدي ليتم آلنسـخ\n\n @["..msg.from.username.."] ~⪼ ( `"..msg.from.id.."` )"
 elseif r=="صورتي" then
 tdcli_function ({ID = "GetUserProfilePhotos",user_id_ = msg.from.id,offset_ = 0,limit_ = 1}, function(arg, data)
-if data.photos_[0] then sendPhoto(msg.to.id,msg.id,0,1,nil,data.photos_[0].sizes_[1].photo_.persistent_id_,"",dl_cb,nil)
-else sendMessage(msg.to.id,msg.id,1,"🚸¦ لا يوجد صوره في بروفايلك ...\n-",1,'md')
+if data.photos_[0] then sendPhoto(msg.to.id,msg.id_,0,1,nil,data.photos_[0].sizes_[1].photo_.persistent_id_,"",dl_cb,nil)
+else sendMsg(msg.to.id,msg.id_,"🚸¦ لا يوجد صوره في بروفايلك ...\n-",'md')
 end end, nil)
 elseif r=="اريد رابط الحذف" or r=="اريد رابط حذف" or r=="رابط حذف" or r=="رابط الحذف" then
 return [[
@@ -240,16 +288,23 @@ local lovm = {"اكرهك 😒👌🏿","دي 😑👊🏾","اعشكك/ج مح 
 local thb = {"اموت عليه-ه 😻😻","فديته-ه 😍❤️","لا ماحبه-ه 🌚💔","اكرهه 💔🌚","يييع 😾👊🏿","مادري افڱﮩﮩﮩر🐸💔"}
 local song = {"عمي يبو البار 🤓☝🏿️ \nصبلي لبلبي ترى اني سكران 😌 \n وصاير عصبي 😠 \nانه وياج يم شامه 😉 \nوانه ويــــاج يم شامه  شد شد  👏🏿👏🏿 \nعدكم سطح وعدنه سطح 😁 \n نتغازل لحد الصبح 😉 \n انه وياج يم شامه 😍 \n وانه وياج فخريه وانه وياج حمديه 😂🖖🏿\n ","اي مو كدامك مغني قديم 😒🎋 هوه ﴿↜ انـِۨـۛـِۨـۛـِۨيـُِـٌِہۧۥۛ ֆᵛ͢ᵎᵖ ⌯﴾❥  ربي كامز و تكلي غنيلي 🙄😒🕷 آإرۈحُـ✯ـہ✟  😴أنــ💤ــااااام😴  اشرف تالي وكت يردوني اغني 😒☹️🚶","لا تظربني لا تظرب 💃💃 كسرت الخيزارانه💃🎋 صارلي سنه وست اشهر💃💃 من ظربتك وجعانه🤒😹","موجوع كلبي😔والتعب بية☹️من اباوع على روحي😢ينكسر كلبي عليه😭","ايامي وياها👫اتمنا انساها😔متندم اني حيل😞يم غيري هيه💃تضحك😂عليه😔مقهور انام الليل😢كاعد امسح بل رسائل✉️وجان اشوف كل رسايلها📩وبجيت هوايه😭شفت احبك😍واني من دونك اموت😱وشفت واحد 🚶صار هسه وياية👬اني رايدها عمر عمر تعرفني كل زين🙈 وماردت لا مصلحة ولاغايه😕والله مافد يوم بايسها💋خاف تطلع🗣البوسه💋وتجيها حجايه😔️","😔صوتي بعد مت سمعه✋يال رايح بلا رجعة🚶بزودك نزلت الدمعة ذاك اليوم☝️يال حبيتلك ثاني✌روح وياه وضل عاني😞يوم اسود علية اني🌚 ذاك اليوم☝️تباها بروحك واضحك😂لان بجيتلي عيني😢😭 وافراح يابعد روحي😌خل الحركة تجويني😔🔥صوتي بعد متسمعة🗣✋",}
 if redis:get(boss..":msg_id"..msg.to.id) then
-if msg.reply_id then  msgx_id = msg.reply_id  else msgx_id = false end else msgx_id = msg.id  end
+if msg.reply_id then  msgx_id = msg.reply_id  else msgx_id = false end else msgx_id = msg.id_  end
 if msgx_id then
-if redis:hget(boss..'replay:all',r) then return sendMessage(msg.to.id,msgx_id,1,'['..redis:hget(boss..'replay:all',r)..']',1,'md') 
+if redis:hget(boss..'replay:all',r) then return sendMsg(msg.to.id,msgx_id,check_markdown(redis:hget(boss..'replay:all',r)),'md')
+elseif redis:hget(boss..'replay_photo:group:',r) then return sendPhoto(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_photo:group:',r))  
+elseif redis:hget(boss..'replay_voice:group:',r) then return sendVoice(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_voice:group:',r))
+elseif redis:hget(boss..'replay_animation:group:',r) then return sendAnimation(msg.to.id,msgx_id,0,1, nil,redis:hget(boss..'replay_animation:group:',r))  
+elseif redis:hget(boss..'replay_audio:group:',r) then return sendAudio(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_audio:group:',r))  
+elseif redis:hget(boss..'replay_sticker:group:',r) then return sendSticker(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_sticker:group:',r))  
+elseif redis:hget(boss..'replay_video:group:',r) then return sendVideo(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_video:group:',r))
+--==============================
 elseif redis:hget(boss..'replay_photo:group:'..msg.to.id,r) then return sendPhoto(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_photo:group:'..msg.to.id, r))  
 elseif redis:hget(boss..'replay_voice:group:'..msg.to.id,r) then return sendVoice(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_voice:group:'..msg.to.id, r))
 elseif redis:hget(boss..'replay_animation:group:'..msg.to.id,r) then return sendAnimation(msg.to.id,msgx_id,0,1, nil,redis:hget(boss..'replay_animation:group:'..msg.to.id, r))  
 elseif redis:hget(boss..'replay_audio:group:'..msg.to.id,r) then return sendAudio(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_audio:group:'..msg.to.id, r))  
 elseif redis:hget(boss..'replay_sticker:group:'..msg.to.id,r) then return sendSticker(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_sticker:group:'..msg.to.id, r))  
-elseif redis:hget(boss..'replay_video:group:'..msg.to.id,r) then return sendVideo(msg.to.id,msgx_id,0,1,nil, redis:hget(boss..'replay_video:group:'..msg.to.id, r))  
-elseif redis:hget(boss..'replay:'..msg.to.id,r) then return sendMessage(msg.to.id,msgx_id,1,'['..redis:hget(boss..'replay:'..msg.to.id, r)..']', 1, 'md') 
+elseif redis:hget(boss..'replay_video:group:'..msg.to.id,r) then return sendVideo(msg.to.id,msgx_id,0,1,nil, redis:hget(boss..'replay_video:group:'..msg.to.id, r))
+elseif redis:hget(boss..'replay:'..msg.to.id,r) then return sendMsg(msg.to.id,msgx_id,check_markdown(redis:hget(boss..'replay:'..msg.to.id, r)),'md') 
 end else
 if redis:hget(boss..'replay:all',r) or redis:hget(boss..'replay_photo:group:'..msg.to.id,r) or redis:hget(boss..'replay_voice:group:'..msg.to.id,r) or redis:hget(boss..'replay_animation:group:'..msg.to.id,r) or redis:hget(boss..'replay_audio:group:'..msg.to.id,r) or  redis:hget(boss..'replay_sticker:group:'..msg.to.id,r) or redis:hget(boss..'replay_video:group:'..msg.to.id,r) or redis:hget(boss..'replay:'..msg.to.id,r) then
 return "📛*¦* هذا الامر يعمل بالرد فقط ..!"
@@ -259,20 +314,20 @@ elseif not is_sudo(msg) and r== BOT_NAME and not r2 then  return  ss97[math.rand
 elseif r== "كول" and r2 then
 if string.len(r2) > 80 then return "💢¦ ما اكدر اكول اكثر من 60 حرف 🙌🏾" end
 if check_name(r2)~='الاسم سبام 📛' then
-return sendMessage(msg.to.id,0,1,'*'..r2..'*',1,'md')  end
+return sendMsg(msg.to.id,0,'*'..r2..'*','md') end
 elseif r== "كله" and r2 then
 if string.len(r2) > 80 then return "💢¦ ما اكدر اكله اكثر من 60 حرف 🙌🏾" end
 if check_name(r2)~='الاسم سبام 📛' then
-if msg.reply_id then return sendMessage(msg.to.id,msg.reply_id, 1, '`'..r2..'`', 1, 'md') end end
+if msg.reply_id then return sendMsg(msg.to.id,msg.reply_id,'`'..r2..'`','md') end end
 elseif r== BOT_NAME.."اتفل" and r2 then
 if msg.reply_id then
-sendMessage(msg.to.id, msg.id, 1, 'اوك سيدي 🌝🍃', 1, 'md')
-sendMessage(msg.to.id, msg.reply_id, 1, 'ختفوووووووووو💦💦️️', 1, 'md')
-else  return"  🕵🏻 وينه بله سويله رد 🙄" end
+sendMsg(msg.to.id,msg.id_,'اوك سيدي 🌝🍃','md')
+sendMsg(msg.to.id,msg.reply_id,'ختفوووووووووو💦💦️️','md')
+else return"  🕵🏻 وينه بله سويله رد 🙄" end
 elseif r== BOT_NAME.." رزله" and r2 and is_sudo(msg) then
 if msg.reply_id then
-sendMessage(msg.to.id, msg.id, 1, 'اوك سيدي 🌝🍃', 1, 'md')
-sendMessage(msg.to.id, msg.reply_id, 1, 'يا ول شو طالعة عينك😒 من البنات مو😪و هم صايرلك لسان تحجي😠اشو تعال👋👊صير حباب مرة ثانية ترةة ...😉و لا تخليني البسك عمامة و اتفل عليك😂️', 1, 'md') end
+sendMsg(msg.to.id,msg.id_,'اوك سيدي 🌝🍃','md')
+sendMsg(msg.to.id,msg.reply_id,'يا ول شو طالعة عينك😒 من البنات مو😪و هم صايرلك لسان تحجي😠اشو تعال👋👊صير حباب مرة ثانية ترةة ...😉و لا تخليني البسك عمامة و اتفل عليك😂️','md') end
 elseif r== "بوس" and r2 then if msg.reply_id then return  bs[math.random(#bs)]  else return "📌 وينه بله سويله رد 🕵🏻" end 
 elseif r== "تحب" and r2 then return  thb[math.random(#thb)] 
 elseif is_sudo(msg) and r=="هلو" then return  sh[math.random(#sh)]  
