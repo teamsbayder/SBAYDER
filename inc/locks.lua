@@ -103,6 +103,26 @@ redis:del(boss..':tqeed_link:'..msg.to.id)
 return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم فتح الروابط بالتقييد \n✓'
 end
 end
+---------------Lock twasel-------------------
+function lock_twasel(msg)
+if not we_sudo(msg) then return "🚸*¦ * هذا الامر يخص المطور الاساسي فقط  \n📛" end
+if redis:get(boss..'lock_twasel') then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التواصل بالتاكيد تم تعطيله \n✓'
+else
+redis:set(boss..'lock_twasel',true)
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تعطيل التواصل  \n✓'
+end
+end
+
+function unlock_twasel(msg)
+if not we_sudo(msg) then return "🚸*¦ * هذا الامر يخص المطور الاساسي فقط  \n📛" end
+if not redis:get(boss..'lock_twasel') then
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* التواصل بالتاكيد تم تفعيله \n✓'
+else 
+redis:del(boss..'lock_twasel')
+return '🙋🏼‍♂️*¦* أهلا عزيزي \n📡*¦* تم تفعيل التواصل \n✓'
+end
+end
 
 ---------------Lock -------------------
 function tqeed_photo(msg)
