@@ -216,6 +216,19 @@ if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ عذرا الانلاين مقفول  \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
 end
+elseif msg.content_.entities_ and msg.content_.entities_[0] then
+if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
+del_msg(msg.to.id, tonumber(msg.id_))
+if redis:get(boss..'lock_woring'..msg.to.id) then
+local msgx = "‼️¦ ممنوع ارسال الماركدوان  \n📛"
+return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
+end end 
+if msg.content_.entities_[0].ID == "MessageEntityUrl" or msg.content_.entities_[0].ID == "MessageEntityTextUrl" then
+del_msg(msg.to.id, tonumber(msg.id_))
+if redis:get(boss..'lock_woring'..msg.to.id) then
+local msgx = "‼️¦ ممنوع ارسال روابط الويب   \n📛"
+return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
+end end
 elseif msg.text then -- رسايل فقط
 local _nl, ctrl_chars = string.gsub(msg.text, '%c', '')
 if (string.len(msg.text) > 1200 or ctrl_chars  > 1200) and redis:get(boss..'lock_spam'..msg.to.id) then -- قفل الكليشه 
@@ -248,12 +261,6 @@ if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ ممنوع ارسال المعرف   \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
 end
-end
-elseif msg.content_.entities_ and msg.content_.entities_[0] and (msg.content_.entities_[0].ID == "MessageEntityUrl" or msg.content_.entities_[0].ID == "MessageEntityTextUrl") then
-del_msg(msg.to.id, tonumber(msg.id_))
-if redis:get(boss..'lock_woring'..msg.to.id) then
-local msgx = "‼️¦ ممنوع ارسال روابط الويب   \n📛"
-return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
 end
 elseif msg.content_.ID == "MessageUnsupported" and redis:get(boss..'mute_video'..msg.to.id) then -- قفل الفيديو
 del_msg(msg.to.id, tonumber(msg.id_))
@@ -350,13 +357,6 @@ elseif msg.media.caption:match("@[%a%d%_]+") and redis:get(boss..'lock_username'
 del_msg(msg.to.id, tonumber(msg.id_))
 if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ عذرا ممنوع ارسال التاك او المعرف  \n📛"
-return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
-end end
-elseif msg.content_.entities_ and msg.content_.entities_[0] then
-if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
-del_msg(msg.to.id, tonumber(msg.id_))
-if redis:get(boss..'lock_woring'..msg.to.id) then
-local msgx = "‼️¦ ممنوع ارسال الماركدوان  \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
 end end end end end end
 return {patterns = {},pre_process = pre_process}
