@@ -172,7 +172,7 @@ local day_ex = (redis:ttl(boss..'ExpireDate:'..msg.to.id) / 86400)
 if tonumber(day_ex) > 0.208 and is_mod(msg) then
 warning(msg)
 end end
-if not is_mod(msg) and not is_whitelist(msg.to.id, msg.to.id) and msg.to.id ~= our_id then -- للاعضاء فقط
+if not is_mod(msg) and not is_whitelist(msg.to.id, msg.to.id) and msg.from.id ~= our_id then -- للاعضاء فقط
 if redis:get(boss..'lock_flood'..msg.to.id) and not msg.adduser then
 local msgs = (redis:get(boss..'user:'..msg.to.id..':msgs') or 0)
 local NUM_MSG_MAX = (redis:get(boss..'num_msg_max'..msg.to.id) or 5)
