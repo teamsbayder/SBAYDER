@@ -51,16 +51,12 @@ if msg.reply_id then
 function get_filemsg(arg, data)
 function get_fileinfo(arg,data)
 if data.content_.ID == 'MessageDocument' then
-file_id = data.content_.document_.document_.id_ 
+file_id = data.content_.document_.document_.persistent_id_ 
 file_name = data.content_.document_.file_name_
 if (file_name:lower():match('.lua$')) then
-tdcli_function ({ID = "DownloadFile",file_id_ = file_id}, dl_cb, nil) sleep(2) 
-if file_exi(file_name, TG_folder..'/data/document') then
 sendMsg(msg.to.id,msg.id_,'🗂*¦* تم آضـآفهہ‏‏ وتفعيل مـلف `'..matches[2]..'.lua` في آلسـورس بنجآح \n✓','md')
-os.rename(TG_folder..'/data/document/'..file_name, './plugins/'..matches[2]..'.lua') 
-redis:sadd(boss..':PLUGINS_FILE:',matches[2]) reload_plugins()
-else sendMsg(msg.to.id,msg.id_,'📛*¦* فشل رفع الملف او يبدو ان عدد اسطر الملف اكثر من 500 سطر يمكنك المحاوله مره ثانيه وسوف يتم رفع الملف.\n❕','md')
-end else
+local file_plug = GetFilePath(file_id)
+download_file(file_plug,'./plugins/'..matches[2]..".lua") redis:sadd(boss..':PLUGINS_FILE:',matches[2]) reload_plugins() else
 sendMsg(msg.to.id,msg.id_,'📛*¦* الملف ليس بصيغه [[lua.]]\n❕','md') end  else sendMsg(msg.to.id,msg.id_,'📛*¦* عذرا , هذا ليس ملف \n❕','md') end end
 tdcli_function({ID ='GetMessage',chat_id_=msg.chat_id_,message_id_=data.id_}, get_fileinfo, nil) end
 tdcli_function({ID ='GetMessage',chat_id_=msg.chat_id_,message_id_=msg.reply_id}, get_filemsg, nil)
@@ -103,20 +99,19 @@ if msg.reply_id then
 function get_filemsg(arg, data)
 function get_fileinfo(arg,data)
 if data.content_.ID == 'MessageDocument' then
-file_id = data.content_.document_.document_.id_ 
+file_id = data.content_.document_.document_.persistent_id_ 
 file_name = data.content_.document_.file_name_
 if (file_name:lower():match('.lua$')) then
-os.execute('rm ./inc/buckup_all.lua')
+if file_exi("buckup_all.lua","./inc") then os.execute('rm ./inc/buckup_all.lua') print("Deleteing buckup_all.lua Old ...") end
 sendMsg(msg.to.id,msg.id_,'⏳*┇* جاري رفع النسخه انتظر قليلا ... \n⌛️','md')
-tdcli_function ({ID = "DownloadFile",file_id_ = file_id}, dl_cb, nil) sleep(4) 
-if file_exi(file_name, TG_folder..'/data/document') then
-os.rename(TG_folder..'/data/document/'..file_name, './inc/buckup_all.lua') 
+local buckup_all = GetFilePath(file_id)
+download_file(buckup_all,'./inc/buckup_all.lua')
 local ok, ERROR =  pcall(function() loadfile("./inc/buckup_all.lua")() end)
 if not ok then
 print(tostring(io.popen("lua ./inc/buckup_all.lua"):read('*all')))
 print('\27[31m'..ERROR..'\27[39m')
 end sendMsg(msg.to.id,msg.id_,'📦*¦* تم رفع آلنسـخهہ‏‏ آلآحتيآطـيهہ\n⚖️*¦* حآليآ عدد مـجمـوعآتگ هہ‏‏يهہ‏‏ *'..#redis:smembers(boss..'group:ids')..'* 🌿\n✓','md')
-else sendMsg(msg.to.id,msg.id_,'📛*¦* فشل رفع الملف او يبدو ان عدد اسطر الملف اكثر من 500 سطر يمكنك المحاوله مره ثانيه وسوف يتم رفع الملف.\n❕','md') end 
+
 else sendMsg(msg.to.id,msg.id_,'📛*¦* الملف ليس بصيغه [[lua.]]\n❕','md') end  else sendMsg(msg.to.id,msg.id_,'📛*¦* عذرا , هذا ليس ملف \n❕','md') end end
 tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = data.id_ }, get_fileinfo, nil) end
 tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = msg.reply_id }, get_filemsg, nil)
