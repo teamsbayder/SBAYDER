@@ -73,6 +73,10 @@ local url = 'https://api.telegram.org/bot'.._info.TOKEN..'/sendMessage?chat_id='
 if reply_id then url = url..'&reply_to_message_id='..reply_id end
 if markdown == 'md' or markdown == 'markdown' then  url = url..'&parse_mode=Markdown' elseif markdown == 'html' then  url = url..'&parse_mode=HTML' end return s_api(url)
 end
+function GetFilePath(FileID)
+local UrlInfo = https.request('https://api.telegram.org/bot'.._info.TOKEN..'/getfile?file_id='..FileID)
+return 'https://api.telegram.org/file/bot'.._info.TOKEN..'/'..JSON.decode(UrlInfo).result.file_path
+end
 function TqeedUser(msg)
 return https.request('https://api.telegram.org/bot'.._info.TOKEN..'/restrictChatMember?chat_id='..msg.to.id..'&user_id='..msg.from.id..'&can_send_messages=true&can_send_media_messages=false&can_send_other_messages=false&can_add_web_page_previews=false')
 end
