@@ -135,10 +135,10 @@ redis:del(boss..'fwd:'..msg.from.id)
 local pv = redis:smembers(boss..'users')
 local groups = redis:smembers(boss..'group:ids')
 for i = 1, #pv do
-forwardMessages(pv[i],msg.to.id, {[0] = msg.id_}, 0)
+forwardMessages(pv[i],msg.to.id,{[0]=msg.id_},0)
 end
 for i = 1, #groups do
-forwardMessages(groups[i],msg.to.id, {[0] = msg.id_}, 0)		
+forwardMessages(groups[i],msg.to.id,{[0]=msg.id_},0)		
 end
 return sendMsg(msg.to.id,msg.id_,'📜*¦* تم اذاعه التوجيه بنجاح 🏌🏻\n🗣*¦* للمـجمـوعآت » *'..#groups..'* \n👥*¦* للخآص » '..#pv..'\n✓')			
 end
@@ -153,15 +153,15 @@ end
 if msg.adduser and redis:get(boss..'group:add'..msg.to.id) then
 redis:incr(boss..':addusers_group:'..msg.to.id..':'..msg.from.id)  -- تسـجيل آلجهآت آلمـضـآفهہ للمـجمـوعهہ‏‏
 end
-if msg and not (msg.adduser or msgjoinuser or msgdeluser ) and redis:get(boss..'group:add'..msg.to.id) then
+if msg and not (msg.adduser or msgjoinuser or msgdeluser ) and msg.from.id ~= our_id and redis:get(boss..'group:add'..msg.to.id) then
 redis:incr(boss..'msgs:'..msg.from.id..':'..msg.to.id)  -- ريدز تسجيل عدد رسائل الاعضاء
 --------------------------------------------
 if msg.adduser and redis:get(boss..'welcome:get'..msg.to.id) then
-local adduserx = tonumber(redis:get(boss..'user:'..msg.to.id..':msgs') or 0)
+local adduserx = tonumber(redis:get(boss..'user:'..msg.from.id..':msgs') or 0)
 if adduserx > 3 then 
 redis:del(boss..'welcome:get'..msg.to.id)
 end
-redis:setex(boss..'user:'..msg.to.id..':msgs', 3, adduserx+1)
+redis:setex(boss..'user:'..msg.from.id..':msgs',3,adduserx+1)
 end
 if redis:get(boss..'CheckExpire::'..msg.to.id) and not redis:get(boss..'ExpireDate:'..msg.to.id) and not is_sudo(msg) then
 botrem(msg)
@@ -172,11 +172,11 @@ local day_ex = (redis:ttl(boss..'ExpireDate:'..msg.to.id) / 86400)
 if tonumber(day_ex) > 0.208 and is_mod(msg) then
 warning(msg)
 end end
-if not is_mod(msg) and not is_whitelist(msg.to.id, msg.to.id) and msg.from.id ~= our_id then -- للاعضاء فقط
+if not is_mod(msg) and not is_whitelist(msg.from.id, msg.to.id) then -- للاعضاء فقط   
 if redis:get(boss..'lock_flood'..msg.to.id) and not msg.adduser then
 local msgs = (redis:get(boss..'user:'..msg.to.id..':msgs') or 0)
 local NUM_MSG_MAX = (redis:get(boss..'num_msg_max'..msg.to.id) or 5)
-if tonumber(msgs) > tonumber(NUM_MSG_MAX) then
+if tonumber(msgs) > tonumber(NUM_MSG_MAX) then 
 if redis:get(boss..'sender:'..msg.to.id..':flood') then
 return
 else
@@ -260,8 +260,7 @@ del_msg(msg.to.id, tonumber(msg.id_))
 if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ ممنوع ارسال المعرف   \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
-end
-end
+end end
 elseif msg.content_.ID == "MessageUnsupported" and redis:get(boss..'mute_video'..msg.to.id) then -- قفل الفيديو
 del_msg(msg.to.id, tonumber(msg.id_))
  if redis:get(boss..'lock_woring'..msg.to.id) then
@@ -358,5 +357,10 @@ del_msg(msg.to.id, tonumber(msg.id_))
 if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ عذرا ممنوع ارسال التاك او المعرف  \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
-end end end end end end
+end
+ end 
+ end 
+ end 
+ end 
+ end
 return {patterns = {},pre_process = pre_process}
