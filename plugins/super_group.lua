@@ -141,6 +141,7 @@ if matches[2] == "المتحركه بالتقييد" then return tqeed_gif(msg) 
 if matches[2] == "التوجيه بالتقييد" then return tqeed_fwd(msg) end
 if matches[2] == "الروابط بالتقييد" then return tqeed_link(msg) end
 if matches[2] == "الدردشه" then return mute_text(msg) end
+if matches[2] == "المتحركه" then return mute_gif(msg) end
 if matches[2] == "الصور" then return mute_photo(msg) end
 if matches[2] == "الفيديو" then return mute_video(msg) end
 if matches[2] == "البصمات" then  return mute_audio(msg) end
@@ -207,11 +208,11 @@ return "🙋🏼‍♂️*¦* أهلا عزيزي \n🔖¦ رجائا ارسل �
 end
 if matches[1] == "الرابط" then
 if not redis:get(boss..'linkgp'..msg.to.id) then return "📡*¦* اوه 🙀 لا يوجد هنا رابط\n🔖¦ *رجائا اكتب [ضع رابط]* \n🔃" end
-return sendMsg(msg.to.id,msg.id_,"`🔖¦رابـط الـمـجـمـوعه 💯\n🌿¦"..msg.to.title.." :\n\n`["..redis:get(boss..'linkgp'..msg.to.id).."]\n",'md')
+return sendMsg(msg.to.id,msg.id_,"`🔖¦رابـط الـمـجـمـوعه 💯\n🌿¦"..GroupTitle(msg).." :\n\n`["..redis:get(boss..'linkgp'..msg.to.id).."]\n",'md')
 end
 if matches[1] == "الرابط خاص" and is_mod(msg) then
 if not redis:get(boss..'linkgp'..msg.to.id) then return "📡*¦* اوه 🙀 لا يوجد هنا رابط\n🔖¦ *رجائا اكتب [ضع رابط]*🔃" end
-sendMsg(msg.from.id, 0,"`🔖¦رابـط الـمـجـمـوعه 💯\n🌿¦"..msg.to.title.." :\n\n`["..redis:get(boss..'linkgp'..msg.to.id).."]\n",'md')
+sendMsg(msg.from.id, 0,"`🔖¦رابـط الـمـجـمـوعه 💯\n🌿¦"..GroupTitle(msg).." :\n\n`["..redis:get(boss..'linkgp'..msg.to.id).."]\n",'md')
 return "🙋🏼‍♂️*¦* أهلا عزيزي \n🌿¦ تم ارسال الرابط خاص لك 🔃"
 end
 if matches[1] == "ضع القوانين" and is_mod(msg) then
@@ -337,7 +338,7 @@ local extime = (tonumber(matches[2]) * 86400)
 redis:setex(boss..'ExpireDate:'..msg.to.id, extime, true)
 if not redis:get(boss..'CheckExpire::'..msg.to.id) then redis:set(boss..'CheckExpire::'..msg.to.id,true) end
 sendMsg(msg.to.id,msg.id_,'💂🏻‍♀️¦ تم شحن الاشتراك الى `'..matches[2]..'` يوم   ... 👍🏿','md')
-sendMsg(SUDO_ID, 0,'💂🏻‍♀️¦ تم شحن الاشتراك الى `'..matches[2]..'` يوم   ... 👍🏿\n🕵🏼️‍♀️¦ في مجموعه  » »  '..msg.to.title,'md')
+sendMsg(SUDO_ID, 0,'💂🏻‍♀️¦ تم شحن الاشتراك الى `'..matches[2]..'` يوم   ... 👍🏿\n🕵🏼️‍♀️¦ في مجموعه  » »  '..GroupTitle(msg),'md')
 else
 sendMsg(msg.to.id,msg.id_,'💂🏻‍♀️¦ عزيزي المطور ✋🏿\n👨🏻‍🔧¦ شحن الاشتراك يكون ما بين يوم الى 1000 يوم فقط 🍃','md')
 end end

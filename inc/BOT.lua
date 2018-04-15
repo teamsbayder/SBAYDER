@@ -177,8 +177,7 @@ print('\27[0;33m>>'..[[
   ███    ███ ███    ███    ▄█    ███    ▄█    ███ 
 ▄█████████▀   ▀██████▀   ▄████████▀   ▄████████▀  
                                                   
-]]..'\27[0;31m'..[[¦ Dev : @TH3BOSS]]..'\27[m\27[0;32m\n'   
-..'\27[0;31m'..[[¦ Dev : @BLCON]]..'\27[m\27[0;32m\n\n\027[0;32m'   
+]]..'\27[0;31m'..[[¦ Dev : @BLCON]]..'\27[m\27[0;32m\n\n\027[0;32m'   
 ..'\27[0;31m'..[[¦ Dev : @TH3BS]]..'\27[m\27[0;32m\n\n\027[0;32m'   
 ..'¦ TOKEN_BOT: \27[1;34m'..info.TOKEN..'\027[0;32m\n'
 ..'¦ USER__BOT: \27[1;34m@'..TGO.result.username..'\027[0;32m\n'
@@ -273,7 +272,6 @@ msg.to = {}
 msg.from = {}
 msg.media = {}
 msg.to.id = msg.chat_id_ or 0
-msg.to.title = chats[msg.to.id].title_
 msg.to.type = GP_Type(msg.chat_id_)
 msg.media.caption = (msg.content_.caption_ or false)
 if msg.reply_to_message_id_ ~= 0 then	msg.reply_id = msg.reply_to_message_id_ end

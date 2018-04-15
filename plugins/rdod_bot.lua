@@ -54,9 +54,9 @@ function infousers(arg,data)
 if data.username_ then user_name = '@'..data.username_ else user_name = data.first_name_ end
 sendMsg(arg.user_id,0,'['..r..']','md')
 sendMsg(msg.from.id,msg.id_,"📬¦ تم آرسـآل آلرسـآل‏‏هہ 🌿\n🎟¦ آلى : "..user_name.." 🏌🏻",'html') end
-tdcli_function ({ID = "GetUser",user_id_ = data.forward_info_.sender_user_id_}, infousers, {user_id=data.forward_info_.sender_user_id_})  end end
-tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = data.id_ },replay_fwd,nil) end
-tdcli_function ({ ID = 'GetMessage', chat_id_ = msg.chat_id_, message_id_ = msg.reply_to_message_id_ }, get_msg_id,nil)
+tdcli_function({ID ='GetUser',user_id_ = data.forward_info_.sender_user_id_}, infousers, {user_id=data.forward_info_.sender_user_id_})  end end
+tdcli_function({ID ='GetMessage',chat_id_=msg.chat_id_,message_id_=data.id_},replay_fwd,nil) end
+tdcli_function({ID ='GetMessage',chat_id_=msg.chat_id_,message_id_=msg.reply_to_message_id_},get_msg_id,nil)
 end end
 if (msg.to.type == "pv") and not is_sudo(msg) and not redis:get(boss..'lock_twasel') and msg.from.id ~= our_id then -- ارسال رساله للاعضاء الي يدخلون خاص
 sendMsg(msg.to.id,0,"🗯¦ تم آرسـآل رسـآلتگ آلى آلمـطـور\n📬¦ سـآرد عليگ في آقرب وقت\n🏌 "..SUDO_USER,'md')
@@ -76,8 +76,8 @@ end
 ---------------[End Function data] -----------------------
 if r=="اضف رد عام" or r=="اضف رد عام ➕" then
 if not we_sudo(msg) then return "☔️هذا الاوامر للمطور الاساسي فقط 🌑" end
-redis:setex(boss..'addrd_all:'..msg.from.id,300 , true)
-redis:del(boss..'allreplay:'..msg.from.id)
+redis:setex(boss..'addrd_all:'..msg.to.id..msg.from.id,300 , true)
+redis:del(boss..'allreplay:'..msg.to.id..msg.from.id)
 return "📭¦ حسننا الان ارسل كلمة الرد العام 🍃\n"
 end
 ------------------------------------------------------
@@ -88,25 +88,25 @@ redis:set(boss..'bot:name',msg.text)
 reload_plugins() 
 return "📭¦ تم تغير اسم البوت  ✋🏿\n🗯¦ الان اسمه `"..msg.text.."` \n✓"
 end
-if redis:get(boss..'addrd_all:'..msg.from.id) then -- استقبال الرد لكل المجموعات
-if not redis:get(boss..'allreplay:'..msg.from.id) then-- استقبال كلمه الرد لكل المجموعات
+if redis:get(boss..'addrd_all:'..msg.to.id..msg.from.id) then -- استقبال الرد لكل المجموعات
+if not redis:get(boss..'allreplay:'..msg.to.id..msg.from.id) then-- استقبال كلمه الرد لكل المجموعات
 redis:hdel(boss..'replay_photo:group:',msg.text)
 redis:hdel(boss..'replay_voice:group:',msg.text)
 redis:hdel(boss..'replay_animation:group:',msg.text)
 redis:hdel(boss..'replay_audio:group:',msg.text)
 redis:hdel(boss..'replay_sticker:group:',msg.text)
 redis:hdel(boss..'replay_video:group:',msg.text)
-redis:setex(boss..'allreplay:'..msg.from.id,300,msg.text)
+redis:setex(boss..'allreplay:'..msg.to.id..msg.from.id,300,msg.text)
 return "📜¦ جيد , يمكنك الان ارسال جوا ب الردالعام \n🔛¦ [[ نص,صوره,فيديو,متحركه,بصمه,اغنيه ]] ✓\n-" 
 end
-if redis:get(boss..'allreplay:'..msg.from.id) then -- استقبال جواب الرد لكل المجموعات
-redis:hset(boss..'replay:all', redis:get(boss.."allreplay:"..msg.from.id), msg.text)
-redis:del(boss..'addrd_all:'..msg.from.id)
-return '(['..redis:get(boss..'allreplay:'..msg.from.id)..'])\n  ✓ تم اضافت الرد لكل المجموعات 🚀 '
+if redis:get(boss..'allreplay:'..msg.to.id..msg.from.id) then -- استقبال جواب الرد لكل المجموعات
+redis:hset(boss..'replay:all', redis:get(boss.."allreplay:"..msg.to.id..msg.from.id),msg.text)
+redis:del(boss..'addrd_all:'..msg.to.id..msg.from.id)
+return '(['..redis:get(boss..'allreplay:'..msg.to.id..msg.from.id)..'])\n  ✓ تم اضافت الرد لكل المجموعات 🚀 '
 end end
 -------------------------------------------------------------
-if redis:get(boss..'addrd:'..msg.from.id) then -- استقبال الرد للمجموعه فقط
-if not redis:get(boss..'replay1'..msg.from.id) then  -- كلمه الرد
+if redis:get(boss..'addrd:'..msg.to.id..msg.from.id) then -- استقبال الرد للمجموعه فقط
+if not redis:get(boss..'replay1'..msg.to.id..msg.from.id) then  -- كلمه الرد
 redis:hdel(boss..'replay:'..msg.to.id,msg.text)
 redis:hdel(boss..'replay_photo:group:'..msg.to.id,msg.text)
 redis:hdel(boss..'replay_voice:group:'..msg.to.id,msg.text)
@@ -114,13 +114,13 @@ redis:hdel(boss..'replay_animation:group:'..msg.to.id,msg.text)
 redis:hdel(boss..'replay_audio:group:'..msg.to.id,msg.text)
 redis:hdel(boss..'replay_sticker:group:'..msg.to.id,msg.text)
 redis:hdel(boss..'replay_video:group:'..msg.to.id,msg.text)
-redis:setex(boss..'replay1'..msg.from.id,300,msg.text)
+redis:setex(boss..'replay1'..msg.to.id..msg.from.id,300,msg.text)
 return "📜¦ جيد , يمكنك الان ارسال جواب الرد \n🔛¦ [[ نص,صوره,فيديو,متحركه,بصمه,اغنيه ]] ✓\n-" 
 end
-if redis:get(boss..'replay1'..msg.from.id) then -- جواب الرد
-redis:hset(boss..'replay:'..msg.to.id, redis:get(boss.."replay1"..msg.from.id), msg.text)
-redis:del(boss..'addrd:'..msg.from.id)
-return '(['..redis:get(boss..'replay1'..msg.from.id)..'])\n  ✓ تم اضافت الرد 🚀 \n-'
+if redis:get(boss..'replay1'..msg.to.id..msg.from.id) then -- جواب الرد
+redis:hset(boss..'replay:'..msg.to.id, redis:get(boss.."replay1"..msg.to.id..msg.from.id),msg.text)
+redis:del(boss..'addrd:'..msg.to.id..msg.from.id)
+return '(['..redis:get(boss..'replay1'..msg.to.id..msg.from.id)..'])\n  ✓ تم اضافت الرد 🚀 \n-'
 end end
 if redis:get(boss..'delrd:'..msg.from.id) then
 redis:del(boss..'delrd:'..msg.from.id)
@@ -256,7 +256,7 @@ end
 if not redis:get(boss..'group:add'..msg.to.id) then return end
 if r=="اضف رد" then
 if not is_owner(msg) then return"♨️ للمدراء فقط ! 💯" end
-redis:setex(boss..'addrd:'..msg.from.id,300,true) redis:del(boss..'replay1'..msg.from.id)
+redis:setex(boss..'addrd:'..msg.to.id..msg.from.id,300,true) redis:del(boss..'replay1'..msg.to.id..msg.from.id)
 return "📭¦ حسننا , الان ارسل كلمه الرد \n-"
 end
 if r== "اسمي"  then return  "\n" ..check_name(msg.from.first_name).."\n" 

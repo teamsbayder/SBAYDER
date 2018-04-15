@@ -4,31 +4,31 @@
 ]]
 local function pre_process(msg)
 --====================== Reply Only Group =====================================
-if redis:get(boss..'addrd:'..msg.from.id) and redis:get(boss..'replay1'..msg.from.id) then
+if redis:get(boss..'addrd:'..msg.to.id..msg.from.id) and redis:get(boss..'replay1'..msg.to.id..msg.from.id) then
 local klma = redis:get(boss..'replay1'..msg.from.id)
 if msg.photo_ then 
 redis:hset(boss..'replay_photo:group:'..msg.to.id,klma,photo_id)
-redis:del(boss..'addrd:'..msg.from.id)
+redis:del(boss..'addrd:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه صوره للرد بنجاح ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الصوره الاتيه .','html')
 elseif msg.voice_ then
 redis:hset(boss..'replay_voice:group:'..msg.to.id,klma,voice_id)
-redis:del(boss..'addrd:'..msg.from.id)
+redis:del(boss..'addrd:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه بصمه صوت للرد بنجاح ✓\n🗂¦ يمكنك ارسال ('..klma..') لسماع البصمه الاتيه .','html')
 elseif msg.animation_ then
 redis:hset(boss..'replay_animation:group:'..msg.to.id,klma,animation_id)
-redis:del(boss..'addrd:'..msg.from.id)
+redis:del(boss..'addrd:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه متحركه للرد بنجاح ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الصوره الاتيه .','html')
 elseif msg.video_ then
 redis:hset(boss..'replay_video:group:'..msg.to.id,klma,video_id)
-redis:del(boss..'addrd:'..msg.from.id)
+redis:del(boss..'addrd:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه فيديو للرد بنجاح ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الفيديو الاتي .','html')
 elseif msg.audio_ then
 redis:hset(boss..'replay_audio:group:'..msg.to.id,klma,audio_id)
-redis:del(boss..'addrd:'..msg.from.id)
+redis:del(boss..'addrd:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه للصوت للرد بنجاح ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الصوت الاتي .','html')
 elseif msg.sticker_ then
 redis:hset(boss..'replay_sticker:group:'..msg.to.id,klma,sticker_id)
-redis:del(boss..'addrd:'..msg.from.id)
+redis:del(boss..'addrd:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه ملصق للرد بنجاح ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الملصق الاتي .','html')
 end  end
 --====================== Reply All Groups =====================================
@@ -61,7 +61,6 @@ return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه ملصق للرد ال�
 end  end
 if msg.from.username then usernamex = "@"..msg.from.username else usernamex = check_name(namecut(msg.from.first_name)) end
 local function check_newmember(arg, data)
-if data.username_ then user_name = '@'..data.username_ else user_name = data.first_name_ end
 if data.id_ == our_id then
 local msg_welcom = [[💯¦ مـرحبآ آنآ بوت آسـمـي ]]..redis:get(boss..'bot:name')..[[ 🎖
 💰¦ آختصـآصـي حمـآيهہ‏‏ آلمـجمـوعآت
@@ -70,6 +69,7 @@ local msg_welcom = [[💯¦ مـرحبآ آنآ بوت آسـمـي ]]..redis:ge
 👨🏽‍🔧]]
 return sendPhoto(arg.chat_id,arg.msg_id,0,1,nil,redis:get(boss..':WELCOME_BOT'),msg_welcom,dl_cb,nil)
 end
+if data.username_ then user_name = "@"..data.username_ else user_name = "---" end
 ------------------------------------------------------
 if redis:get(boss..'group:add'..arg.chat_id) then
 if data.type_.ID == "UserTypeBot" then -- حصانه التحقق من البوتات المضافه
@@ -85,7 +85,6 @@ end end else
 if redis:get(boss..'welcome:get'..arg.chat_id) then
 welcome = (redis:get(boss..'welcome:msg'..arg.chat_id) or "🔖*¦* مرحباً عزيزي\n🔖*¦* نورت المجموعة \n💂🏼‍♀️")
 rules = (redis:get(boss..'rulse:msg'..arg.chat_id) or "🔖*¦* مرحبأ عزيري 👋🏻 القوانين كلاتي 👇🏻\n🔖*¦* ممنوع نشر الروابط \n🔖*¦* ممنوع التكلم او نشر صور اباحيه \n🔖*¦* ممنوع  اعاده توجيه \n🔖*¦* ممنوع التكلم بلطائفه \n🔖*¦* الرجاء احترام المدراء والادمنيه 😅\n")
-if data.username_ then user_name = "@"..data.username_ else user_name = "---" end
 local welcome = welcome:gsub("{rules}", rules)
 local welcome = welcome:gsub("{name}", '['..data.first_name_..' '..(data.last_name_ or '')..']')
 local welcome = welcome:gsub("{username}", "["..user_name.."]")
@@ -99,7 +98,7 @@ kick_user(data.id_, arg.chat_id)
 end
 if is_gbanned(data.id_) then
 sendMsg(arg.chat_id,arg.msg_id,'🔖*¦* العضو ⇐ ['..user_name..'] \n🔖*¦* الايدي* ('..data.id_..')*\n🔖*¦* محظور عام تم طرده ✓',"md")
-kick_user(data.id_, arg.chat_id)
+kick_user(data.id_,arg.chat_id)
 end end end
 if msg.to.type == "channel" and redis:get(boss..'group:add'..msg.to.id) then
 if msg.content_.ID == "MessageChatChangePhoto" then
@@ -113,13 +112,12 @@ return sendMsg(msg.to.id,msg.id_,"📭¦ تم تغير اسم المجموعه  
 end
 
 if msg.adduser then
-tdcli_function ({ID = "GetUser",user_id_ = msg.adduser},check_newmember,{chat_id=msg.to.id,msg_id=msg.id_,user_id=msg.to.id,gp_name=msg.to.title})
+tdcli_function ({ID = "GetUser",user_id_ = msg.adduser},check_newmember,{chat_id=msg.to.id,msg_id=msg.id_,user_id=msg.to.id,gp_name=GroupTitle(msg)})
 end
 if msg.joinuser then
-tdcli_function ({ID = "GetUser",user_id_ = msg.joinuser},check_newmember,{chat_id=msg.to.id,msg_id=msg.id_,user_id=msg.to.id,gp_name=msg.to.title}) end
+tdcli_function ({ID = "GetUser",user_id_ = msg.joinuser},check_newmember,{chat_id=msg.to.id,msg_id=msg.id_,user_id=msg.to.id,gp_name=GroupTitle(msg)}) end
 if (msg.adduser or msg.joinuser or msg.deluser) and redis:get(boss..'mute_tgservice'..msg.to.id) then
 del_msg(msg.to.id, tonumber(msg.id_))
-end end
 if msg.photo_ then
 if redis:get(boss..'photo:group'..msg.from.id) then
 redis:del(boss..'photo:group'..msg.from.id)
@@ -129,7 +127,8 @@ if redis:get(boss..'welcom_ph:witting'..msg.from.id) then
 redis:del(boss..'welcom_ph:witting'..msg.from.id)
 redis:set(boss..':WELCOME_BOT',photo_id)
 return sendMsg(msg.to.id,msg.id_,'🚸 ¦ تم تغيير صـورهہ‏‏ آلترحيب للبوت 🌿\n✓','md')
-end end
+end end end end
+
 if msg.forward_info_ and redis:get(boss..'fwd:'..msg.from.id) then
 redis:del(boss..'fwd:'..msg.from.id)
 local pv = redis:smembers(boss..'users')
@@ -153,7 +152,7 @@ end
 if msg.adduser and redis:get(boss..'group:add'..msg.to.id) then
 redis:incr(boss..':addusers_group:'..msg.to.id..':'..msg.from.id)  -- تسـجيل آلجهآت آلمـضـآفهہ للمـجمـوعهہ‏‏
 end
-if msg and not (msg.adduser or msgjoinuser or msgdeluser ) and msg.from.id ~= our_id and redis:get(boss..'group:add'..msg.to.id) then
+if msg and not (msg.adduser or msg.joinuser or msg.deluser ) and is_bot(msg.from.id) and redis:get(boss..'group:add'..msg.to.id) then
 redis:incr(boss..'msgs:'..msg.from.id..':'..msg.to.id)  -- ريدز تسجيل عدد رسائل الاعضاء
 --------------------------------------------
 if msg.adduser and redis:get(boss..'welcome:get'..msg.to.id) then
@@ -165,7 +164,7 @@ redis:setex(boss..'user:'..msg.from.id..':msgs',3,adduserx+1)
 end
 if redis:get(boss..'CheckExpire::'..msg.to.id) and not redis:get(boss..'ExpireDate:'..msg.to.id) and not is_sudo(msg) then
 botrem(msg)
-sendMsg(SUDO_ID,0,'🕵🏼️‍♀️¦ انتهى الاشتراك في احد المجموعات ✋🏿\n👨🏾‍🔧¦ المجموعه : `'..msg.to.title..'`🍃\n💂🏻‍♀️¦ ايدي : '..msg.to.id,'md')
+sendMsg(SUDO_ID,0,'🕵🏼️‍♀️¦ انتهى الاشتراك في احد المجموعات ✋🏿\n👨🏾‍🔧¦ المجموعه : `'..GroupTitle(msg)..'`🍃\n💂🏻‍♀️¦ ايدي : '..msg.to.id,'md')
 return sendMsg(msg.to.id,0,'🕵🏼️‍♀️¦ انتهى الاشتراك البوت✋🏿\n💂🏻‍♀️¦ سوف اغادر المجموعه فرصه سعيده 👋🏿\n👨🏾‍🔧¦ او راسل المطور للتجديد ['..SUDO_USER..'] 🍃','md')
 else
 local day_ex = (redis:ttl(boss..'ExpireDate:'..msg.to.id) / 86400)
@@ -174,19 +173,18 @@ warning(msg)
 end end
 if not is_mod(msg) and not is_whitelist(msg.from.id, msg.to.id) then -- للاعضاء فقط   
 if redis:get(boss..'lock_flood'..msg.to.id) and not msg.adduser then
-local msgs = (redis:get(boss..'user:'..msg.to.id..':msgs') or 0)
+local msgs = (redis:get(boss..'user:'..msg.from.id..':msgs') or 0)
 local NUM_MSG_MAX = (redis:get(boss..'num_msg_max'..msg.to.id) or 5)
 if tonumber(msgs) > tonumber(NUM_MSG_MAX) then 
-if redis:get(boss..'sender:'..msg.to.id..':flood') then
+if redis:get(boss..'sender:'..msg.from.id..':flood') then
 return
 else
-if msg.from.username then  user_name = "@"..msg.from.username else user_name = check_name(namecut(msg.from.first_name)) end
-del_msg(msg.to.id, msg.id_)
-kick_user(msg.to.id, msg.to.id)
-redis:setex(boss..'sender:'..msg.to.id..':flood',30,true)
-return sendMsg(msg.to.id,msg.id_,"👤¦ العضو : ["..user_name.."]\n🚸¦ عذرا ممنوع التكرار في هذه المجموعه لقد تم طردك ✓\n","md")
+del_msg(msg.to.id,tonumber(msg.id_))
+kick_user(msg.to.id,msg.to.id)
+redis:setex(boss..'sender:'..msg.from.id..':flood',60,true)
+return sendMsg(msg.to.id,msg.id_,"👤¦ العضو : ["..usernamex.."]\n🚸¦ عذرا ممنوع التكرار في هذه المجموعه لقد تم طردك ✓\n","md")
 end end
-redis:setex(boss..'user:'..msg.to.id..':msgs',2,msgs+1)
+redis:setex(boss..'user:'..msg.from.id..':msgs',2,msgs+1)
 end
 if msg.forward_info_ and redis:get(boss..':tqeed_fwd:'..msg.to.id) then
 del_msg(msg.to.id, tonumber(msg.id_))
@@ -216,19 +214,6 @@ if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ عذرا الانلاين مقفول  \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
 end
-elseif msg.content_.entities_ and msg.content_.entities_[0] then
-if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
-del_msg(msg.to.id, tonumber(msg.id_))
-if redis:get(boss..'lock_woring'..msg.to.id) then
-local msgx = "‼️¦ ممنوع ارسال الماركدوان  \n📛"
-return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
-end end 
-if msg.content_.entities_[0].ID == "MessageEntityUrl" or msg.content_.entities_[0].ID == "MessageEntityTextUrl" then
-del_msg(msg.to.id, tonumber(msg.id_))
-if redis:get(boss..'lock_woring'..msg.to.id) then
-local msgx = "‼️¦ ممنوع ارسال روابط الويب   \n📛"
-return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
-end end
 elseif msg.text then -- رسايل فقط
 local _nl, ctrl_chars = string.gsub(msg.text, '%c', '')
 if (string.len(msg.text) > 1200 or ctrl_chars  > 1200) and redis:get(boss..'lock_spam'..msg.to.id) then -- قفل الكليشه 
@@ -237,16 +222,22 @@ if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ ممنوع ارسال الكليشه والا سوف تجبرني على طردك  \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
 end
-elseif (msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.text:match("[Tt].[Mm][Ee]/") or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/") or msg.text:match(".[Pp][Ee]")) and redis:get(boss..'lock_link'..msg.to.id) then
+elseif (msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Oo][Rr][Gg]/") or msg.text:match("[Tt].[Mm][Ee]/") or msg.text:match(".[Pp][Ee]")) and redis:get(boss..'lock_link'..msg.to.id) then
 del_msg(msg.to.id, tonumber(msg.id_))
 if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ ممنوع ارسال الروابط  \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
 end
-elseif (msg.text:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.text:match("[Hh][Tt][Tt][Pp]://") or msg.text:match("[Ww][Ww][Ww].") or msg.text:match(".[Cc][Oo][Mm]")) and redis:get(boss..'lock_webpage'..msg.to.id) then
+elseif (msg.text:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.text:match("[Hh][Tt][Tt][Pp]://") or msg.text:match("[Ww][Ww][Ww].") or msg.text:match(".[Cc][Oo][Mm]") or msg.text:match(".[Tt][Kk]") or msg.text:match(".[Mm][Ll]") or msg.text:match(".[Oo][Rr][Gg]")) and redis:get(boss..'lock_webpage'..msg.to.id) then
 del_msg(msg.to.id, tonumber(msg.id_))
 if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ ممنوع ارسال روابط الويب   \n📛"
+return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
+end
+elseif msg.edited and redis:get(boss..'lock_edit'..msg.to.id) then -- قفل التعديل
+del_msg(msg.to.id, tonumber(msg.id_))
+if redis:get(boss..'lock_woring'..msg.to.id) then
+local msgx = "‼️¦ عذراً ممنوع التعديل تم المسح \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
 end
 elseif msg.text:match("#") and redis:get(boss..'lock_tag'..msg.to.id) then
@@ -260,17 +251,24 @@ del_msg(msg.to.id, tonumber(msg.id_))
 if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ ممنوع ارسال المعرف   \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
-end end
+end
+elseif msg.content_.entities_ and msg.content_.entities_[0] and msg.content_.entities_[0].ID ~= "MessageEntityBold" then
+if (msg.content_.entities_[0].ID == "MessageEntityTextUrl" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic") and redis:get(boss..'lock_markdown'..msg.to.id) then
+del_msg(msg.to.id, tonumber(msg.id_))
+if redis:get(boss..'lock_woring'..msg.to.id) then
+local msgx = "‼️¦ ممنوع ارسال الماركدوان  \n📛"
+return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
+end end 
+if msg.content_.entities_[0].ID == "MessageEntityUrl" and redis:get(boss..'lock_webpage'..msg.to.id) then
+del_msg(msg.to.id, tonumber(msg.id_))
+if redis:get(boss..'lock_woring'..msg.to.id) then
+local msgx = "‼️¦  .ممنوع ارسال روابط الويب   \n📛"
+return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
+end end end
 elseif msg.content_.ID == "MessageUnsupported" and redis:get(boss..'mute_video'..msg.to.id) then -- قفل الفيديو
 del_msg(msg.to.id, tonumber(msg.id_))
  if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ عذرا ممنوع ارسال الفيديو كام \n📛"
-return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
-end
-elseif msg.edited and redis:get(boss..'lock_edit'..msg.to.id) then -- قفل التعديل
-del_msg(msg.to.id, tonumber(msg.id_))
-if redis:get(boss..'lock_woring'..msg.to.id) then
-local msgx = "‼️¦ عذراً ممنوع التعديل تم المسح \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
 end
 elseif msg.photo_ and redis:get(boss..'mute_photo'..msg.to.id)  then -- قفب الصور
@@ -357,10 +355,5 @@ del_msg(msg.to.id, tonumber(msg.id_))
 if redis:get(boss..'lock_woring'..msg.to.id) then
 local msgx = "‼️¦ عذرا ممنوع ارسال التاك او المعرف  \n📛"
 return sendMsg(msg.to.id,0,'*👤¦* العضو : ['..check_name(namecut(msg.from.first_name))..']\n🎟*¦* اليوزر : ['..usernamex..']\n'..msgx,'md')    
-end
- end 
- end 
- end 
- end 
- end
+end end end end end end
 return {patterns = {},pre_process = pre_process}
