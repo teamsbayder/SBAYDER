@@ -16,11 +16,9 @@ tdcli_function({ID = "GetUserProfilePhotos",user_id_=msg.from.id,offset_=0,limit
 if data.photos_[0] then
 sendPhoto(msg.to.id,msg.id_,0,1,nil,data.photos_[0].sizes_[1].photo_.persistent_id_,'👤¦ معرفك » '..userxn..'\n🎫¦ ايديك  » '..msg.from.id..'\n🎖¦ رتبتـك » '..get_rank(msg)..'\n📨¦ رسائلك » '..msgs..' رسالةة\n⭐️¦ تفاعلك » '..get_ttl(msgs)..'\n➖',dl_cb,nil) else
 sendMsg(msg.to.id,msg.id_,'🚸*¦* لا يوجد صوره في بروفايلك ...!\n\n👤*¦* اسمك » ['..check_name(namecut(msg.from.first_name))..']\n🎫*¦* معرفك » ['..userxn..']\n🏷*¦* ايديك » (*'..msg.from.id..'*)\n📮*¦* رتبتك » '..get_rank(msg)..'\n⭐️*¦* تفاعلك » '..get_ttl(msgs)..'\n📨*¦* رسائلك » (*'..msgs..'*) رساله\n➖','md')
-end end,nil) 
-else
+end end,nil) else
 return '👤*¦* اسمك » ['..check_name(namecut(msg.from.first_name))..']\n🎫*¦* معرفك » ['..userxn..']\n🏷*¦* ايديك » (*'..msg.from.id..'*)\n🎖¦ رتبتـك » '..get_rank(msg)..'\n📨¦ رسائلك » '..msgs..' رسالةة\n⭐️¦ تفاعلك » '..get_ttl(msgs)..'\n➖'
-end 
-end
+end end
 if msg.reply_id and not matches[2] then
 tdcli_function ({ID = "GetMessage",chat_id_ = msg.to.id,message_id_ = msg.reply_id}, action_by_reply, {msg_id=msg.id_,chat_id=msg.to.id,cmd="iduser"})
 end
@@ -295,7 +293,7 @@ if data.content_.photo_.sizes_[3] then photo_id = data.content_.photo_.sizes_[3]
 tdcli_function({ID = "ChangeChatPhoto",chat_id_ = msg.to.id,photo_ = getInputFile(photo_id)}, dl_cb, nil)
 end end tdcli_function({ID = 'GetMessage',chat_id_ = msg.chat_id_,message_id_ = data.id_ },photoinfo,nil)
 end tdcli_function({ID = 'GetMessage',chat_id_ = msg.chat_id_,message_id_ = msg.reply_to_message_id_ },photomsg,nil)
-else redis:setex(boss..'photo:group'..msg.from.id,300,true)
+else redis:setex(boss..'photo:group'..msg.to.id..msg.from.id,300,true)
 return '📭¦ حسننا عزيزي 🍁\n🌄 ¦ الان قم بارسال الصوره\n🛠' end end
 if matches[1] == "ضع وصف" and is_mod(msg) then redis:setex(boss..'about:witting'..msg.from.id,300,true) return "📭¦ حسننا عزيزي  ✋🏿\n🗯¦ الان ارسل الوصف  للمجموعه\n🛠" end
 if matches[1] == "منع" and is_mod(msg) then return filter_word(msg, matches[2]) end
@@ -564,7 +562,7 @@ local pv = redis:smembers(boss..'users')
 local groups = redis:smembers(boss..'group:ids')
 for i = 1, #pv do sendMsg(pv[i],0,check_markdown(msg.text))end
 for i = 1, #groups do sendMsg(groups[i],0,check_markdown(msg.text))end
-return sendMsg(msg.from.id,msg.id_,'📜*¦* تم اذاعه الكليشه بنجاح 🏌🏻\n🗣*¦* للمـجمـوعآت » *'..#groups..'* گروب \n👥*¦* للمـشـترگين » '..#pv..' مـشـترگ \n✓')end
+return sendMsg(msg.to.id,msg.id_,'📜*¦* تم اذاعه الكليشه بنجاح 🏌🏻\n🗣*¦* للمـجمـوعآت » *'..#groups..'* گروب \n👥*¦* للمـشـترگين » '..#pv..' مـشـترگ \n✓')end
 if redis:get(boss..'fwd:pv'..msg.from.id) then ---- استقبال رساله الاذاعه خاص
 redis:del(boss..'fwd:pv'..msg.from.id)
 local pv = redis:smembers(boss..'users')

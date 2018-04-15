@@ -58,9 +58,9 @@ tdcli_function({ID ='GetUser',user_id_ = data.forward_info_.sender_user_id_}, in
 tdcli_function({ID ='GetMessage',chat_id_=msg.chat_id_,message_id_=data.id_},replay_fwd,nil) end
 tdcli_function({ID ='GetMessage',chat_id_=msg.chat_id_,message_id_=msg.reply_to_message_id_},get_msg_id,nil)
 end end
-if (msg.to.type == "pv") and not is_sudo(msg) and not redis:get(boss..'lock_twasel') and msg.from.id ~= our_id then -- ارسال رساله للاعضاء الي يدخلون خاص
+if (msg.to.type == "pv") and not we_sudo(msg) and not redis:get(boss..'lock_twasel') and msg.from.id ~= our_id then -- ارسال رساله للاعضاء الي يدخلون خاص
 sendMsg(msg.to.id,0,"🗯¦ تم آرسـآل رسـآلتگ آلى آلمـطـور\n📬¦ سـآرد عليگ في آقرب وقت\n🏌 "..SUDO_USER,'md')
-forwardMessages(SUDO_ID,msg.to.id,{[0] = msg.id_}, 0)
+forwardMessages(SUDO_ID,msg.to.id,{[0] = msg.id_},0)
 end
 if (r=="تيست" or r=="test") and is_sudo(msg) then return "💯 البوت شـغــال 🚀" end
 if (r== "ايدي" or r=="ايدي 🆔") and msg.to.type == "pv" then return  "\n"..msg.from.id.."\n"  end
@@ -250,8 +250,6 @@ for i=1, #audio do message = message ..ii..' - *{* '..audio[i]..' *}_*( صوتي
 for i=1, #sticker do message = message ..ii..' - *{* '..sticker[i]..' *}_*( ملصق 🗺 ) \n' ii = ii + 1 end
 for i=1, #video do message = message ..ii..' - *{* '..video[i]..' *}_*( فيديو  🎞 ) \n' ii = ii + 1 end
 return message..'\n➖➖➖'
-
-
 end
 if not redis:get(boss..'group:add'..msg.to.id) then return end
 if r=="اضف رد" then
@@ -288,7 +286,7 @@ local song = {"عمي يبو البار 🤓☝🏿️ \nصبلي لبلبي ت�
 if redis:get(boss..":msg_id"..msg.to.id) then
 if msg.reply_id then  msgx_id = msg.reply_id  else msgx_id = false end else msgx_id = msg.id_  end
 if msgx_id then
-if redis:hget(boss..'replay:all',r) then return sendMsg(msg.to.id,msgx_id,check_markdown(redis:hget(boss..'replay:all',r)),'md')
+if redis:hget(boss..'replay:all',r) then return sendMsg(msg.to.id,msgx_id,"["..redis:hget(boss..'replay:all',r).."]",'md')
 elseif redis:hget(boss..'replay_photo:group:',r) then return sendPhoto(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_photo:group:',r))  
 elseif redis:hget(boss..'replay_voice:group:',r) then return sendVoice(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_voice:group:',r))
 elseif redis:hget(boss..'replay_animation:group:',r) then return sendAnimation(msg.to.id,msgx_id,0,1, nil,redis:hget(boss..'replay_animation:group:',r))  
@@ -302,7 +300,7 @@ elseif redis:hget(boss..'replay_animation:group:'..msg.to.id,r) then return send
 elseif redis:hget(boss..'replay_audio:group:'..msg.to.id,r) then return sendAudio(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_audio:group:'..msg.to.id, r))  
 elseif redis:hget(boss..'replay_sticker:group:'..msg.to.id,r) then return sendSticker(msg.to.id,msgx_id,0,1,nil,redis:hget(boss..'replay_sticker:group:'..msg.to.id, r))  
 elseif redis:hget(boss..'replay_video:group:'..msg.to.id,r) then return sendVideo(msg.to.id,msgx_id,0,1,nil, redis:hget(boss..'replay_video:group:'..msg.to.id, r))
-elseif redis:hget(boss..'replay:'..msg.to.id,r) then return sendMsg(msg.to.id,msgx_id,check_markdown(redis:hget(boss..'replay:'..msg.to.id, r)),'md') 
+elseif redis:hget(boss..'replay:'..msg.to.id,r) then return sendMsg(msg.to.id,msgx_id,"["..redis:hget(boss..'replay:'..msg.to.id, r).."]",'md') 
 end else
 if redis:hget(boss..'replay:all',r) or redis:hget(boss..'replay_photo:group:'..msg.to.id,r) or redis:hget(boss..'replay_voice:group:'..msg.to.id,r) or redis:hget(boss..'replay_animation:group:'..msg.to.id,r) or redis:hget(boss..'replay_audio:group:'..msg.to.id,r) or  redis:hget(boss..'replay_sticker:group:'..msg.to.id,r) or redis:hget(boss..'replay_video:group:'..msg.to.id,r) or redis:hget(boss..'replay:'..msg.to.id,r) then
 return "📛*¦* هذا الامر يعمل بالرد فقط ..!"
