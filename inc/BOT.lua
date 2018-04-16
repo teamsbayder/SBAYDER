@@ -65,8 +65,7 @@ create_config()
 end else
 print('\n\27[1;31m￤ You Did not Enter USERNAME !\n￤ لم تقوم بادخال معرف المطور | انتبه !')
 create_config()
-end
-end
+end end
 local REBD = redis:get(ip_login..":TOKEN"):match("(%d+)")
 local getversion = https.request('https://api.th3boss.com/version/')
 redis:set(REBD..":VERSION",getversion)
@@ -286,7 +285,6 @@ end
 function tdcli_update_callback (data)
 if data.ID == "UpdateNewMessage" then
 local msg = data.message_
-
 if ((not data.disable_notification_) and chats[msg.chat_id_]) then if msg.content_.ID == "MessageText" then doify(chats[msg.chat_id_].title_, msg.content_.text_)  else doify(chats[msg.chat_id_].title_, msg.content_.ID) end end
 
 if msg_check(msg) then
@@ -312,11 +310,8 @@ msg_info(msg)
 	elseif msg.content_.ID == "MessageAudio" then
 	msg.audio_ = true
 	audio_id = msg.content_.audio_.audio_.persistent_id_
-	elseif msg.content_.ID == "MessageForwarded" then
-    msg.forward = {}
-	msg.forward_info_ = true
-	msg.forward.from_id = msg.forward_info_.sender_user_id_
-    msg.forward.msg_id = msg.forward_info_.data_
+	elseif msg.forward_info_ then
+   	msg.forward_info_ = true 
 	elseif msg.content_.ID == "MessageSticker" then
 	msg.sticker_ = true
 	sticker_id = msg.content_.sticker_.sticker_.persistent_id_

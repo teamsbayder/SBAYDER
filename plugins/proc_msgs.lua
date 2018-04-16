@@ -109,10 +109,10 @@ redis:set(boss..'group:name'..msg.to.id,data.title_)
 return sendMsg(msg.to.id,msg.id_,"📭¦ تم تغير اسم المجموعه  ✋🏿\n🗯¦ الان اسمه `"..data.title_.."` \n✓","md") end,nil)
 end
 if msg.adduser then
-tdcli_function ({ID = "GetUser",user_id_ = msg.adduser},check_newmember,{chat_id=msg.to.id,msg_id=msg.id_,user_id=msg.from.id,gp_name=GroupTitle(msg)})
+tdcli_function ({ID = "GetUser",user_id_ = msg.adduser},check_newmember,{chat_id=msg.to.id,msg_id=msg.id_,user_id=msg.from.id,gp_name=redis:get(boss..'group:name'..msg.to.id)})
 end
 if msg.joinuser then
-tdcli_function ({ID = "GetUser",user_id_ = msg.joinuser},check_newmember,{chat_id=msg.to.id,msg_id=msg.id_,user_id=msg.from.id,gp_name=GroupTitle(msg)}) end
+tdcli_function ({ID = "GetUser",user_id_ = msg.joinuser},check_newmember,{chat_id=msg.to.id,msg_id=msg.id_,user_id=msg.from.id,gp_name=redis:get(boss..'group:name'..msg.to.id)}) end
 if (msg.adduser or msg.joinuser or msg.deluser) and redis:get(boss..'mute_tgservice'..msg.to.id) then del_msg(msg.to.id,tonumber(msg.id_)) end
 end
 if msg.photo_ then
@@ -156,7 +156,7 @@ redis:setex(boss..'user:'..msg.from.id..':msgs',3,adduserx+1)
 end
 if redis:get(boss..'CheckExpire::'..msg.to.id) and not redis:get(boss..'ExpireDate:'..msg.to.id) and not is_sudo(msg) then
 botrem(msg)
-sendMsg(SUDO_ID,0,'🕵🏼️‍♀️¦ انتهى الاشتراك في احد المجموعات ✋🏿\n👨🏾‍🔧¦ المجموعه : `'..GroupTitle(msg)..'`🍃\n💂🏻‍♀️¦ ايدي : '..msg.to.id,'md')
+sendMsg(SUDO_ID,0,'🕵🏼️‍♀️¦ انتهى الاشتراك في احد المجموعات ✋🏿\n👨🏾‍🔧¦ المجموعه : `'..redis:get(boss..'group:name'..msg.to.id)..'`🍃\n💂🏻‍♀️¦ ايدي : '..msg.to.id,'md')
 return sendMsg(msg.to.id,0,'🕵🏼️‍♀️¦ انتهى الاشتراك البوت✋🏿\n💂🏻‍♀️¦ سوف اغادر المجموعه فرصه سعيده 👋🏿\n👨🏾‍🔧¦ او راسل المطور للتجديد ['..SUDO_USER..'] 🍃','md')
 else
 local day_ex = (redis:ttl(boss..'ExpireDate:'..msg.to.id) / 86400)
@@ -168,9 +168,7 @@ if redis:get(boss..'lock_flood'..msg.to.id) and not msg.adduser then
 local msgs = (redis:get(boss..'user:'..msg.from.id..':msgs') or 0)
 local NUM_MSG_MAX = (redis:get(boss..'num_msg_max'..msg.to.id) or 5)
 if tonumber(msgs) > tonumber(NUM_MSG_MAX) then 
-if redis:get(boss..'sender:'..msg.from.id..':flood') then
-return
-else
+if not redis:get(boss..'sender:'..msg.from.id..':flood') then
 kick_user(msg.from.id,msg.to.id)
 redis:setex(boss..'sender:'..msg.from.id..':flood',60,true)
 return sendMsg(msg.to.id,msg.id_,"👤¦ العضو : ["..usernamex.."]\n🚸¦ عذرا ممنوع التكرار في هذه المجموعه لقد تم طردك ✓\n","md")

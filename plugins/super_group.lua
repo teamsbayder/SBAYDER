@@ -206,11 +206,11 @@ return "🙋🏼‍♂️*¦* أهلا عزيزي \n🔖¦ رجائا ارسل �
 end
 if matches[1] == "الرابط" then
 if not redis:get(boss..'linkgp'..msg.to.id) then return "📡*¦* اوه 🙀 لا يوجد هنا رابط\n🔖¦ *رجائا اكتب [ضع رابط]* \n🔃" end
-return sendMsg(msg.to.id,msg.id_,"`🔖¦رابـط الـمـجـمـوعه 💯\n🌿¦"..GroupTitle(msg).." :\n\n`["..redis:get(boss..'linkgp'..msg.to.id).."]\n",'md')
+return sendMsg(msg.to.id,msg.id_,"`🔖¦رابـط الـمـجـمـوعه 💯\n🌿¦"..redis:get(boss..'group:name'..msg.to.id).." :\n\n`["..redis:get(boss..'linkgp'..msg.to.id).."]\n",'md')
 end
 if matches[1] == "الرابط خاص" and is_mod(msg) then
 if not redis:get(boss..'linkgp'..msg.to.id) then return "📡*¦* اوه 🙀 لا يوجد هنا رابط\n🔖¦ *رجائا اكتب [ضع رابط]*🔃" end
-sendMsg(msg.from.id, 0,"`🔖¦رابـط الـمـجـمـوعه 💯\n🌿¦"..GroupTitle(msg).." :\n\n`["..redis:get(boss..'linkgp'..msg.to.id).."]\n",'md')
+sendMsg(msg.from.id, 0,"`🔖¦رابـط الـمـجـمـوعه 💯\n🌿¦"..redis:get(boss..'group:name'..msg.to.id).." :\n\n`["..redis:get(boss..'linkgp'..msg.to.id).."]\n",'md')
 return "🙋🏼‍♂️*¦* أهلا عزيزي \n🌿¦ تم ارسال الرابط خاص لك 🔃"
 end
 if matches[1] == "ضع القوانين" and is_mod(msg) then
@@ -263,17 +263,22 @@ end
 if matches[2] == 'المحظورين' and is_owner(msg) then
 if #redis:smembers(boss..'banned:'..msg.to.id) ==0 then return "*📌¦ لا يوجد مستخدمين محظورين  *" end
 redis:del(boss..'banned:'..msg.to.id)
-return "📡*¦* تم مسح المحظورين في المجموعه"
+return "📡*¦* تم مسح المحظورين في المجموعه \n✓"
 end
 if matches[2] == 'المكتومين' and is_owner(msg)  then
 if #redis:smembers(boss..'is_silent_users:'..msg.to.id) ==0 then return "📡*¦* لا يوجد مستخدمين مكتومين في المجموعه " end
 redis:del(boss..'is_silent_users:'..msg.to.id)
-return "⚙️*¦* تم مسح قائمه الكتم"
+return "⚙️*¦* تم مسح قائمه الكتم \n✓"
 end
 if matches[2] == 'المميزين' and is_owner(msg)  then
 if #redis:smembers(boss..'whitelist:'..msg.to.id) ==0 then return "*⚙️*¦ لا يوجد مستخدمين مميزين في المجموعه " end
 redis:del(boss..'whitelist:'..msg.to.id)
-return "⚙️*¦* تم مسح قائمه المميزين"
+return "⚙️*¦* تم مسح قائمه المميزين \n✓"
+end
+if matches[2] == 'الرابط' and is_owner(msg)  then
+if not redis:get(boss..'linkgp'..msg.to.id) then return "*⚙️*¦ لا يوجد رابط مضاف اصلا " end
+redis:del(boss..'linkgp'..msg.to.id)
+return "⚙️*¦* تم مسح رابط المجموعه \n✓"
 end
 end --end del 
 if matches[1] == "ضع اسم" and is_mod(msg) then
@@ -336,7 +341,7 @@ local extime = (tonumber(matches[2]) * 86400)
 redis:setex(boss..'ExpireDate:'..msg.to.id, extime, true)
 if not redis:get(boss..'CheckExpire::'..msg.to.id) then redis:set(boss..'CheckExpire::'..msg.to.id,true) end
 sendMsg(msg.to.id,msg.id_,'💂🏻‍♀️¦ تم شحن الاشتراك الى `'..matches[2]..'` يوم   ... 👍🏿','md')
-sendMsg(SUDO_ID, 0,'💂🏻‍♀️¦ تم شحن الاشتراك الى `'..matches[2]..'` يوم   ... 👍🏿\n🕵🏼️‍♀️¦ في مجموعه  » »  '..GroupTitle(msg),'md')
+sendMsg(SUDO_ID, 0,'💂🏻‍♀️¦ تم شحن الاشتراك الى `'..matches[2]..'` يوم   ... 👍🏿\n🕵🏼️‍♀️¦ في مجموعه  » »  '..redis:get(boss..'group:name'..msg.to.id),'md')
 else
 sendMsg(msg.to.id,msg.id_,'💂🏻‍♀️¦ عزيزي المطور ✋🏿\n👨🏻‍🔧¦ شحن الاشتراك يكون ما بين يوم الى 1000 يوم فقط 🍃','md')
 end end
@@ -552,8 +557,8 @@ redis:del(boss..'welcom:witting'..msg.from.id) redis:set(boss..'welcome:msg'..ms
 return "📜*¦* تم وضع الترحيب بنجاح كلاتي 👋🏻\n*["..msg.text.."]*\n\n🔖¦ ملاحظه تستطيع\n🗒¦ اضهار القوانين بواسطه  ➣ *{rules}*  \n📰¦  اضهار الاسم بواسطه ➣ *{name}*\n🏷¦ اضهار المعرف بواسطه ➣ *{username}*" end
 if redis:get(boss..'rulse:witting'..msg.from.id) then --- استقبال القوانين
 redis:del(boss..'rulse:witting'..msg.from.id) redis:set(boss..'rulse:msg'..msg.to.id,check_markdown(msg.text)) return '📜*¦* مرحبآ عزيزي\n📦¦ تم حفظ القوانين بنجاح ✓\n🔖¦ اكتب [[ القوانين ]] لعرضها \n💬✓' end
-if redis:get(boss..'name:witting'..msg.from.id) then --- استقبال الوصف
-redis:del(boss..'name:witting'..msg.from.id) tdcli_function ({ID = "ChangeChatTitle",chat_id_ = msg.to.id,title_ = msg.text},dl_cb,nil) return false  end
+if redis:get(boss..'name:witting'..msg.from.id) then --- استقبال الاسم
+redis:del(boss..'name:witting'..msg.from.id) tdcli_function ({ID = "ChangeChatTitle",chat_id_ = msg.to.id,title_ = msg.text},dl_cb,nil) end
 if redis:get(boss..'about:witting'..msg.from.id) then --- استقبال الوصف
 redis:del(boss..'about:witting'..msg.from.id) tdcli_function ({ID = "ChangeChannelAbout",channel_id_ = getChatId(msg.to.id).ID,about_ = msg.text}, dl_cb, nil) return "📜*¦* تم وضع الوصف بنجاح\n✓" end
 if redis:get(boss..'fwd:all'..msg.from.id) then ---- استقبال رساله الاذاعه عام
