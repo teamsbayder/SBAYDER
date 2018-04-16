@@ -32,31 +32,31 @@ redis:del(boss..'addrd:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه ملصق للرد بنجاح ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الملصق الاتي .','html')
 end  end
 --====================== Reply All Groups =====================================
-if redis:get(boss..'addrd_all:'..msg.from.id) and redis:get(boss..'allreplay:'..msg.from.id) then
-local klma = redis:get(boss..'allreplay:'..msg.from.id)
+if redis:get(boss..'addrd_all:'..msg.to.id..msg.from.id) and redis:get(boss..'allreplay:'..msg.to.id..msg.from.id) then
+local klma = redis:get(boss..'allreplay:'..msg.to.id..msg.from.id)
 if msg.photo_ then 
 redis:hset(boss..'replay_photo:group:',klma,photo_id)
-redis:del(boss..'addrd_all:'..msg.from.id)
+redis:del(boss..'addrd_all:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه صوره للرد العام ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الصوره الاتيه .','html')
 elseif msg.voice_ then
 redis:hset(boss..'replay_voice:group:',klma,voice_id)
-redis:del(boss..'addrd_all:'..msg.from.id)
+redis:del(boss..'addrd_all:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه بصمه صوت للرد العام ✓\n🗂¦ يمكنك ارسال ('..klma..') لسماع البصمه الاتيه .','html')
 elseif msg.animation_ then
 redis:hset(boss..'replay_animation:group:',klma,animation_id)
-redis:del(boss..'addrd_all:'..msg.from.id)
+redis:del(boss..'addrd_all:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه متحركه للرد العام ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الصوره الاتيه .','html')
 elseif msg.video_ then
 redis:hset(boss..'replay_video:group:',klma,video_id)
-redis:del(boss..'addrd_all:'..msg.from.id)
+redis:del(boss..'addrd_all:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه فيديو للرد العام ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الفيديو الاتي .','html')
 elseif msg.audio_ then
 redis:hset(boss..'replay_audio:group:',klma,audio_id)
-redis:del(boss..'addrd_all:'..msg.from.id)
+redis:del(boss..'addrd_all:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه للصوت للرد العام ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الصوت الاتي .','html')
 elseif msg.sticker_ then
 redis:hset(boss..'replay_sticker:group:',klma,sticker_id)
-redis:del(boss..'addrd_all:'..msg.from.id)
+redis:del(boss..'addrd_all:'..msg.to.id..msg.from.id)
 return sendMsg(msg.to.id,msg.id_,'🗂¦ تم اضافه ملصق للرد العام ✓\n🗂¦ يمكنك ارسال ('..klma..') لاضهار الملصق الاتي .','html')
 end  end
 if msg.from.username then usernamex = "@"..msg.from.username else usernamex = check_name(namecut(msg.from.first_name)) end
