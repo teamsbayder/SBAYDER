@@ -5,7 +5,7 @@
 local function pre_process(msg)
 --====================== Reply Only Group =====================================
 if redis:get(boss..'addrd:'..msg.to.id..msg.from.id) and redis:get(boss..'replay1'..msg.to.id..msg.from.id) then
-local klma = redis:get(boss..'replay1'..msg.from.id)
+local klma = redis:get(boss..'replay1'..msg.to.id..msg.from.id)
 if msg.photo_ then 
 redis:hset(boss..'replay_photo:group:'..msg.to.id,klma,photo_id)
 redis:del(boss..'addrd:'..msg.to.id..msg.from.id)
