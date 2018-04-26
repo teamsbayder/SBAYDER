@@ -42,7 +42,8 @@ echo -e "\x1B[01;90m\n¦ Download luarocks v2.4.3 ... \n\x1B[0m"
  echo -e "\x1B[01;90m\n¦ dkjson installing ... \n\x1B[0m"
  sudo luarocks install dkjson
   echo -e "\x1B[01;90m\n¦ lua-cjson installing ... \n\x1B[0m"
- sudo  luarocks install lua-cjson
+ sudo  luarocks remove lua-cjson
+ sudo  apt-get install lua-cjson -y
  echo -e "\x1B[01;90m\n¦ Lua-cURL installing ...\n \x1B[0m"
  sudo luarocks install Lua-cURL
  echo -e "\x1B[01;90m\n¦ redis-server start ...\n \x1B[0m"
@@ -55,20 +56,12 @@ echo -e "\x1B[01;90m\n¦ Download luarocks v2.4.3 ... \n\x1B[0m"
  sudo apt-get install libreadline-dev -y libconfig-dev -y libssl-dev -y lua5.2 -y liblua5.2-dev -y lua-socket -y lua-sec -y lua-expat -y libevent-dev -y make unzip git redis-server autoconf g++ -y libjansson-dev -y libpython-dev -y expat libexpat1-dev -y
  echo -e "\x1B[01;90m\n¦ screen installing ... \n\x1B[0m"
  sudo apt-get install screen -y
- echo -e "\x1B[01;90m\n¦ tmux installing ...\n \x1B[0m"
- sudo apt-get install tmux -y
  echo -e "\x1B[01;90m\n¦ libstdc++6 installing ... \n\x1B[0m"
  sudo apt-get install libstdc++6 -y
  echo -e "\x1B[01;90m\n¦ lua-lgi installing ... \n\x1B[0m"
  sudo apt-get install lua-lgi -y
  echo -e "\x1B[01;90m\n¦ libnotify installing ... \n\x1B[0m"
  sudo apt-get install libnotify-dev -y
- echo -e "\x1B[01;90m\n¦ python installing ... \n\x1B[0m"
- sudo apt-get install python-setuptools python-dev build-essential -y
- echo -e "\x1B[01;90m\n¦ easy_install pip installing ... \n\x1B[0m"
- sudo easy_install pip
- echo -e "\x1B[01;90m\n¦ pip redis installing ... \n\x1B[0m"
- sudo pip install redis
  cd ..
  echo -e "\x1B[01;90m\n¦ Remove luarocks ... \n\x1B[0m"
  rm -rf ./luarocks-2.4.3
