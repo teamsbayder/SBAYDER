@@ -39,11 +39,8 @@ echo -e "\x1B[01;90m\n¦ Download luarocks v2.4.3 ... \n\x1B[0m"
  sudo luarocks install luasec
  echo -e "\x1B[01;90m\n¦ redis-lua installing ... \n\x1B[0m"
  sudo luarocks install redis-lua
- echo -e "\x1B[01;90m\n¦ dkjson installing ... \n\x1B[0m"
- sudo luarocks install dkjson
   echo -e "\x1B[01;90m\n¦ lua-cjson installing ... \n\x1B[0m"
- sudo  luarocks remove lua-cjson
- sudo  apt-get install lua-cjson -y
+ sudo  luarocks install lua-cjson2
  echo -e "\x1B[01;90m\n¦ Lua-cURL installing ...\n \x1B[0m"
  sudo luarocks install Lua-cURL
  echo -e "\x1B[01;90m\n¦ redis-server start ...\n \x1B[0m"
@@ -66,10 +63,6 @@ echo -e "\x1B[01;90m\n¦ Download luarocks v2.4.3 ... \n\x1B[0m"
  echo -e "\x1B[01;90m\n¦ Remove luarocks ... \n\x1B[0m"
  rm -rf ./luarocks-2.4.3
  rm  ./luarocks-2.4.3.tar.gz
-echo -e "\x1B[01;90m\n¦ update ...\n \x1B[0m"
-sudo apt-get update -y
-echo -e "\x1B[01;90m\n¦ upgrade ... \n\x1B[0m"
-sudo apt-get upgrade -y
  echo -e "\x1B[01;90m\n¦ Download TG ...\n \x1B[0m"
  wget https://valtman.name/files/telegram-cli-1222
  echo -e "\x1B[01;90m¦ Rename telegram-cli-1222 to TG  ... \x1B[0m"
