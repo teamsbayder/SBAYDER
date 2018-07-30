@@ -70,7 +70,6 @@ redis:sadd(REBD..':PLUGINS_FILE:','plug_manager')
 redis:sadd(REBD..':PLUGINS_FILE:','proc_msgs')
 redis:sadd(REBD..':PLUGINS_FILE:','rdod_bot')
 redis:sadd(REBD..':PLUGINS_FILE:','super_group')
-os.execute("timedatectl set-timezone Asia/Baghdad")
 insert(redis:get(ip_login..":SUDO_USER"),redis:get(ip_login..":SUDO_IDX"),redis:get(ip_login..":USERBOT:"))
 file = io.open("./inc/info.lua", "w")
 file:write([[
