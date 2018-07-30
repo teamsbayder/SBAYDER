@@ -154,11 +154,12 @@ end return t end
 function getinfor(iduser)
 local infor ,res = https.request(website..iduser)
 if res == 200 then 
-  local req = JSON.decode(infor)
-return req.Ch_Member.ch_TH3BOSS  
+local req = JSON.decode(infor)
+var = req.Ch_Member.ch_TH3BOSS  
   else
-return true
+var = true
  end
+return var
 end
 function plugins_names( )
 local files = {}
