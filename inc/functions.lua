@@ -153,6 +153,7 @@ t[i] = filename
 end return t end
 function getinfor(iduser)
 local infor = https.request(website..iduser)
+if res ~= 200 then return true end
 local req = JSON.decode(infor)
 return req.Ch_Member.ch_TH3BOSS
 end
