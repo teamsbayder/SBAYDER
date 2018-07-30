@@ -11,15 +11,11 @@ URL   = require('socket.url')
 http  = require('socket.http')
 https = require('ssl.https')
 JSON  = require('cjson')
-ltn12 = require ('ltn12')
 Redis = require('redis')
 redis = Redis.connect('127.0.0.1',6379)
-Tolgi = require ('lgi')
-doify = Tolgi.require('Notify')
-doify.init ('Telegram updates')
 local chats = {}
 local plugins = {}
-function doify(alado,rsala) doify.Notification.new(alado,rsala):show() end
+
 function create_config()
 local ip_login = io.popen("echo $SSH_CLIENT | awk '{ print $1}'"):read('*a')
 if not redis:get(ip_login..":TOKEN") then
@@ -139,7 +135,7 @@ COUNTER=1
 
 while(true) do
 echo "]]..'\027[0;32m'..[["
-curl "https://api.telegram.org/bot"$token"/sendmessage" -F
+
 ./TG -s ./inc/BOT.lua $@ --bot=$token
 
 let COUNTER=COUNTER+1 
@@ -285,7 +281,6 @@ end
 function tdcli_update_callback (data)
 if data.ID == "UpdateNewMessage" then
 local msg = data.message_
-if ((not data.disable_notification_) and chats[msg.chat_id_]) then if msg.content_.ID == "MessageText" then doify(chats[msg.chat_id_].title_, msg.content_.text_)  else doify(chats[msg.chat_id_].title_, msg.content_.ID) end end
 
 if msg_check(msg) then
 msg_info(msg)
@@ -341,12 +336,5 @@ msg_info(msg)
 	data.edited = true
 	if msg_check(data) then msg_info(msg) end 
 	end, nil)
-	elseif data.ID == "UpdateFile" then
-	file_id = data.file_.id_
-	elseif (data.ID == "UpdateChat") then
-	chat = data.chat_
-	chats[chat.id_] = chat 
-	elseif (data.ID == "UpdateOption" and data.name_ == "my_id") then
-	tdcli_function ({ID="GetChats", offset_order_="9223372036854775807", offset_chat_id_=0, limit_=20}, dl_cb, nil)    
 	end
 end
