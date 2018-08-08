@@ -41,7 +41,7 @@
   
   [ الـزعـيـم || مٰـحٰـمـٰد هٰـشٰامٰ ³¹³](https://telegram.me/TH3BOSS) <br>
   
-  [[٠ツعـمـر الـسـراي ٠](https://telegram.me/blcon) <br>
+  [٠ツعـمـر الـسـراي ٠](https://telegram.me/blcon) <br>
   
   
 [Team Boss](https://telegram.me/TH3BS) <br>
