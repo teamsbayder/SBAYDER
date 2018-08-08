@@ -39,13 +39,13 @@
 
 #  💬¦ للمشاكل والاسفسار والاقتراحات :
   
-  [ الـزعـيـم || مٰـحٰـمـٰد هٰـشٰامٰ ³¹³](https://telegram.me/TH3BS) <br>
+  [ الـزعـيـم || مٰـحٰـمـٰد هٰـشٰامٰ ³¹³](https://telegram.me/TH3BOSS) <br>
   
-  [Mohammed Hisham](https://telegram.me/TH3BOSS) <br>
+  [[٠ツعـمـر الـسـراي ٠](https://telegram.me/blcon) <br>
   
   
-  [٠ツعـمـر الـسـراي ٠](https://telegram.me/blcon) <br>
-
+[Team Boss](https://telegram.me/TH3BS) <br>
+  
 # <p align="center"> كروب دعم السورس للتكلم حول المشاكل
 
   # <p align="center">[اضــغــط هــنــا للــدخــول للمجموعةة🌿](https://t.me/joinchat/A5_fO0HjNU_9mQsLEUYi2w)
