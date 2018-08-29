@@ -13,7 +13,7 @@ https = require('ssl.https')
 JSON  = require('cjson')
 Redis = require('redis')
 redis = Redis.connect('127.0.0.1',6379)
-http.TIMEOUT = 3
+http.TIMEOUT = 5
 local chats = {}
 local plugins = {}
 
