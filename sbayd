@@ -71,6 +71,6 @@ echo -e "\x1B[01;90m\n¦ Download luarocks v2.4.3 ... \n\x1B[0m"
  mv telegram-cli-1222 TG
  echo -e "\x1B[01;90m¦ chmod for TG  ... \x1B[0m"
  chmod +x TG
- echo -e "\x1B[01;90m¦ Open file BOT.lua and insert information  ... \x1B[0m"
- rm  ./inc/info.lua
- lua ./inc/BOT.lua
+ echo -e "\x1B[01;90m¦ Open file BOT.lua and sbyert information  ... \x1B[0m"
+ rm  ./sby/info.lua
+ lua ./sby/BOT.lua
