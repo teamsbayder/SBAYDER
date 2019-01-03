@@ -1,0 +1,5 @@
+#!/bin/sh 
+cd td 
+screen -S SBAYDER -X kill
+screen -s SBAYDER -S SBAYDER ./run
+#source SBAYDER
