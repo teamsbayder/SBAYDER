@@ -1,0 +1,5 @@
+#!/bin/sh 
+cd td 
+screen -S victor -X kill
+screen -s victor -S victor ./run
+#source victor
